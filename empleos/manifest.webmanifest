@@ -1,0 +1,19 @@
+{
+  "name": "Radar Laboral",
+  "short_name": "Radar",
+  "description": "Radar personal de oportunidades laborales compatibles.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f3ee",
+  "theme_color": "#f5f3ee",
+  "lang": "es-CL",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
