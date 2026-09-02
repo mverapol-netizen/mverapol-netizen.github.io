@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#f5f3ee">
   <meta name="description" content="Radar laboral personal para revisar, guardar y seguir oportunidades compatibles.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Radar Laboral">
   <title>Radar Laboral</title>
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./icon.svg" type="image/svg+xml">
@@ -24,7 +27,7 @@
         <div>
           <div class="eyebrow">Radar Laboral</div>
           <h1>Oportunidades que vale la pena mirar.</h1>
-          <p>Ingresa tu correo y recibirás un enlace de acceso. El matching profesional se calcula fuera de la app y tus decisiones personales permanecen separadas.</p>
+          <p>Abre esta página desde tu teléfono o computador y puedes instalarla como una aplicación. El matching profesional se calcula fuera de la app y tus decisiones personales permanecen separadas.</p>
         </div>
       </div>
 
@@ -33,6 +36,8 @@
           <input id="emailInput" type="email" autocomplete="email" required placeholder="tu@correo.cl">
         </label>
         <button id="magicLinkButton" class="primary" type="submit">Enviarme un enlace de acceso</button>
+        <button class="secondary" type="button" data-install-app>Instalar Radar Laboral</button>
+        <p id="installMessage" class="status-text" role="status">Puedes instalarla desde este mismo sitio, sin descargar archivos externos.</p>
         <p id="authMessage" class="status-text" role="status"></p>
       </form>
     </section>
@@ -43,7 +48,10 @@
           <div class="eyebrow">Radar Laboral</div>
           <h1 id="welcomeTitle">Tus oportunidades</h1>
         </div>
-        <button id="logoutButton" class="icon-button" type="button" aria-label="Cerrar sesión">Salir</button>
+        <div class="card-actions">
+          <button class="secondary compact" type="button" data-install-app>Instalar</button>
+          <button id="logoutButton" class="icon-button" type="button" aria-label="Cerrar sesión">Salir</button>
+        </div>
       </header>
 
       <section class="summary-grid" aria-label="Resumen">
@@ -101,6 +109,7 @@
 
   <script src="./config.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+  <script src="./install.js"></script>
   <script src="./app.js"></script>
 </body>
 </html>
