@@ -18,7 +18,7 @@
     <section id="setupPanel" class="panel setup-panel hidden" aria-live="polite">
       <div class="eyebrow">Configuración</div>
       <h1>Conecta tu Supabase</h1>
-      <p>Falta <code>app/config.js</code>. Copia <code>config.example.js</code> y completa la URL y la clave pública del proyecto.</p>
+      <p>Falta la configuración pública del proyecto.</p>
     </section>
 
     <section id="authPanel" class="auth-wrap hidden">
@@ -27,7 +27,7 @@
         <div>
           <div class="eyebrow">Radar Laboral</div>
           <h1>Oportunidades que vale la pena mirar.</h1>
-          <p>Abre esta página desde tu teléfono o computador y puedes instalarla como una aplicación. El matching profesional se calcula fuera de la app y tus decisiones personales permanecen separadas.</p>
+          <p>Entra con tu correo y contraseña. También puedes instalar esta página en tu teléfono y usarla como una aplicación independiente.</p>
         </div>
       </div>
 
@@ -35,7 +35,7 @@
         <label>Correo
           <input id="emailInput" type="email" autocomplete="email" required placeholder="tu@correo.cl">
         </label>
-        <button id="magicLinkButton" class="primary" type="submit">Enviarme un enlace de acceso</button>
+        <button id="magicLinkButton" class="primary" type="submit">Entrar</button>
         <button class="secondary" type="button" data-install-app>Instalar Radar Laboral</button>
         <p id="installMessage" class="status-text" role="status">Puedes instalarla desde este mismo sitio, sin descargar archivos externos.</p>
         <p id="authMessage" class="status-text" role="status"></p>
@@ -111,5 +111,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
   <script src="./install.js"></script>
   <script src="./app.js"></script>
+  <script src="./password-auth.js"></script>
 </body>
 </html>
