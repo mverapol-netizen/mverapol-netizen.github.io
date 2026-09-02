@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f5f3ee">
+  <meta name="description" content="Radar laboral personal para revisar, guardar y seguir oportunidades compatibles.">
+  <title>Radar Laboral</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="shell">
+    <section id="setupPanel" class="panel setup-panel hidden" aria-live="polite">
+      <div class="eyebrow">Configuración</div>
+      <h1>Conecta tu Supabase</h1>
+      <p>Falta <code>app/config.js</code>. Copia <code>config.example.js</code> y completa la URL y la clave pública del proyecto.</p>
+    </section>
+
+    <section id="authPanel" class="auth-wrap hidden">
+      <div class="brand-block">
+        <div class="brand-mark" aria-hidden="true">R</div>
+        <div>
+          <div class="eyebrow">Radar Laboral</div>
+          <h1>Oportunidades que vale la pena mirar.</h1>
+          <p>Ingresa tu correo y recibirás un enlace de acceso. El matching profesional se calcula fuera de la app y tus decisiones personales permanecen separadas.</p>
+        </div>
+      </div>
+
+      <form id="loginForm" class="panel auth-card">
+        <label>Correo
+          <input id="emailInput" type="email" autocomplete="email" required placeholder="tu@correo.cl">
+        </label>
+        <button id="magicLinkButton" class="primary" type="submit">Enviarme un enlace de acceso</button>
+        <p id="authMessage" class="status-text" role="status"></p>
+      </form>
+    </section>
+
+    <section id="appPanel" class="app hidden">
+      <header class="topbar">
+        <div>
+          <div class="eyebrow">Radar Laboral</div>
+          <h1 id="welcomeTitle">Tus oportunidades</h1>
+        </div>
+        <button id="logoutButton" class="icon-button" type="button" aria-label="Cerrar sesión">Salir</button>
+      </header>
+
+      <section class="summary-grid" aria-label="Resumen">
+        <article class="summary-card"><strong id="countActive">—</strong><span>vigentes</span></article>
+        <article class="summary-card"><strong id="countHigh">—</strong><span>alta compatibilidad</span></article>
+        <article class="summary-card"><strong id="countClosing">—</strong><span>cierran pronto</span></article>
+      </section>
+
+      <section class="toolbar panel">
+        <div class="search-wrap">
+          <label class="sr-only" for="searchInput">Buscar oportunidades</label>
+          <input id="searchInput" type="search" placeholder="Buscar cargo, organización o lugar…">
+        </div>
+        <div id="filterChips" class="chips" role="group" aria-label="Filtros">
+          <button class="chip active" data-view="active" type="button">Vigentes</button>
+          <button class="chip" data-view="new" type="button">Nuevas</button>
+          <button class="chip" data-view="week" type="button">Esta semana</button>
+          <button class="chip" data-view="high_match" type="button">Alta compatibilidad</button>
+          <button class="chip" data-view="closing_soon" type="button">Cierran pronto</button>
+          <button class="chip" data-view="saved" type="button">Guardadas</button>
+          <button class="chip" data-view="interested" type="button">Me interesan</button>
+          <button class="chip" data-view="will_apply" type="button">Voy a postular</button>
+          <button class="chip" data-view="applied" type="button">Postulé</button>
+          <button class="chip" data-view="dismissed" type="button">Descartadas</button>
+        </div>
+      </section>
+
+      <section class="feed-head">
+        <div>
+          <h2 id="feedTitle">Vacantes vigentes</h2>
+          <p id="feedSubtitle">Ordenadas por cumplimiento, compatibilidad y urgencia.</p>
+        </div>
+        <button id="refreshButton" class="secondary compact" type="button">Actualizar</button>
+      </section>
+
+      <div id="loadingState" class="loading-state hidden" role="status">Actualizando oportunidades…</div>
+      <div id="emptyState" class="empty-state hidden">
+        <strong>No hay oportunidades en esta vista.</strong>
+        <span>Prueba otro filtro o vuelve a actualizar.</span>
+      </div>
+      <section id="jobList" class="job-list" aria-live="polite"></section>
+    </section>
+  </main>
+
+  <dialog id="jobDialog" class="job-dialog">
+    <form method="dialog" class="dialog-head">
+      <div>
+        <div id="detailSource" class="eyebrow"></div>
+        <h2 id="detailTitle"></h2>
+      </div>
+      <button class="icon-button" value="cancel" aria-label="Cerrar">Cerrar</button>
+    </form>
+    <div id="detailBody" class="dialog-body"></div>
+  </dialog>
+
+  <script src="./config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
