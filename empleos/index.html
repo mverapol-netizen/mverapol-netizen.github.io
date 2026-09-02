@@ -55,18 +55,20 @@
       </header>
 
       <section class="summary-grid" aria-label="Resumen">
-        <article class="summary-card"><strong id="countActive">—</strong><span>vigentes</span></article>
-        <article class="summary-card"><strong id="countHigh">—</strong><span>alta compatibilidad</span></article>
-        <article class="summary-card"><strong id="countClosing">—</strong><span>cierran pronto</span></article>
+        <article class="summary-card"><strong id="countRecommended">—</strong><span>recomendadas</span></article>
+        <article class="summary-card"><strong id="countReview">—</strong><span>por revisar</span></article>
+        <article class="summary-card"><strong id="countActive">—</strong><span>vigentes totales</span></article>
       </section>
 
       <section class="toolbar panel">
         <div class="search-wrap">
           <label class="sr-only" for="searchInput">Buscar oportunidades</label>
-          <input id="searchInput" type="search" placeholder="Buscar cargo, organización o lugar…">
+          <input id="searchInput" type="search" placeholder="Buscar cargo, organización, campo o lugar…">
         </div>
         <div id="filterChips" class="chips" role="group" aria-label="Filtros">
-          <button class="chip active" data-view="active" type="button">Vigentes</button>
+          <button class="chip active" data-view="recommended" type="button">Recomendadas</button>
+          <button class="chip" data-view="review" type="button">Vale la pena revisar</button>
+          <button class="chip" data-view="all" type="button">Explorar todas</button>
           <button class="chip" data-view="new" type="button">Nuevas</button>
           <button class="chip" data-view="week" type="button">Esta semana</button>
           <button class="chip" data-view="high_match" type="button">Alta compatibilidad</button>
@@ -81,8 +83,8 @@
 
       <section class="feed-head">
         <div>
-          <h2 id="feedTitle">Vacantes vigentes</h2>
-          <p id="feedSubtitle">Ordenadas por cumplimiento, compatibilidad y urgencia.</p>
+          <h2 id="feedTitle">Recomendadas</h2>
+          <p id="feedSubtitle">Campo profesional claramente pertinente y sin señales fuertes de incompatibilidad.</p>
         </div>
         <button id="refreshButton" class="secondary compact" type="button">Actualizar</button>
       </section>
@@ -90,7 +92,7 @@
       <div id="loadingState" class="loading-state hidden" role="status">Actualizando oportunidades…</div>
       <div id="emptyState" class="empty-state hidden">
         <strong>No hay oportunidades en esta vista.</strong>
-        <span>Prueba otro filtro o vuelve a actualizar.</span>
+        <span>Prueba otra categoría o vuelve a actualizar.</span>
       </div>
       <section id="jobList" class="job-list" aria-live="polite"></section>
     </section>
@@ -110,7 +112,7 @@
   <script src="./config.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
   <script src="./install.js"></script>
-  <script src="./app.js"></script>
+  <script src="./app-v2.js"></script>
   <script src="./password-auth.js"></script>
 </body>
 </html>
