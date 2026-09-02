@@ -17,6 +17,11 @@ document.querySelectorAll('.site-nav a').forEach(link => link.addEventListener('
 
 document.getElementById('year').textContent = new Date().getFullYear();
 
+const profilePhoto = document.querySelector('.about-photo img');
+if (profilePhoto) {
+  profilePhoto.src = 'https://raw.githubusercontent.com/mverapol-netizen/mverapol-netizen.github.io/main/assets/marcelo-vera.jpg?v=3';
+}
+
 const form = document.getElementById('contact-form');
 const note = document.getElementById('form-note');
 form?.addEventListener('submit', (event) => {
