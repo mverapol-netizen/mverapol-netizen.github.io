@@ -1,5 +1,5 @@
-const CACHE_NAME = "radar-shell-v2";
-const SHELL = ["./", "./index.html", "./styles.css", "./app.js", "./install.js", "./manifest.webmanifest", "./icon.svg"];
+const CACHE_NAME = "radar-shell-v3";
+const SHELL = ["./", "./index.html", "./styles.css", "./app.js", "./install.js", "./password-auth.js", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(SHELL)));
