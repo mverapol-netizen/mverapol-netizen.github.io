@@ -1,5 +1,5 @@
-const CACHE_NAME = "radar-shell-v3";
-const SHELL = ["./", "./index.html", "./styles.css", "./app.js", "./install.js", "./password-auth.js", "./manifest.webmanifest", "./icon.svg"];
+const CACHE_NAME = "radar-shell-v4";
+const SHELL = ["./", "./index.html", "./styles.css", "./app-v2.js", "./install.js", "./password-auth.js", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(SHELL)));
@@ -16,13 +16,10 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
   if (event.request.method !== "GET" || url.origin !== self.location.origin) return;
-
-  // Nunca almacenar la configuración del proyecto ni respuestas de Supabase.
   if (url.pathname.endsWith("/config.js")) {
     event.respondWith(fetch(event.request));
     return;
   }
-
   event.respondWith(
     fetch(event.request)
       .then((response) => {
