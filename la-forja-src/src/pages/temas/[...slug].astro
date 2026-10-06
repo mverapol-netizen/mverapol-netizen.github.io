@@ -1,8 +1,9 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
-const slugify=(s)=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+
 export async function getStaticPaths(){
+  const slugify=(s)=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
   const articulos=await getCollection('articulos');
   const topics=[...new Set(articulos.flatMap(a=>a.data.topics))];
   return topics.map(topic=>({params:{slug:slugify(topic)},props:{topic}}));
