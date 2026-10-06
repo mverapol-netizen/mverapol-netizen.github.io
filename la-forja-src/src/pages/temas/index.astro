@@ -3,14 +3,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 const base=import.meta.env.BASE_URL;
 const slugify=(s)=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-const articulos=await getCollection('articulos');
+const articulos=await getCollection('articulos',({data})=>!data.draft);
 const counts=new Map();
 for(const a of articulos) for(const topic of a.data.topics) counts.set(topic,(counts.get(topic)||0)+1);
 const topics=[...counts.entries()].sort((a,b)=>a[0].localeCompare(b[0],'es'));
 ---
-<BaseLayout title="Temas" active="Temas">
-  <header class="page-head"><span class="label blue">Índice temático</span><h1>Temas</h1><p>Una entrada transversal al archivo de La Forja: problemas, conceptos y discusiones que reaparecen entre números.</p></header>
-  <section class="topic-cloud">
-    {topics.map(([topic,count])=><a class="topic-block" href={base+'temas/'+slugify(topic)+'/'}><span>{String(count).padStart(2,'0')}</span><strong>{topic}</strong></a>)}
-  </section>
-</BaseLayout>
+<BaseLayout title="Temas" active="Temas"><header class="page-head"><span class="label blue">Índice temático</span><h1>Temas</h1><p>Una entrada transversal al archivo de La Forja: problemas, conceptos y discusiones que reaparecen entre números.</p></header><section class="topic-cloud">{topics.map(([topic,count])=><a class="topic-block" href={base+'temas/'+slugify(topic)+'/'}><span>{String(count).padStart(2,'0')}</span><strong>{topic}</strong></a>)}</section></BaseLayout>

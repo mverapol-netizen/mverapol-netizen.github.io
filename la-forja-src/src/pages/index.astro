@@ -3,13 +3,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import EditorialArt from '../components/EditorialArt.astro';
 import { getCollection } from 'astro:content';
 const base=import.meta.env.BASE_URL;
-const articulos=await getCollection('articulos');
-const autores=await getCollection('autores');
-const debates=await getCollection('debates');
+const articulos=await getCollection('articulos',({data})=>!data.draft);
+const autores=await getCollection('autores',({data})=>!data.draft);
+const debates=await getCollection('debates',({data})=>!data.draft);
 const authorName=(id)=>autores.find(a=>a.id===id)?.data.name??id;
 const featured=articulos.find(x=>x.data.featured)??articulos[0];
 const columnas=articulos.filter(x=>x.data.type==='columna').sort((a,b)=>b.data.date.valueOf()-a.data.date.valueOf()).slice(0,3);
-const cuadernos=(await getCollection('cuadernos')).sort((a,b)=>a.data.number-b.data.number).slice(0,4);
+const cuadernos=(await getCollection('cuadernos',({data})=>!data.draft)).sort((a,b)=>a.data.number-b.data.number).slice(0,4);
 const debate=debates[0];
 ---
 <BaseLayout active="Portada">
@@ -21,38 +21,12 @@ const debate=debates[0];
       <div class="byline">Por {authorName(featured.data.author)}</div>
       <a class="text-link" href={base+'ensayos/'+featured.id+'/'}>Leer ensayo →</a>
     </div>
-    <EditorialArt style={featured.data.artStyle} label={featured.data.artLabel} alt={featured.data.title} href={base+'ensayos/'+featured.id+'/'} />
+    <EditorialArt style={featured.data.artStyle} label={featured.data.artLabel} alt={featured.data.title} href={base+'ensayos/'+featured.id+'/'} image={featured.data.image} imageAlt={featured.data.imageAlt} imageTreatment={featured.data.imageTreatment}/>
   </section>
-
   <section class="grid3">
-    <article class="card">
-      <span class="label">Columnas</span>
-      <div class="card-list">
-        {columnas.map(c=><a href={base+'columnas/'+c.id+'/'}><strong>{c.data.title}</strong><br/><small>Por {authorName(c.data.author)}</small></a>)}
-      </div>
-    </article>
-    <article class="card">
-      <span class="label blue">Editorial</span>
-      <h2>Por qué nace La Forja</h2>
-      <p>Una revista para pensar, debatir y formar desde las izquierdas.</p>
-      <a class="text-link" href={base+'sobre/'}>La revista →</a>
-    </article>
-    <article class="card">
-      <span class="label">Debate</span>
-      {debate && <EditorialArt style={debate.data.artStyle} label={debate.data.artLabel} alt={debate.data.title} href={base+'debates/'} compact />}
-      <h2>{debate?.data.title ?? '¿Debe la izquierda volver a hablar de clase?'}</h2>
-      <p>{debate?.data.subtitle}</p>
-      <a class="text-link" href={base+'debates/'}>Entrar al debate →</a>
-    </article>
+    <article class="card"><span class="label">Columnas</span><div class="card-list">{columnas.map(c=><a href={base+'columnas/'+c.id+'/'}><strong>{c.data.title}</strong><br/><small>Por {authorName(c.data.author)}</small></a>)}</div></article>
+    <article class="card"><span class="label blue">Editorial</span><h2>Por qué nace La Forja</h2><p>Una revista para pensar, debatir y formar desde las izquierdas.</p><a class="text-link" href={base+'sobre/'}>La revista →</a></article>
+    <article class="card"><span class="label">Debate</span>{debate&&<EditorialArt style={debate.data.artStyle} label={debate.data.artLabel} alt={debate.data.title} href={base+'debates/'} compact image={debate.data.image} imageAlt={debate.data.imageAlt} imageTreatment={debate.data.imageTreatment}/>}<h2>{debate?.data.title??'Debate'}</h2><p>{debate?.data.subtitle}</p><a class="text-link" href={base+'debates/'}>Entrar al debate →</a></article>
   </section>
-
-  <section>
-    <div class="section-intro">
-      <div><span class="label blue">Educación popular</span><h2>Cuadernos</h2></div>
-      <p>Conceptos, historia, lecturas y herramientas para una formación política crítica y colectiva.</p>
-    </div>
-    <div class="books">
-      {cuadernos.map(c=><a class:list={['book',`book-${c.data.artStyle}`]} href={base+'educacion-popular/'}><span class="num">N.º {String(c.data.number).padStart(2,'0')}</span><span class="book-art" aria-hidden="true"></span><h3>{c.data.title}</h3><small>{c.data.series}</small></a>)}
-    </div>
-  </section>
+  <section><div class="section-intro"><div><span class="label blue">Educación popular</span><h2>Cuadernos</h2></div><p>Conceptos, historia, lecturas y herramientas para una formación política crítica y colectiva.</p></div><div class="books">{cuadernos.map(c=><a class:list={['book',`book-${c.data.artStyle}`]} href={base+'educacion-popular/'}><span class="num">N.º {String(c.data.number).padStart(2,'0')}</span><span class="book-art" aria-hidden="true"></span><h3>{c.data.title}</h3><small>{c.data.series}</small></a>)}</div></section>
 </BaseLayout>

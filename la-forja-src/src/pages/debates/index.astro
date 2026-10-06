@@ -2,14 +2,6 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import EditorialArt from '../../components/EditorialArt.astro';
 import {getCollection} from 'astro:content';
-const debates=await getCollection('debates');
+const debates=await getCollection('debates',({data})=>!data.draft);
 ---
-<BaseLayout title="Debates" active="Debates">
-  <header class="page-head"><span class="label">Debate</span><h1>Debates</h1><p>Intervenciones, respuestas y réplicas sobre problemas estratégicos, teóricos y políticos.</p></header>
-  <section class="debate-grid">
-    {debates.map(d=><article class="debate-feature">
-      <EditorialArt style={d.data.artStyle} label={d.data.artLabel} alt={d.data.title}/>
-      <div class="debate-copy"><span class="kicker">Año I · N.º {d.data.issue}</span><h2>{d.data.title}</h2><p>{d.data.subtitle}</p><div class="participants">{d.data.participants.join(' · ')}</div></div>
-    </article>)}
-  </section>
-</BaseLayout>
+<BaseLayout title="Debates" active="Debates"><header class="page-head"><span class="label">Debate</span><h1>Debates</h1><p>Intervenciones, respuestas y réplicas sobre problemas estratégicos, teóricos y políticos.</p></header><section class="debate-grid">{debates.map(d=><article class="debate-feature"><EditorialArt style={d.data.artStyle} label={d.data.artLabel} alt={d.data.title} image={d.data.image} imageAlt={d.data.imageAlt} imageTreatment={d.data.imageTreatment}/><div class="debate-copy"><span class="kicker">Año I · N.º {d.data.issue}</span><h2>{d.data.title}</h2><p>{d.data.subtitle}</p><div class="participants">{d.data.participants.join(' · ')}</div></div></article>)}</section></BaseLayout>
