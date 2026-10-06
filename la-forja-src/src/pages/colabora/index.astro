@@ -15,14 +15,93 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     <article><strong>04</strong><h2>Educación popular</h2><p>Materiales accesibles y rigurosos sobre conceptos, historia, lecturas y herramientas.</p></article>
   </section>
 
+  <section class="submission-form-wrap">
+    <div class="submission-form-copy">
+      <span class="label blue">Envía una propuesta</span>
+      <h2>Queremos leerte.</h2>
+      <p>Completa este formulario. Tu propuesta queda registrada de manera privada para revisión editorial y no se publica automáticamente.</p>
+      <div class="submission-note">
+        <strong>Antes de enviar</strong>
+        <p>Puedes pegar el texto completo o compartir un enlace privado al manuscrito. Más adelante incorporaremos adjuntos directos.</p>
+      </div>
+    </div>
+
+    <form id="publication-form" class="publication-form" novalidate>
+      <div class="form-grid">
+        <label>
+          <span>Nombre completo *</span>
+          <input name="name" type="text" maxlength="120" required autocomplete="name" />
+        </label>
+        <label>
+          <span>Correo de contacto *</span>
+          <input name="email" type="email" maxlength="180" required autocomplete="email" />
+        </label>
+      </div>
+
+      <div class="form-grid">
+        <label>
+          <span>Tipo de colaboración *</span>
+          <select name="submission_type" required>
+            <option value="">Selecciona una opción</option>
+            <option value="columna">Columna</option>
+            <option value="ensayo">Ensayo</option>
+            <option value="debate">Propuesta de debate</option>
+            <option value="educacion-popular">Educación popular</option>
+            <option value="otro">Otro</option>
+          </select>
+        </label>
+        <label>
+          <span>Título provisional *</span>
+          <input name="title" type="text" maxlength="220" required />
+        </label>
+      </div>
+
+      <label>
+        <span>Resumen o argumento central *</span>
+        <textarea name="summary" rows="6" maxlength="3000" required placeholder="¿Qué problema aborda el texto y cuál es su argumento principal?"></textarea>
+      </label>
+
+      <label>
+        <span>Breve biografía</span>
+        <textarea name="bio" rows="4" maxlength="1200" placeholder="Dos o tres líneas sobre ti y tu relación con el tema."></textarea>
+      </label>
+
+      <label>
+        <span>Enlace al manuscrito</span>
+        <input name="manuscript_url" type="url" maxlength="900" placeholder="Google Drive, Dropbox, documento público o privado con acceso por enlace" />
+      </label>
+
+      <label>
+        <span>O pega aquí el texto</span>
+        <textarea name="manuscript_text" rows="12" maxlength="50000" placeholder="Puedes pegar el manuscrito completo si prefieres no usar un enlace."></textarea>
+      </label>
+
+      <label class="form-check">
+        <input name="originality" type="checkbox" required />
+        <span>Declaro que la propuesta es original y que tengo autorización para enviar su contenido. *</span>
+      </label>
+
+      <label class="form-check">
+        <input name="editorial_process" type="checkbox" required />
+        <span>Entiendo que el envío queda sujeto a revisión editorial y puede recibir sugerencias de cambios. *</span>
+      </label>
+
+      <div class="form-honeypot" aria-hidden="true">
+        <label>Deja este campo vacío<input name="website" type="text" tabindex="-1" autocomplete="off" /></label>
+      </div>
+
+      <button class="submit-publication" type="submit">Enviar propuesta →</button>
+      <p class="form-privacy">Tus datos se utilizan únicamente para gestionar esta propuesta editorial.</p>
+      <div id="form-status" class="form-status" role="status" aria-live="polite"></div>
+    </form>
+  </section>
+
   <section class="submission-process">
     <div class="prose">
-      <h2>Cómo funciona</h2>
-      <p>La publicación es editorialmente curada. Los textos no aparecen de manera automática: La Forja los revisa, conversa eventuales cambios con sus autores y decide su publicación.</p>
-      <h2>Qué preparar</h2>
-      <p>Nombre, correo de contacto, título, tipo de colaboración, una presentación breve de la propuesta y el texto completo en formato editable.</p>
-      <h2>Envío</h2>
-      <p>Estamos terminando de habilitar el canal editorial de recepción. Esta página será el punto permanente para enviar propuestas y consultar las normas de colaboración.</p>
+      <h2>Qué ocurre después</h2>
+      <p>El envío se incorpora al registro editorial privado. La Forja revisa la propuesta y, si existe interés en continuar, el equipo se pondrá en contacto utilizando el correo indicado en el formulario.</p>
+      <h2>Criterio editorial</h2>
+      <p>La publicación es curada. No buscamos uniformidad doctrinaria ni textos que repitan una línea predeterminada: buscamos argumentos, problemas relevantes y discusión crítica desde las izquierdas.</p>
     </div>
     <aside>
       <span>Principio editorial</span>
@@ -30,4 +109,48 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <p>La firma de un texto expresa la posición de su autor o autora, no necesariamente la de la revista.</p>
     </aside>
   </section>
+
+  <script>
+    const form = document.querySelector('#publication-form');
+    const status = document.querySelector('#form-status');
+
+    form?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      status.textContent = '';
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const data = new FormData(form);
+      if (data.get('website')) {
+        status.textContent = 'La propuesta fue recibida.';
+        form.reset();
+        return;
+      }
+
+      const manuscriptUrl = String(data.get('manuscript_url') || '').trim();
+      const manuscriptText = String(data.get('manuscript_text') || '').trim();
+
+      if (!manuscriptUrl && !manuscriptText) {
+        status.textContent = 'Incluye un enlace al manuscrito o pega el texto antes de enviar.';
+        return;
+      }
+
+      const button = form.querySelector('button[type="submit"]');
+      button.disabled = true;
+      button.textContent = 'Enviando…';
+
+      try {
+        const response = await fetch('/la-forja/api-placeholder', { method: 'POST' });
+        if (!response.ok) throw new Error('submission unavailable');
+      } catch {
+        status.textContent = 'El formulario está siendo habilitado. Tu propuesta aún no fue enviada.';
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Enviar propuesta →';
+      }
+    });
+  </script>
 </BaseLayout>
