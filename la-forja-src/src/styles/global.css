@@ -313,3 +313,17 @@ footer a{border-bottom:1px solid transparent}footer a:hover{border-color:var(--r
 .admin-export-actions{display:flex;gap:7px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.admin-export-actions button{border:0;background:var(--blue);color:var(--paper);padding:9px 11px;font:700 10px var(--sans);text-transform:uppercase;cursor:pointer}.admin-export-actions button:hover{background:var(--red)}.admin-export-actions span{width:100%;text-align:right;font:700 10px var(--sans)}
 @media(max-width:950px){.admin-stats{grid-template-columns:1fr 1fr}.admin-export{grid-template-columns:1fr}.admin-export-actions{justify-content:flex-start}.admin-export-actions span{text-align:left}}
 @media(max-width:560px){.admin-head-actions{margin-top:12px}.admin-stats{grid-template-columns:1fr}}
+
+
+/* Publication preparation sheet */
+.admin-publication{margin-top:24px;border:1px solid var(--rule);border-top:6px solid var(--blue);padding:16px;background:rgba(255,255,255,.08)}
+.admin-publication>header{display:flex;justify-content:space-between;gap:18px;align-items:end;border-bottom:1px solid var(--rule);padding-bottom:10px;margin-bottom:15px}
+.admin-publication>header span{font:700 10px var(--sans);text-transform:uppercase;color:var(--blue)}.admin-publication>header h3{font:700 30px/1 var(--serif);margin:4px 0 0}
+.admin-publication>header>strong{font:700 11px var(--sans);text-transform:uppercase;padding:5px 7px;border:1px solid var(--rule)}.admin-publication>header>strong.ready{background:#315f35;color:var(--paper);border-color:#315f35}.admin-publication>header>strong.pending{color:var(--red)}
+.admin-pub-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.admin-pub-grid label>span{display:block;font:700 10px var(--sans);text-transform:uppercase;margin-bottom:4px}.admin-pub-grid label.wide{grid-column:1/-1}
+.admin-pub-grid input,.admin-pub-grid select{width:100%;border:1px solid var(--rule);border-radius:0;background:rgba(232,221,196,.45);padding:9px;font:500 14px var(--serif)}.admin-pub-grid select{font-family:var(--sans)}
+.admin-pub-grid label.check{display:flex;gap:8px;align-items:center;border-top:1px solid rgba(48,43,37,.3);padding-top:9px}.admin-pub-grid label.check input{width:auto}.admin-pub-grid label.check span{margin:0;text-transform:none;font:600 13px var(--serif)}
+.admin-pub-checklist{display:flex;flex-wrap:wrap;gap:6px;margin:15px 0}.admin-pub-checklist span{padding:4px 7px;font:700 10px var(--sans);text-transform:uppercase;border:1px solid var(--rule)}.admin-pub-checklist .done{background:rgba(49,95,53,.12);border-color:#315f35}.admin-pub-checklist .pending{color:var(--red);border-color:var(--red)}
+.admin-pub-actions{display:flex;align-items:center;gap:10px;border-top:2px solid var(--ink);padding-top:12px}.admin-pub-actions button{border:0;background:var(--blue);color:var(--paper);padding:10px 13px;font:700 11px var(--sans);text-transform:uppercase;cursor:pointer}.admin-pub-actions span{font:700 10px var(--sans)}
+.admin-export>div:first-child small{display:block;font:600 11px var(--sans);color:var(--ink-soft);word-break:break-all;margin-top:3px}
+@media(max-width:700px){.admin-pub-grid{grid-template-columns:1fr}.admin-pub-grid label.wide{grid-column:auto}.admin-publication>header{display:block}.admin-publication>header>strong{display:inline-block;margin-top:9px}}
