@@ -259,3 +259,22 @@ footer a{border-bottom:1px solid transparent}footer a:hover{border-color:var(--r
 .form-privacy{font:600 11px var(--sans);text-transform:uppercase;color:var(--ink-soft);margin:14px 0 4px}.form-status{min-height:26px;font:700 14px/1.3 var(--sans);color:var(--blue);padding-top:5px}
 @media(max-width:900px){.submission-form-wrap{grid-template-columns:1fr}.submission-form-copy{position:static}.publication-form{border-left:0;border-top:1px solid var(--rule);padding:24px 0 0}}
 @media(max-width:560px){.form-grid{grid-template-columns:1fr}.submission-form-wrap{padding-top:24px}.publication-form input[type="text"],.publication-form input[type="email"],.publication-form input[type="url"],.publication-form select,.publication-form textarea{font-size:16px}}
+
+
+/* Editorial submission form */
+.submission-form-section{display:grid;grid-template-columns:minmax(260px,.72fr) minmax(0,1.4fr);gap:48px;padding:42px 0 54px;border-bottom:4px solid var(--red)}
+.submission-form-intro{align-self:start;position:sticky;top:82px}.submission-form-intro h2{font:400 clamp(45px,6vw,78px)/.9 var(--display);text-transform:uppercase;margin:12px 0}
+.submission-form-intro p{font-size:18px;line-height:1.35}.form-note{border-top:2px solid var(--blue);padding-top:10px;font-size:14px!important;color:var(--ink-soft)}
+.submission-form{display:grid;gap:19px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:17px}
+.submission-form label>span,.form-checks span{font:700 12px var(--sans);text-transform:uppercase;letter-spacing:.03em}
+.submission-form input[type="text"],.submission-form input[type="email"],.submission-form select,.submission-form textarea{display:block;width:100%;margin-top:6px;border:1px solid var(--rule);border-radius:0;background:rgba(255,255,255,.12);color:var(--ink);padding:11px 12px;font:500 17px/1.35 var(--serif);outline:none}
+.submission-form select{font-family:var(--sans)}.submission-form textarea{resize:vertical}
+.submission-form input:focus,.submission-form select:focus,.submission-form textarea:focus{border-color:var(--red);box-shadow:inset 4px 0 0 var(--red)}
+.form-checks{display:grid;gap:10px;border-top:1px solid var(--rule);padding-top:15px}.form-checks label{display:grid;grid-template-columns:20px 1fr;gap:9px;align-items:start}
+.form-checks input{accent-color:var(--red);margin-top:2px}.form-checks span{text-transform:none;font:600 14px/1.3 var(--serif);letter-spacing:0}
+.form-honeypot{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important}
+.form-submit-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap;border-top:3px solid var(--ink);padding-top:17px}
+.form-submit-row button{border:0;background:var(--red);color:var(--paper);padding:13px 18px;font:700 15px var(--sans);text-transform:uppercase;cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
+.form-submit-row button:hover{background:var(--blue)}.form-submit-row button:disabled{opacity:.6;cursor:progress}
+.submission-status{font:700 13px/1.2 var(--sans);max-width:420px}.submission-status.success{color:#315f35}.submission-status.error{color:#8e211d}
+@media(max-width:900px){.submission-form-section{grid-template-columns:1fr}.submission-form-intro{position:static}.form-grid{grid-template-columns:1fr}}
