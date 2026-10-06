@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<rect width="1200" height="630" fill="#e8ddc4"/>
+<rect y="35" width="1200" height="18" fill="#b22f2a"/>
+<rect y="577" width="1200" height="18" fill="#31597b"/>
+<path d="M710 70L1180 70 1180 565 925 565Z" fill="#31597b"/>
+<path d="M820 70L1180 240 1180 390 760 160Z" fill="#b22f2a"/>
+<g fill="#191816" font-family="Arial Black, Arial, sans-serif">
+<text x="62" y="250" font-size="150" letter-spacing="-10">LA</text>
+<text x="62" y="395" font-size="150" letter-spacing="-10" fill="#b22f2a">FORJA</text>
+<text x="68" y="466" font-size="31">OPINIÓN · PENSAMIENTO CRÍTICO · DEBATE</text>
+<text x="68" y="510" font-size="31">EDUCACIÓN POPULAR</text>
+</g>
+</svg>
