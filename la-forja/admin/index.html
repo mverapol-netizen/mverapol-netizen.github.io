@@ -1,0 +1,178 @@
+<!DOCTYPE html><html lang="es"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Revista de opinión, pensamiento crítico, debate y educación popular."><meta name="theme-color" content="#e8ddc4"><meta name="robots" content="noindex,nofollow,noarchive"><link rel="canonical" href="https://mverapol-netizen.github.io/la-forja/admin/"><link rel="alternate" type="application/rss+xml" title="La Forja" href="https://mverapol-netizen.github.io/la-forja/rss.xml"><meta property="og:site_name" content="La Forja"><meta property="og:locale" content="es_CL"><meta property="og:type" content="website"><meta property="og:title" content="Panel editorial — La Forja"><meta property="og:description" content="Revista de opinión, pensamiento crítico, debate y educación popular."><meta property="og:url" content="https://mverapol-netizen.github.io/la-forja/admin/"><meta property="og:image" content="https://mverapol-netizen.github.io/la-forja/social/default.svg"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Panel editorial — La Forja"><meta name="twitter:description" content="Revista de opinión, pensamiento crítico, debate y educación popular."><meta name="twitter:image" content="https://mverapol-netizen.github.io/la-forja/social/default.svg"><title>Panel editorial — La Forja</title><link rel="stylesheet" href="/la-forja/_astro/index.C4j3rLFM.css"></head> <body class="page-enter"> <main class="shell"> <div class="topline"><span>Año I · N.º 1 · Santiago de Chile</span><span>Octubre 2026</span></div> <header class="mast"> <a class="logo ink-title" href="/la-forja/">La Forja</a> <div class="mast-side"> <div class="mast-note">Opinión<br>Pensamiento crítico<br>Debate<br>Educación popular</div> <a class="mast-submit" href="/la-forja/colabora/"> <span>Convocatoria editorial</span> <strong>Publica con nosotros →</strong> </a> </div> </header> <nav class="nav"> <a href="/la-forja/">Portada</a><a href="/la-forja/columnas/">Columnas</a><a href="/la-forja/ensayos/">Ensayos</a><a href="/la-forja/debates/">Debates</a><a href="/la-forja/educacion-popular/">Educación popular</a><a href="/la-forja/archivo/">Archivo</a><a href="/la-forja/temas/">Temas</a><a href="/la-forja/buscar/">Buscar</a> <a class="nav-submit" href="/la-forja/colabora/">Publica con nosotros</a> </nav>  <section class="admin-shell"> <header class="admin-head"> <div> <span class="label blue">Uso interno</span> <h1>Panel editorial</h1> <p>Recepción y revisión de colaboraciones de La Forja.</p> </div> <button id="admin-logout" class="admin-logout" type="button" hidden>Cerrar sesión</button> </header> <section id="admin-login" class="admin-login"> <div> <span class="kicker">Acceso restringido</span> <h2>Ingresar a la redacción</h2> <p>Usa la cuenta de administración autorizada en Supabase. Las demás cuentas, aunque puedan autenticarse, no tienen acceso a las postulaciones.</p> </div> <form id="admin-login-form"> <label><span>Correo</span><input name="email" type="email" required autocomplete="username"></label> <label><span>Contraseña</span><input name="password" type="password" required minlength="8" autocomplete="current-password"></label> <button type="submit">Ingresar →</button> <p id="admin-login-status" role="status" aria-live="polite"></p> </form> </section> <section id="admin-app" class="admin-app" hidden> <div class="admin-stats"> <button data-filter="all" class="active"><span id="count-all">0</span><strong>Todas</strong></button> <button data-filter="received"><span id="count-received">0</span><strong>Recibidas</strong></button> <button data-filter="reviewing"><span id="count-reviewing">0</span><strong>En revisión</strong></button> <button data-filter="accepted"><span id="count-accepted">0</span><strong>Aceptadas</strong></button> <button data-filter="rejected"><span id="count-rejected">0</span><strong>Rechazadas</strong></button> </div> <div class="admin-toolbar"> <input id="admin-search" type="search" placeholder="Buscar por título, nombre o correo…"> <button id="admin-refresh" type="button">Actualizar</button> </div> <div class="admin-workspace"> <section class="admin-list-panel"> <div id="admin-list" class="admin-list"></div> <div id="admin-empty" class="admin-empty" hidden>No hay propuestas en esta vista.</div> </section> <article id="admin-detail" class="admin-detail"> <div class="admin-detail-empty">Selecciona una propuesta para revisarla.</div> </article> </div> </section> </section> <script>(function(){const supabaseUrl = "https://jtgoumydocaleucuomaw.supabase.co";
+const supabaseKey = "sb_publishable_jHVTZ5v1aeP82CxMg33r6g_S3C_yG9H";
+
+    const STORAGE_KEY='laforja_editorial_session_v1';
+    const loginSection=document.getElementById('admin-login');
+    const appSection=document.getElementById('admin-app');
+    const loginForm=document.getElementById('admin-login-form');
+    const loginStatus=document.getElementById('admin-login-status');
+    const logoutBtn=document.getElementById('admin-logout');
+    const listEl=document.getElementById('admin-list');
+    const emptyEl=document.getElementById('admin-empty');
+    const detailEl=document.getElementById('admin-detail');
+    const searchEl=document.getElementById('admin-search');
+    const refreshBtn=document.getElementById('admin-refresh');
+    const filterButtons=[...document.querySelectorAll('.admin-stats button')];
+    let submissions=[];
+    let currentFilter='all';
+    let selectedId=null;
+    let session=null;
+
+    const escapeHtml=(s='')=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+    const fmtDate=(v)=>new Intl.DateTimeFormat('es-CL',{dateStyle:'medium',timeStyle:'short'}).format(new Date(v));
+    const statusName=(s)=>({received:'Recibida',reviewing:'En revisión',accepted:'Aceptada',rejected:'Rechazada',withdrawn:'Retirada'})[s]||s;
+    const typeName=(s)=>({columna:'Columna',ensayo:'Ensayo',debate:'Debate','educacion-popular':'Educación popular',otro:'Otro'})[s]||s;
+
+    function readSession(){
+      try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'null')}catch{return null}
+    }
+    function saveSession(value){
+      session=value;
+      if(value)localStorage.setItem(STORAGE_KEY,JSON.stringify(value));
+      else localStorage.removeItem(STORAGE_KEY);
+    }
+    function jwtExp(token){
+      try{return JSON.parse(atob(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'))).exp||0}catch{return 0}
+    }
+    async function refreshSession(){
+      if(!session?.refresh_token)return false;
+      const r=await fetch(`${supabaseUrl}/auth/v1/token?grant_type=refresh_token`,{
+        method:'POST',headers:{apikey:supabaseKey,'Content-Type':'application/json'},
+        body:JSON.stringify({refresh_token:session.refresh_token})
+      });
+      if(!r.ok){saveSession(null);return false}
+      const next=await r.json();saveSession(next);return true;
+    }
+    async function ensureSession(){
+      session=readSession();
+      if(!session?.access_token)return false;
+      if(jwtExp(session.access_token) < Math.floor(Date.now()/1000)+60){
+        return await refreshSession();
+      }
+      return true;
+    }
+    async function api(path,options={}){
+      if(!(await ensureSession()))throw new Error('auth');
+      const headers={apikey:supabaseKey,Authorization:`Bearer ${session.access_token}`,...(options.headers||{})};
+      return fetch(`${supabaseUrl}/rest/v1/${path}`,{...options,headers});
+    }
+    async function loadSubmissions(){
+      refreshBtn.disabled=true;
+      try{
+        const fields='id,created_at,status,name,email,contribution_type,title,summary,bio,manuscript,notes,editorial_note,reviewed_at,updated_at';
+        const r=await api(`editorial_submissions?select=${fields}&order=created_at.desc`);
+        if(r.status===401||r.status===403)throw new Error('forbidden');
+        if(!r.ok)throw new Error('load');
+        submissions=await r.json();
+        renderStats();renderList();
+        if(selectedId && submissions.some(x=>x.id===selectedId))renderDetail(selectedId);
+      }catch(error){
+        if(error.message==='auth'||error.message==='forbidden'){logout(false);loginStatus.textContent='La sesión no tiene autorización para acceder a la redacción.'}
+        else emptyEl.textContent='No fue posible cargar las propuestas.';
+      }finally{refreshBtn.disabled=false}
+    }
+    function renderStats(){
+      const count=(status)=>status==='all'?submissions.length:submissions.filter(x=>x.status===status).length;
+      ['all','received','reviewing','accepted','rejected'].forEach(s=>{
+        const el=document.getElementById(`count-${s}`);if(el)el.textContent=count(s);
+      });
+    }
+    function visibleItems(){
+      const q=searchEl.value.trim().toLowerCase();
+      return submissions.filter(x=>(currentFilter==='all'||x.status===currentFilter)&&(!q||[x.title,x.name,x.email,x.summary].join(' ').toLowerCase().includes(q)));
+    }
+    function renderList(){
+      const items=visibleItems();
+      emptyEl.hidden=items.length>0;
+      listEl.innerHTML=items.map(x=>`
+        <button class="admin-list-item ${x.id===selectedId?'selected':''}" data-id="${x.id}">
+          <span class="admin-status status-${escapeHtml(x.status)}">${escapeHtml(statusName(x.status))}</span>
+          <strong>${escapeHtml(x.title)}</strong>
+          <small>${escapeHtml(x.name)} · ${escapeHtml(typeName(x.contribution_type))}</small>
+          <time>${escapeHtml(fmtDate(x.created_at))}</time>
+        </button>`).join('');
+      listEl.querySelectorAll('[data-id]').forEach(btn=>btn.addEventListener('click',()=>{selectedId=btn.dataset.id;renderList();renderDetail(selectedId)}));
+    }
+    function renderDetail(id){
+      const x=submissions.find(s=>s.id===id);if(!x)return;
+      detailEl.innerHTML=`
+        <header class="admin-detail-head">
+          <div><span class="admin-status status-${escapeHtml(x.status)}">${escapeHtml(statusName(x.status))}</span><h2>${escapeHtml(x.title)}</h2><p>${escapeHtml(x.name)} · <a href="mailto:${escapeHtml(x.email)}">${escapeHtml(x.email)}</a></p></div>
+          <div><span>${escapeHtml(typeName(x.contribution_type))}</span><time>${escapeHtml(fmtDate(x.created_at))}</time></div>
+        </header>
+        <section class="admin-meta">
+          <div><strong>Resumen</strong><p>${escapeHtml(x.summary)}</p></div>
+          <div><strong>Biografía</strong><p>${escapeHtml(x.bio)}</p></div>
+          ${x.notes?`<div><strong>Nota de quien envía</strong><p>${escapeHtml(x.notes)}</p></div>`:''}
+        </section>
+        <section class="admin-manuscript"><strong>Manuscrito</strong><div>${escapeHtml(x.manuscript).replace(/\n/g,'<br>')}</div></section>
+        <section class="admin-review">
+          <label><span>Estado editorial</span>
+            <select id="detail-status">
+              ${['received','reviewing','accepted','rejected','withdrawn'].map(s=>`<option value="${s}" ${x.status===s?'selected':''}>${statusName(s)}</option>`).join('')}
+            </select>
+          </label>
+          <label><span>Nota interna</span><textarea id="detail-note" rows="6" maxlength="10000" placeholder="Observaciones para la redacción…">${escapeHtml(x.editorial_note||'')}</textarea></label>
+          <div class="admin-review-actions"><button id="save-review" type="button">Guardar revisión →</button><span id="save-status" role="status"></span></div>
+        </section>`;
+      document.getElementById('save-review').addEventListener('click',()=>saveReview(x.id));
+    }
+    async function saveReview(id){
+      const btn=document.getElementById('save-review');const msg=document.getElementById('save-status');
+      const status=document.getElementById('detail-status').value;
+      const editorial_note=document.getElementById('detail-note').value.trim()||null;
+      btn.disabled=true;msg.textContent='Guardando…';
+      try{
+        const now=new Date().toISOString();
+        const r=await api(`editorial_submissions?id=eq.${encodeURIComponent(id)}`,{
+          method:'PATCH',headers:{'Content-Type':'application/json','Prefer':'return=minimal'},
+          body:JSON.stringify({status,editorial_note,reviewed_at:now,updated_at:now})
+        });
+        if(!r.ok)throw new Error('save');
+        const x=submissions.find(s=>s.id===id);if(x){x.status=status;x.editorial_note=editorial_note;x.reviewed_at=now;x.updated_at=now}
+        renderStats();renderList();renderDetail(id);document.getElementById('save-status').textContent='Guardado.';
+      }catch{msg.textContent='No se pudo guardar.'}finally{btn.disabled=false}
+    }
+    function showApp(){
+      loginSection.hidden=true;appSection.hidden=false;logoutBtn.hidden=false;loadSubmissions();
+    }
+    function logout(showMessage=true){
+      saveSession(null);submissions=[];selectedId=null;appSection.hidden=true;logoutBtn.hidden=true;loginSection.hidden=false;
+      if(showMessage)loginStatus.textContent='Sesión cerrada.';
+    }
+
+    loginForm.addEventListener('submit',async(e)=>{
+      e.preventDefault();loginStatus.textContent='Ingresando…';
+      const fd=new FormData(loginForm);const email=String(fd.get('email')||'').trim();const password=String(fd.get('password')||'');
+      try{
+        const r=await fetch(`${supabaseUrl}/auth/v1/token?grant_type=password`,{
+          method:'POST',headers:{apikey:supabaseKey,'Content-Type':'application/json'},body:JSON.stringify({email,password})
+        });
+        if(!r.ok)throw new Error('login');
+        saveSession(await r.json());loginForm.reset();loginStatus.textContent='';showApp();
+      }catch{loginStatus.textContent='No fue posible ingresar. Revisa las credenciales.'}
+    });
+    logoutBtn.addEventListener('click',()=>logout());
+    refreshBtn.addEventListener('click',loadSubmissions);
+    searchEl.addEventListener('input',renderList);
+    filterButtons.forEach(btn=>btn.addEventListener('click',()=>{currentFilter=btn.dataset.filter;filterButtons.forEach(b=>b.classList.toggle('active',b===btn));renderList()}));
+
+    if(await ensureSession())showApp();
+  })();</script>  <footer> <span>La Forja · Santiago de Chile · 2026</span> <span><a href="/la-forja/autores/">Autores</a> · <a href="/la-forja/temas/">Temas</a> · <a href="/la-forja/buscar/">Buscar</a> · <a href="https://mverapol-netizen.github.io/la-forja/rss.xml">RSS</a> · <a href="/la-forja/sobre/">Sobre La Forja</a> · <a class="footer-submit" href="/la-forja/colabora/">Publica con nosotros</a></span> </footer> </main> <script>
+    (() => {
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce) return;
+      document.addEventListener('click', (event) => {
+        const a = event.target.closest('a');
+        if (!a || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        if (a.target === '_blank' || a.hasAttribute('download')) return;
+        const href = a.getAttribute('href');
+        if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+        const url = new URL(a.href, window.location.href);
+        if (url.origin !== window.location.origin) return;
+        event.preventDefault();
+        document.body.classList.add('page-leave');
+        window.setTimeout(() => { window.location.href = url.href; }, 115);
+      });
+    })();
+  </script> </body> </html>
