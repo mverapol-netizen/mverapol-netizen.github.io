@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+const slugify=(s)=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+export async function getStaticPaths(){
+  const articulos=await getCollection('articulos');
+  const topics=[...new Set(articulos.flatMap(a=>a.data.topics))];
+  return topics.map(topic=>({params:{slug:slugify(topic)},props:{topic}}));
+}
+const{topic}=Astro.props;
+const base=import.meta.env.BASE_URL;
+const autores=await getCollection('autores');
+const authorName=(id)=>autores.find(a=>a.id===id)?.data.name??id;
+const articulos=(await getCollection('articulos')).filter(a=>a.data.topics.includes(topic)).sort((a,b)=>b.data.date.valueOf()-a.data.date.valueOf());
+const hrefFor=(a)=>base+(a.data.type==='ensayo'?'ensayos/':'columnas/')+a.id+'/';
+---
+<BaseLayout title={topic} active="Temas">
+  <header class="page-head"><span class="label blue">Tema</span><h1>{topic}</h1><p>{articulos.length} {articulos.length===1?'publicación':'publicaciones'} en el archivo.</p></header>
+  <section class="list">
+    {articulos.map(a=><article class="row"><strong>{a.data.type}</strong><div><h2><a href={hrefFor(a)}>{a.data.title}</a></h2><p>{a.data.subtitle}</p><small>Por {authorName(a.data.author)} · {a.data.date.toLocaleDateString('es-CL')}</small></div></article>)}
+  </section>
+</BaseLayout>

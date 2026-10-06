@@ -3,7 +3,7 @@ import '../styles/global.css';
 interface Props{title?:string;description?:string;active?:string}
 const{title='La Forja',description='Revista de opinión, pensamiento crítico, debate y educación popular.',active=''}=Astro.props;
 const base=import.meta.env.BASE_URL;
-const nav=[['Portada',''],['Columnas','columnas/'],['Ensayos','ensayos/'],['Debates','debates/'],['Educación popular','educacion-popular/'],['Archivo','archivo/']];
+const nav=[['Portada',''],['Columnas','columnas/'],['Ensayos','ensayos/'],['Debates','debates/'],['Educación popular','educacion-popular/'],['Archivo','archivo/'],['Temas','temas/'],['Buscar','buscar/']];
 ---
 <!doctype html>
 <html lang="es">
@@ -28,7 +28,7 @@ const nav=[['Portada',''],['Columnas','columnas/'],['Ensayos','ensayos/'],['Deba
     <slot/>
     <footer>
       <span>La Forja · Santiago de Chile · 2026</span>
-      <span><a href={base+'autores/'}>Autores</a> · <a href={base+'sobre/'}>Sobre La Forja</a> · <a href={base+'colabora/'}>Escribe con nosotros</a></span>
+      <span><a href={base+'autores/'}>Autores</a> · <a href={base+'temas/'}>Temas</a> · <a href={base+'buscar/'}>Buscar</a> · <a href={base+'sobre/'}>Sobre La Forja</a> · <a href={base+'colabora/'}>Escribe con nosotros</a></span>
     </footer>
   </main>
   <script is:inline>

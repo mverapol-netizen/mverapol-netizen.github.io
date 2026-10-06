@@ -4,6 +4,8 @@ import EditorialArt from '../../components/EditorialArt.astro';
 import { getCollection, render } from 'astro:content';
 export async function getStaticPaths(){const entries=await getCollection('articulos',({data})=>data.type==='ensayo');return entries.map(post=>({params:{slug:post.id},props:{post}}))}
 const{post}=Astro.props;
+const base=import.meta.env.BASE_URL;
+const slugify=(s)=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 const autores=await getCollection('autores');
 const author=autores.find(a=>a.id===post.data.author);
 const{Content}=await render(post);
@@ -22,5 +24,6 @@ const{Content}=await render(post);
       <div class="prose"><Content/></div>
       <aside class="pull">La democracia política no puede separarse indefinidamente de la distribución del poder económico.</aside>
     </section>
+    <section class="article-topics"><strong>Temas</strong>{post.data.topics.map(t=><a href={base+'temas/'+slugify(t)+'/' }>{t}</a>)}</section>
   </article>
 </BaseLayout>
