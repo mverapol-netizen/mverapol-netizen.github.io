@@ -1,4 +1,12 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';import{getCollection}from'astro:content';const columnas=(await getCollection('articulos',({data})=>data.type==='columna')).sort((a,b)=>b.data.date.valueOf()-a.data.date.valueOf());
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import{getCollection}from'astro:content';
+const base=import.meta.env.BASE_URL;
+const autores=await getCollection('autores');
+const authorName=(id)=>autores.find(a=>a.id===id)?.data.name??id;
+const columnas=(await getCollection('articulos',({data})=>data.type==='columna')).sort((a,b)=>b.data.date.valueOf()-a.data.date.valueOf());
 ---
-<BaseLayout title="Columnas" active="Columnas"><header class="page-head"><span class="label">Columnas</span><h1>Columnas</h1><p>Intervenciones breves sobre coyuntura, cultura y política.</p></header><section class="list">{columnas.map(c=><article class="row"><strong>{c.data.date.toLocaleDateString('es-CL')}</strong><div><h2>{c.data.title}</h2><p>{c.data.subtitle}</p><small>Por {c.data.author}</small></div></article>)}</section></BaseLayout>
+<BaseLayout title="Columnas" active="Columnas">
+  <header class="page-head"><span class="label">Columnas</span><h1>Columnas</h1><p>Intervenciones breves sobre coyuntura, cultura y política.</p></header>
+  <section class="list">{columnas.map(c=><article class="row"><strong>{c.data.date.toLocaleDateString('es-CL')}</strong><div><h2><a href={base+'columnas/'+c.id+'/'}>{c.data.title}</a></h2><p>{c.data.subtitle}</p><small>Por {authorName(c.data.author)}</small></div></article>)}</section>
+</BaseLayout>

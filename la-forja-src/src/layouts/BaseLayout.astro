@@ -5,4 +5,49 @@ const{title='La Forja',description='Revista de opinión, pensamiento crítico, d
 const base=import.meta.env.BASE_URL;
 const nav=[['Portada',''],['Columnas','columnas/'],['Ensayos','ensayos/'],['Debates','debates/'],['Educación popular','educacion-popular/'],['Archivo','archivo/']];
 ---
-<!doctype html><html lang="es"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="description" content={description}/><title>{title==='La Forja'?title:`${title} — La Forja`}</title></head><body><main class="shell"><div class="topline"><span>Año I · N.º 1 · Santiago de Chile</span><span>Octubre de 2026</span></div><header class="mast"><a class="logo" href={base}>La Forja</a><div class="mast-note">Opinión<br/>Pensamiento crítico<br/>Debate<br/>Educación popular</div></header><nav class="nav">{nav.map(([label,path])=><a class:list={{active:active===label}} href={base+path}>{label}</a>)}<a class="push" href={base+'colabora/'}>Colabora</a></nav><slot/><footer><span>La Forja · Santiago de Chile · 2026</span><span><a href={base+'autores/'}>Autores</a> · <a href={base+'sobre/'}>Sobre La Forja</a> · <a href={base+'colabora/'}>Escribe con nosotros</a></span></footer></main></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="description" content={description}/>
+  <meta name="theme-color" content="#e8ddc4"/>
+  <title>{title==='La Forja'?title:`${title} — La Forja`}</title>
+</head>
+<body class="page-enter">
+  <main class="shell">
+    <div class="topline"><span>Año I · N.º 1 · Santiago de Chile</span><span>Octubre de 2026</span></div>
+    <header class="mast">
+      <a class="logo ink-title" href={base}>La Forja</a>
+      <div class="mast-note">Opinión<br/>Pensamiento crítico<br/>Debate<br/>Educación popular</div>
+    </header>
+    <nav class="nav">
+      {nav.map(([label,path])=><a class:list={{active:active===label}} href={base+path}>{label}</a>)}
+      <a class="push" href={base+'colabora/'}>Colabora</a>
+    </nav>
+    <slot/>
+    <footer>
+      <span>La Forja · Santiago de Chile · 2026</span>
+      <span><a href={base+'autores/'}>Autores</a> · <a href={base+'sobre/'}>Sobre La Forja</a> · <a href={base+'colabora/'}>Escribe con nosotros</a></span>
+    </footer>
+  </main>
+  <script is:inline>
+    (() => {
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce) return;
+      document.addEventListener('click', (event) => {
+        const a = event.target.closest('a');
+        if (!a || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        if (a.target === '_blank' || a.hasAttribute('download')) return;
+        const href = a.getAttribute('href');
+        if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+        const url = new URL(a.href, window.location.href);
+        if (url.origin !== window.location.origin) return;
+        event.preventDefault();
+        document.body.classList.add('page-leave');
+        window.setTimeout(() => { window.location.href = url.href; }, 115);
+      });
+    })();
+  </script>
+</body>
+</html>

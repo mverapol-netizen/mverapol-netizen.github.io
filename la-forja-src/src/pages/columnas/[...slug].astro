@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+export async function getStaticPaths(){const entries=await getCollection('articulos',({data})=>data.type==='columna');return entries.map(post=>({params:{slug:post.id},props:{post}}))}
+const{post}=Astro.props;
+const autores=await getCollection('autores');
+const author=autores.find(a=>a.id===post.data.author);
+const{Content}=await render(post);
+---
+<BaseLayout title={post.data.title} description={post.data.subtitle} active="Columnas">
+  <article class="article">
+    <header><span class="label">Columna</span><h1>{post.data.title}</h1><div class="dek">{post.data.subtitle}</div><div class="byline">Por {author?.data.name??post.data.author} · {post.data.date.toLocaleDateString('es-CL')} {post.data.readingTime&&`· ${post.data.readingTime} min`}</div></header>
+    <section class="article-body"><div class="prose"><Content/></div><aside class="pull">Intervenir en la coyuntura también exige construir argumentos.</aside></section>
+  </article>
+</BaseLayout>

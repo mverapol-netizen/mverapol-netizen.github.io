@@ -2,6 +2,53 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 const base=import.meta.env.BASE_URL;
-const articulos=await getCollection('articulos');const featured=articulos.find(x=>x.data.featured)??articulos[0];const columnas=articulos.filter(x=>x.data.type==='columna').slice(0,3);const cuadernos=(await getCollection('cuadernos')).sort((a,b)=>a.data.number-b.data.number);
+const articulos=await getCollection('articulos');
+const autores=await getCollection('autores');
+const authorName=(id)=>autores.find(a=>a.id===id)?.data.name??id;
+const featured=articulos.find(x=>x.data.featured)??articulos[0];
+const columnas=articulos.filter(x=>x.data.type==='columna').sort((a,b)=>b.data.date.valueOf()-a.data.date.valueOf()).slice(0,3);
+const cuadernos=(await getCollection('cuadernos')).sort((a,b)=>a.data.number-b.data.number).slice(0,4);
 ---
-<BaseLayout active="Portada"><section class="hero"><div><span class="label blue">{featured.data.type}</span><h1>{featured.data.title}</h1><div class="dek">{featured.data.subtitle}</div><div class="byline">Por {featured.data.author}</div><a href={base+'ensayos/'+featured.id+'/'}>Leer ensayo →</a></div><a class="art" href={base+'ensayos/'+featured.id+'/'} aria-label="Abrir ensayo destacado"></a></section><section class="grid3"><article class="card"><span class="label">Columnas</span>{columnas.map(c=><><h2>{c.data.title}</h2><div class="byline">Por {c.data.author}</div></>)}</article><article class="card"><span class="label blue">Editorial</span><h2>Por qué nace La Forja</h2><p>Una revista para pensar, debatir y formar desde las izquierdas.</p></article><article class="card"><span class="label">Debate</span><h2>¿Debe la izquierda volver a hablar de clase?</h2><a href={base+'debates/'}>Cuatro intervenciones →</a></article></section><section><div class="page-head"><span class="label blue">Educación popular</span><h1>Cuadernos</h1></div><div class="books">{cuadernos.map(c=><a class="book" href={base+'educacion-popular/'}><span class="num">N.º {String(c.data.number).padStart(2,'0')}</span><h3>{c.data.title}</h3><small>{c.data.series}</small></a>)}</div></section></BaseLayout>
+<BaseLayout active="Portada">
+  <section class="hero">
+    <div>
+      <span class="label blue">{featured.data.type}</span>
+      <h1>{featured.data.title}</h1>
+      <div class="dek">{featured.data.subtitle}</div>
+      <div class="byline">Por {authorName(featured.data.author)}</div>
+      <a class="text-link" href={base+'ensayos/'+featured.id+'/'}>Leer ensayo →</a>
+    </div>
+    <a class="art" href={base+'ensayos/'+featured.id+'/'} aria-label="Abrir ensayo destacado"></a>
+  </section>
+
+  <section class="grid3">
+    <article class="card">
+      <span class="label">Columnas</span>
+      <div class="card-list">
+        {columnas.map(c=><a href={base+'columnas/'+c.id+'/'}><strong>{c.data.title}</strong><br/><small>Por {authorName(c.data.author)}</small></a>)}
+      </div>
+    </article>
+    <article class="card">
+      <span class="label blue">Editorial</span>
+      <h2>Por qué nace La Forja</h2>
+      <p>Una revista para pensar, debatir y formar desde las izquierdas.</p>
+      <a class="text-link" href={base+'sobre/'}>La revista →</a>
+    </article>
+    <article class="card">
+      <span class="label">Debate</span>
+      <h2>¿Debe la izquierda volver a hablar de clase?</h2>
+      <p>Cuatro intervenciones sobre representación, conflicto social y organización.</p>
+      <a class="text-link" href={base+'debates/'}>Entrar al debate →</a>
+    </article>
+  </section>
+
+  <section>
+    <div class="section-intro">
+      <div><span class="label blue">Educación popular</span><h2>Cuadernos</h2></div>
+      <p>Conceptos, historia, lecturas y herramientas para una formación política crítica y colectiva.</p>
+    </div>
+    <div class="books">
+      {cuadernos.map(c=><a class="book" href={base+'educacion-popular/'}><span class="num">N.º {String(c.data.number).padStart(2,'0')}</span><h3>{c.data.title}</h3><small>{c.data.series}</small></a>)}
+    </div>
+  </section>
+</BaseLayout>
