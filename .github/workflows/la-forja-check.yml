@@ -40,7 +40,6 @@ jobs:
             "dist/index.html"
             "dist/columnas/index.html"
             "dist/ensayos/index.html"
-            "dist/debates/index.html"
             "dist/educacion-popular/index.html"
             "dist/archivo/index.html"
             "dist/temas/index.html"

@@ -3,7 +3,7 @@ const esc=(s:string)=>s.replace(/[<>&'"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;
 const slugify=(s:string)=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 export async function GET({site}:{site:URL|undefined}){
   const root=new URL('/la-forja/',site??new URL('https://mverapol-netizen.github.io'));
-  const urls=new Set<string>(['','columnas/','ensayos/','debates/','educacion-popular/','archivo/','temas/','buscar/','autores/','sobre/','colabora/'].map(p=>new URL(p,root).toString()));
+  const urls=new Set<string>(['','columnas/','ensayos/','educacion-popular/','archivo/','temas/','buscar/','autores/','sobre/','colabora/'].map(p=>new URL(p,root).toString()));
   const articulos=await getCollection('articulos',({data})=>!data.draft);
   for(const a of articulos){const folder=a.data.type==='ensayo'?'ensayos':'columnas';urls.add(new URL(`${folder}/${a.id}/`,root).toString());for(const topic of a.data.topics)urls.add(new URL(`temas/${slugify(topic)}/`,root).toString());}
   for(const a of await getCollection('autores',({data})=>!data.draft))urls.add(new URL(`autores/${a.id}/`,root).toString());
