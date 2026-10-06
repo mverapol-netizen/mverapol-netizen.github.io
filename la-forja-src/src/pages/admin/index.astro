@@ -101,6 +101,7 @@ const currentIssue=String(issues[0]?.data.number??1).padStart(3,'0');
     let currentFilter='all';
     let selectedId=null;
     let session=null;
+    const versionsCache={};
 
     const escapeHtml=(s='')=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
     const fmtDate=(v)=>new Intl.DateTimeFormat('es-CL',{dateStyle:'medium',timeStyle:'short'}).format(new Date(v));
@@ -115,6 +116,8 @@ const currentIssue=String(issues[0]?.data.number??1).padStart(3,'0');
       publication_prep:'Preparación de publicación',
       response_draft:'Respuesta al autor',
       response_sent:'Respuesta marcada como enviada',
+      version_added:'Nueva versión del manuscrito',
+      publication_version:'Versión de publicación',
       manual:'Nota de historial'
     })[s]||s;
     const slugify=(s='')=>String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'texto';
@@ -131,7 +134,7 @@ const currentIssue=String(issues[0]?.data.number??1).padStart(3,'0');
 
     function markdownFor(x){
       const date=new Date().toISOString().slice(0,10);
-      const words=(x.manuscript||'').trim().split(/\s+/).filter(Boolean).length;
+      const words=(manuscript||'').trim().split(/\s+/).filter(Boolean).length;
       const readingTime=Math.max(1,Math.ceil(words/220));
       const authorSlug=x.publication_author_slug||slugify(x.name);
       const issue=x.publication_issue||currentIssue;
@@ -147,7 +150,7 @@ const currentIssue=String(issues[0]?.data.number??1).padStart(3,'0');
           'issue: '+yaml(issue)+'\n' +
           'participants: ['+yaml(x.name)+']\n' +
           'artStyle: '+yaml(artStyle)+'\n' +
-          'artLabel: '+yaml(artLabel)+imageYaml(x)+'\n---\n\n' + (x.manuscript||'').trim() + '\n';
+          'artLabel: '+yaml(artLabel)+imageYaml(x)+'\n---\n\n' + (manuscript||'').trim() + '\n';
       }
 
       if(x.contribution_type==='educacion-popular'){
@@ -161,7 +164,7 @@ const currentIssue=String(issues[0]?.data.number??1).padStart(3,'0');
           'date: '+date+'\n' +
           'issue: '+yaml(issue)+'\n' +
           'artStyle: '+yaml(artStyle)+'\n' +
-          'artLabel: '+yaml(artLabel)+imageYaml(x)+'\n---\n\n' + (x.manuscript||'').trim() + '\n';
+          'artLabel: '+yaml(artLabel)+imageYaml(x)+'\n---\n\n' + (manuscript||'').trim() + '\n';
       }
 
       const type=x.contribution_type==='columna'?'columna':'ensayo';
@@ -177,7 +180,7 @@ const currentIssue=String(issues[0]?.data.number??1).padStart(3,'0');
         'featured: '+String(!!x.publication_featured)+'\n' +
         'readingTime: '+String(readingTime)+'\n' +
         'artStyle: '+yaml(artStyle)+'\n' +
-        'artLabel: '+yaml(artLabel)+imageYaml(x)+'\n---\n\n' + (x.manuscript||'').trim() + '\n';
+        'artLabel: '+yaml(artLabel)+imageYaml(x)+'\n---\n\n' + (manuscript||'').trim() + '\n';
     }
 
     function authorMarkdownFor(x){
@@ -304,6 +307,157 @@ const currentIssue=String(issues[0]?.data.number??1).padStart(3,'0');
           })
         });
       }catch{}
+    }
+
+    function versionPanel(x){
+      return `
+        <section class="admin-versions">
+          <header>
+            <div><span>Revisión del manuscrito</span><h3>Versiones</h3></div>
+            <strong>Publicación: V${Number(x.publication_manuscript_version||1)}</strong>
+          </header>
+          <div id="version-summary" class="version-summary"><p>Cargando versiones…</p></div>
+          <div class="version-controls">
+            <label><span>Comparar</span><select id="compare-a"></select></label>
+            <label><span>con</span><select id="compare-b"></select></label>
+            <button id="use-publication-version" type="button">Usar B para publicación</button>
+            <span id="version-action-status"></span>
+          </div>
+          <div id="version-compare" class="version-compare"></div>
+          <details class="version-add">
+            <summary>Añadir una nueva versión</summary>
+            <div class="version-add-form">
+              <label><span>Origen</span>
+                <select id="revision-source">
+                  <option value="author">Versión corregida del autor/a</option>
+                  <option value="editorial">Edición interna</option>
+                </select>
+              </label>
+              <label><span>Nota de revisión</span><input id="revision-note" maxlength="5000" placeholder="Qué cambió en esta versión"></label>
+              <label class="wide"><span>Manuscrito revisado</span><textarea id="revision-manuscript" rows="18" minlength="100" maxlength="120000"></textarea></label>
+              <button id="save-version" type="button">Guardar nueva versión →</button>
+              <span id="version-save-status"></span>
+            </div>
+          </details>
+        </section>`;
+    }
+
+    function allVersionsFor(x){
+      return [{
+        version_number:1,
+        created_at:x.created_at,
+        manuscript:x.manuscript||'',
+        revision_note:'Manuscrito original recibido',
+        revision_source:'author',
+        actor_email:x.email
+      },...(versionsCache[x.id]||[])].sort((a,b)=>Number(a.version_number)-Number(b.version_number));
+    }
+
+    function versionLabel(v){
+      return 'V'+v.version_number+(Number(v.version_number)===1?' · original':' · '+(v.revision_source==='editorial'?'edición interna':'revisión'));
+    }
+
+    function compareParagraphs(a,b){
+      const pa=String(a||'').split(/\n\s*\n/).map(s=>s.trim()).filter(Boolean);
+      const pb=String(b||'').split(/\n\s*\n/).map(s=>s.trim()).filter(Boolean);
+      const setA=new Set(pa),setB=new Set(pb);
+      const left=pa.map(p=>'<p class="'+(setB.has(p)?'same':'changed removed')+'">'+escapeHtml(p)+'</p>').join('');
+      const right=pb.map(p=>'<p class="'+(setA.has(p)?'same':'changed added')+'">'+escapeHtml(p)+'</p>').join('');
+      return '<div class="version-pane">'+left+'</div><div class="version-pane">'+right+'</div>';
+    }
+
+    function renderVersionSummary(x){
+      const versions=allVersionsFor(x);
+      const host=document.getElementById('version-summary');
+      const a=document.getElementById('compare-a');
+      const b=document.getElementById('compare-b');
+      if(!host||!a||!b)return;
+      host.innerHTML=versions.map(v=>`
+        <article class="${Number(v.version_number)===Number(x.publication_manuscript_version||1)?'is-publication':''}">
+          <strong>${escapeHtml(versionLabel(v))}</strong>
+          <span>${escapeHtml(fmtDate(v.created_at))}</span>
+          <p>${escapeHtml(v.revision_note||'Sin nota de revisión.')}</p>
+        </article>`).join('');
+      const options=versions.map(v=>`<option value="${v.version_number}">${escapeHtml(versionLabel(v))}</option>`).join('');
+      a.innerHTML=options;b.innerHTML=options;
+      a.value=String(versions.length>1?versions[versions.length-2].version_number:1);
+      b.value=String(versions[versions.length-1].version_number);
+      renderVersionComparison(x);
+    }
+
+    function renderVersionComparison(x){
+      const a=document.getElementById('compare-a');
+      const b=document.getElementById('compare-b');
+      const host=document.getElementById('version-compare');
+      if(!a||!b||!host)return;
+      const va=Number(a.value),vb=Number(b.value);
+      host.innerHTML=compareParagraphs(manuscriptFor(x,va),manuscriptFor(x,vb));
+    }
+
+    async function loadVersions(id){
+      const x=submissions.find(s=>s.id===id);if(!x)return;
+      try{
+        const r=await api('editorial_submission_versions?submission_id=eq.'+encodeURIComponent(id)+'&select=id,version_number,created_at,manuscript,revision_note,revision_source,actor_email&order=version_number.asc');
+        if(!r.ok)throw new Error('versions');
+        versionsCache[id]=await r.json();
+        renderVersionSummary(x);
+      }catch{
+        const host=document.getElementById('version-summary');if(host)host.innerHTML='<p>No se pudieron cargar las versiones.</p>';
+      }
+    }
+
+    async function saveNewVersion(id){
+      const x=submissions.find(s=>s.id===id);if(!x)return;
+      const text=document.getElementById('revision-manuscript')?.value?.trim()||'';
+      const note=document.getElementById('revision-note')?.value?.trim()||null;
+      const source=document.getElementById('revision-source')?.value||'author';
+      const status=document.getElementById('version-save-status');
+      if(text.length<100){status.textContent='El manuscrito debe tener al menos 100 caracteres.';return;}
+      const versions=allVersionsFor(x);
+      const next=Math.max(...versions.map(v=>Number(v.version_number)))+1;
+      status.textContent='Guardando V'+next+'…';
+      try{
+        const r=await api('editorial_submission_versions',{
+          method:'POST',
+          headers:{'Content-Type':'application/json','Prefer':'return=minimal'},
+          body:JSON.stringify({
+            submission_id:id,
+            version_number:next,
+            manuscript:text,
+            revision_note:note,
+            revision_source:source,
+            actor_email:session?.user?.email||null
+          })
+        });
+        if(!r.ok)throw new Error('save-version');
+        await logEvent(id,'version_added',{toValue:'V'+next,note:note||'Nueva versión incorporada.'});
+        document.getElementById('revision-manuscript').value='';
+        document.getElementById('revision-note').value='';
+        await loadVersions(id);
+        status.textContent='V'+next+' guardada.';
+        loadHistory(id);
+      }catch{status.textContent='No se pudo guardar la versión.'}
+    }
+
+    async function setPublicationVersion(id){
+      const x=submissions.find(s=>s.id===id);if(!x)return;
+      const target=Number(document.getElementById('compare-b')?.value||1);
+      const status=document.getElementById('version-action-status');
+      const old=Number(x.publication_manuscript_version||1);
+      if(target===old){status.textContent='Esa versión ya está seleccionada.';return;}
+      status.textContent='Guardando…';
+      try{
+        const now=new Date().toISOString();
+        const r=await api('editorial_submissions?id=eq.'+encodeURIComponent(id),{
+          method:'PATCH',
+          headers:{'Content-Type':'application/json','Prefer':'return=minimal'},
+          body:JSON.stringify({publication_manuscript_version:target,updated_at:now})
+        });
+        if(!r.ok)throw new Error('publication-version');
+        x.publication_manuscript_version=target;x.updated_at=now;
+        await logEvent(id,'publication_version',{fromValue:'V'+old,toValue:'V'+target});
+        renderDetail(id);
+      }catch{status.textContent='No se pudo cambiar la versión de publicación.'}
     }
 
     function responseText(x,kind,note=''){
@@ -485,7 +639,7 @@ La Forja`;
     async function loadSubmissions(){
       refreshBtn.disabled=true;
       try{
-        const fields='id,created_at,status,name,email,contribution_type,title,summary,bio,manuscript,notes,editorial_note,reviewed_at,updated_at,publication_author_slug,publication_issue,publication_topics,publication_art_style,publication_art_label,publication_image,publication_image_alt,publication_image_credit,publication_featured,publication_ready,publication_series,publication_number,editorial_priority,author_response_kind,author_response_note,response_sent_at';
+        const fields='id,created_at,status,name,email,contribution_type,title,summary,bio,manuscript,notes,editorial_note,reviewed_at,updated_at,publication_author_slug,publication_issue,publication_topics,publication_art_style,publication_art_label,publication_image,publication_image_alt,publication_image_credit,publication_featured,publication_ready,publication_series,publication_number,publication_manuscript_version,editorial_priority,author_response_kind,author_response_note,response_sent_at';
         const r=await api(`editorial_submissions?select=${fields}&order=created_at.desc`);
         if(r.status===401||r.status===403)throw new Error('forbidden');
         if(!r.ok)throw new Error('load');
@@ -543,7 +697,8 @@ La Forja`;
           <div><strong>Biografía</strong><p>${escapeHtml(x.bio)}</p></div>
           ${x.notes?`<div><strong>Nota de quien envía</strong><p>${escapeHtml(x.notes)}</p></div>`:''}
         </section>
-        <section class="admin-manuscript"><strong>Manuscrito</strong><div>${escapeHtml(x.manuscript).replace(/\n/g,'<br>')}</div></section>
+        <section class="admin-manuscript"><strong>Manuscrito original · V1</strong><div>${escapeHtml(x.manuscript).replace(/\n/g,'<br>')}</div></section>
+        ${versionPanel(x)}
         ${publicationPanel(x)}
         <section class="admin-review">
           <label><span>Prioridad editorial</span>
@@ -579,6 +734,16 @@ La Forja`;
         detailEl.querySelectorAll('.admin-publication input,.admin-publication select').forEach(el=>el.addEventListener('input',()=>updatePrepChecklist(x)));
         updatePrepChecklist(x);
       }
+      const compareA=document.getElementById('compare-a');
+      const compareB=document.getElementById('compare-b');
+      const saveVersionBtn=document.getElementById('save-version');
+      const useVersionBtn=document.getElementById('use-publication-version');
+      if(compareA)compareA.addEventListener('change',()=>renderVersionComparison(x));
+      if(compareB)compareB.addEventListener('change',()=>renderVersionComparison(x));
+      if(saveVersionBtn)saveVersionBtn.addEventListener('click',()=>saveNewVersion(x.id));
+      if(useVersionBtn)useVersionBtn.addEventListener('click',()=>setPublicationVersion(x.id));
+      loadVersions(x.id);
+
       const responseKind=document.getElementById('response-kind');
       const responseNote=document.getElementById('response-note');
       const saveResponseBtn=document.getElementById('save-response');
