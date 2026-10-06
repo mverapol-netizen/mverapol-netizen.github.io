@@ -4,12 +4,10 @@ import { getCollection } from 'astro:content';
 const base=import.meta.env.BASE_URL;
 const articulos=await getCollection('articulos',({data})=>!data.draft);
 const autores=await getCollection('autores',({data})=>!data.draft);
-const debates=await getCollection('debates',({data})=>!data.draft);
 const cuadernos=await getCollection('cuadernos',({data})=>!data.draft);
 const authorName=(id)=>autores.find(a=>a.id===id)?.data.name??id;
 const index=[
   ...articulos.map(a=>({title:a.data.title,subtitle:a.data.subtitle??'',type:a.data.type,meta:`${authorName(a.data.author)} · ${a.data.topics.join(' · ')}`,url:base+(a.data.type==='ensayo'?'ensayos/':'columnas/')+a.id+'/',search:[a.data.title,a.data.subtitle??'',authorName(a.data.author),...a.data.topics].join(' ').toLowerCase()})),
-  ...debates.map(d=>({title:d.data.title,subtitle:d.data.subtitle??'',type:'debate',meta:d.data.participants.join(' · '),url:base+'debates/',search:[d.data.title,d.data.subtitle??'',...d.data.participants].join(' ').toLowerCase()})),
   ...cuadernos.map(c=>({title:c.data.title,subtitle:c.data.subtitle??'',type:'cuaderno',meta:`${c.data.series} · ${c.data.author}`,url:base+'educacion-popular/',search:[c.data.title,c.data.subtitle??'',c.data.series,c.data.author].join(' ').toLowerCase()}))
 ];
 ---
