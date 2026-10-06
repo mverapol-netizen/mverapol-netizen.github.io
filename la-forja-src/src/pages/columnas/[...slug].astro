@@ -7,11 +7,12 @@ const base=import.meta.env.BASE_URL;
 const slugify=(s)=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 const autores=await getCollection('autores');
 const author=autores.find(a=>a.id===post.data.author);
+const authorName=author?.data.name??post.data.author;
 const{Content}=await render(post);
 ---
-<BaseLayout title={post.data.title} description={post.data.subtitle} active="Columnas">
+<BaseLayout title={post.data.title} description={post.data.subtitle} active="Columnas" image={post.data.image} type="article" publishedTime={post.data.date} author={authorName}>
   <article class="article">
-    <header><span class="label">Columna</span><h1>{post.data.title}</h1><div class="dek">{post.data.subtitle}</div><div class="byline">Por {author?.data.name??post.data.author} · {post.data.date.toLocaleDateString('es-CL')} {post.data.readingTime&&`· ${post.data.readingTime} min`}</div></header>
+    <header><span class="label">Columna</span><h1>{post.data.title}</h1><div class="dek">{post.data.subtitle}</div><div class="byline">Por {authorName} · {post.data.date.toLocaleDateString('es-CL')} {post.data.readingTime&&`· ${post.data.readingTime} min`}</div></header>
     <section class="article-body"><div class="prose"><Content/></div><aside class="pull">Intervenir en la coyuntura también exige construir argumentos.</aside></section>
     <section class="article-topics"><strong>Temas</strong>{post.data.topics.map(t=><a href={base+'temas/'+slugify(t)+'/' }>{t}</a>)}</section>
   </article>
