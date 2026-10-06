@@ -14,8 +14,8 @@ Esta carpeta contiene la versión mantenible de La Forja. La maqueta pública vi
 1. Crear o editar un archivo Markdown.
 2. Revisar metadatos.
 3. Commit.
-4. Build estático de Astro.
-5. Publicación.
+4. GitHub Actions comprueba que Astro compile.
+5. Build estático y publicación.
 
 ## Desarrollo
 `npm install` · `npm run dev` · `npm run build`
