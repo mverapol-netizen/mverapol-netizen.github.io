@@ -52,16 +52,22 @@ const nav=[['Portada',''],['Columnas','columnas/'],['Ensayos','ensayos/'],['Deba
     <div class="topline"><span>Año {yearLabel} · N.º {issueNumber} · Santiago de Chile</span><span>{issueMonth}</span></div>
     <header class="mast">
       <a class="logo ink-title" href={base}>La Forja</a>
-      <div class="mast-note">Opinión<br/>Pensamiento crítico<br/>Debate<br/>Educación popular</div>
+      <div class="mast-side">
+        <div class="mast-note">Opinión<br/>Pensamiento crítico<br/>Debate<br/>Educación popular</div>
+        <a class="mast-submit" href={base+'colabora/'}>
+          <span>Convocatoria editorial</span>
+          <strong>Publica con nosotros →</strong>
+        </a>
+      </div>
     </header>
     <nav class="nav">
       {nav.map(([label,path])=><a class:list={{active:active===label}} href={base+path}>{label}</a>)}
-      <a class="push" href={base+'colabora/'}>Colabora</a>
+      <a class="nav-submit" href={base+'colabora/'}>Publica con nosotros</a>
     </nav>
     <slot/>
     <footer>
       <span>La Forja · Santiago de Chile · 2026</span>
-      <span><a href={base+'autores/'}>Autores</a> · <a href={base+'temas/'}>Temas</a> · <a href={base+'buscar/'}>Buscar</a> · <a href={rssUrl}>RSS</a> · <a href={base+'sobre/'}>Sobre La Forja</a> · <a href={base+'colabora/'}>Escribe con nosotros</a></span>
+      <span><a href={base+'autores/'}>Autores</a> · <a href={base+'temas/'}>Temas</a> · <a href={base+'buscar/'}>Buscar</a> · <a href={rssUrl}>RSS</a> · <a href={base+'sobre/'}>Sobre La Forja</a> · <a class="footer-submit" href={base+'colabora/'}>Publica con nosotros</a></span>
     </footer>
   </main>
   <script is:inline>

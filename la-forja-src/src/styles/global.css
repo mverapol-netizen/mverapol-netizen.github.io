@@ -194,3 +194,51 @@ footer a{border-bottom:1px solid transparent}footer a:hover{border-color:var(--r
 .issue-toc>h1{font:700 clamp(43px,5vw,72px)/.94 var(--serif);margin:13px 0 24px}.toc-row{display:grid;grid-template-columns:110px 1fr;gap:15px;border-top:1px solid var(--rule);padding:13px 0}.toc-row>span{font:700 11px var(--sans);text-transform:uppercase;color:var(--blue)}.toc-row a{font:700 25px/1 var(--serif)}.toc-row small{display:block;margin-top:5px;font:500 14px var(--serif);color:var(--ink-soft)}
 @media(max-width:900px){.issue-shelf{grid-template-columns:1fr 1fr}.issue-page{grid-template-columns:1fr}.issue-page .issue-cover-page{position:relative;top:auto;max-width:440px}.issue-cover-page{min-height:380px}}
 @media(max-width:560px){.issue-shelf{grid-template-columns:1fr}.toc-row{grid-template-columns:82px 1fr}}
+
+
+/* Publication invitation + essay index */
+.mast-side{display:grid;gap:10px;align-items:end}
+.mast-submit{display:block;background:var(--red);color:var(--paper);padding:11px 13px;border:1px solid var(--red);transform:rotate(-.35deg)}
+.mast-submit span{display:block;font:700 10px var(--sans);text-transform:uppercase;letter-spacing:.07em;opacity:.82}
+.mast-submit strong{display:block;font:700 18px/.95 var(--sans);text-transform:uppercase;margin-top:3px}
+.mast-submit:hover{background:var(--ink);border-color:var(--ink)}
+.nav .nav-submit{margin-left:auto;background:var(--blue);color:var(--paper)}
+.nav .nav-submit::before{display:none}.nav .nav-submit:hover{background:var(--red)}
+.footer-submit{font-weight:700;color:var(--red)}
+
+.submission-callout{display:grid;grid-template-columns:.8fr 1.25fr auto;gap:24px;align-items:center;background:var(--red);color:var(--paper);margin:18px 0 5px;padding:20px 22px;border-block:5px solid var(--ink);position:relative;overflow:hidden}
+.submission-callout::after{content:"";position:absolute;right:18%;top:-70px;width:190px;height:190px;border:18px solid rgba(232,221,196,.1);border-radius:50%;pointer-events:none}
+.submission-eyebrow{font:700 11px var(--sans);text-transform:uppercase;letter-spacing:.08em}
+.submission-callout h2{margin:3px 0 0;font:400 clamp(38px,5vw,70px)/.85 var(--display);text-transform:uppercase}
+.submission-callout p{font:600 18px/1.15 var(--serif);margin:0;position:relative;z-index:2}
+.submission-callout>a{position:relative;z-index:2;background:var(--paper);color:var(--ink);padding:12px 15px;font:700 13px var(--sans);text-transform:uppercase;white-space:nowrap;border:2px solid var(--paper)}
+.submission-callout>a:hover{background:var(--blue);color:var(--paper);border-color:var(--blue)}
+
+.submission-hero{padding:32px 0 28px;border-bottom:8px solid var(--red)}
+.submission-hero>span{display:inline-block;background:var(--blue);color:var(--paper);padding:6px 9px;font:700 13px var(--sans);text-transform:uppercase}
+.submission-hero h1{font:400 clamp(68px,10vw,145px)/.82 var(--display);letter-spacing:-.055em;text-transform:uppercase;color:var(--red);margin:10px 0 16px;max-width:1080px}
+.submission-hero p{font:600 clamp(21px,2.4vw,31px)/1.1 var(--serif);max-width:970px;margin:0}
+.submission-types{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:3px solid var(--rule)}
+.submission-types article{padding:17px 15px 22px;border-right:1px solid var(--rule);min-height:210px}
+.submission-types article:last-child{border-right:0}.submission-types strong{font:700 12px var(--sans);color:var(--blue)}
+.submission-types h2{font:700 29px/.95 var(--serif);margin:22px 0 8px}.submission-types p{margin:0;font-size:15px;line-height:1.35}
+.submission-process{display:grid;grid-template-columns:minmax(0,700px) 1fr;gap:60px;padding:34px 0 70px}
+.submission-process aside{align-self:start;background:var(--blue);color:var(--paper);padding:21px;transform:rotate(.4deg)}
+.submission-process aside span{font:700 11px var(--sans);text-transform:uppercase;letter-spacing:.08em}
+.submission-process aside strong{display:block;font:700 31px/1 var(--serif);margin:13px 0}.submission-process aside p{font-size:14px;line-height:1.35}
+
+.essay-index{padding:20px 0 70px}.essay-entry{display:grid;grid-template-columns:240px 1fr;gap:22px;padding:17px 0;border-bottom:1px solid var(--rule)}
+.essay-entry .editorial-art{min-height:155px}.essay-entry-copy{align-self:center}.essay-entry-copy h2{font:700 34px/.97 var(--serif);margin:5px 0}.essay-entry-copy p{margin:7px 0;font-size:17px}.essay-entry-copy small{font:700 11px var(--sans);text-transform:uppercase;color:var(--blue)}
+.essay-entry-featured{grid-template-columns:1fr 1fr;border-bottom:4px solid var(--red);padding-bottom:24px;margin-bottom:10px}.essay-entry-featured .editorial-art{min-height:350px}.essay-entry-featured .essay-entry-copy h2{font-size:clamp(46px,5vw,74px);letter-spacing:-.035em}
+
+@media(max-width:900px){
+  .mast-side{margin-top:12px}.mast-note{display:none}.mast-submit{max-width:360px}
+  .nav .nav-submit{margin-left:0}.submission-callout{grid-template-columns:1fr;gap:12px}.submission-callout>a{justify-self:start}
+  .submission-types{grid-template-columns:1fr 1fr}.submission-types article:nth-child(2){border-right:0}.submission-types article:nth-child(-n+2){border-bottom:1px solid var(--rule)}
+  .submission-process{grid-template-columns:1fr}.essay-entry,.essay-entry-featured{grid-template-columns:1fr}.essay-entry .editorial-art{min-height:260px}
+}
+@media(max-width:560px){
+  .mast-submit{max-width:none}.nav{padding-right:0}.nav .nav-submit{display:inline-block}
+  .submission-callout{margin-inline:-15px;padding:18px 15px}.submission-types{grid-template-columns:1fr}.submission-types article{border-right:0;border-bottom:1px solid var(--rule)}
+  .submission-types article:nth-child(2){border-bottom:1px solid var(--rule)}.submission-hero h1{font-size:62px}
+}

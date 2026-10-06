@@ -33,6 +33,32 @@ jobs:
         working-directory: la-forja-src
         run: npm run build
 
+      - name: Verify required navigation routes
+        working-directory: la-forja-src
+        run: |
+          required=(
+            "dist/index.html"
+            "dist/columnas/index.html"
+            "dist/ensayos/index.html"
+            "dist/debates/index.html"
+            "dist/educacion-popular/index.html"
+            "dist/archivo/index.html"
+            "dist/temas/index.html"
+            "dist/buscar/index.html"
+            "dist/colabora/index.html"
+            "dist/autores/index.html"
+            "dist/sobre/index.html"
+            "dist/rss.xml"
+            "dist/sitemap.xml"
+          )
+          for path in "${required[@]}"; do
+            if [ ! -f "$path" ]; then
+              echo "::error::Required public route is missing: $path"
+              exit 1
+            fi
+          done
+          echo "All required La Forja routes exist."
+
       - name: Replace public La Forja with Astro build
         run: |
           rm -rf la-forja
