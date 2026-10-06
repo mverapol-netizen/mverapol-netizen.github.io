@@ -1,22 +1,52 @@
-name: La Forja build check
+name: La Forja build and publish
+
 on:
   push:
     paths:
       - 'la-forja-src/**'
       - '.github/workflows/la-forja-check.yml'
   workflow_dispatch:
+
+permissions:
+  contents: write
+
 jobs:
-  build:
+  build-and-publish:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: la-forja-src
+
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
           cache-dependency-path: la-forja-src/package.json
-      - run: npm install
-      - run: npm run build
+
+      - name: Install dependencies
+        working-directory: la-forja-src
+        run: npm install
+
+      - name: Build La Forja
+        working-directory: la-forja-src
+        run: npm run build
+
+      - name: Replace public La Forja with Astro build
+        run: |
+          rm -rf la-forja
+          mkdir -p la-forja
+          cp -R la-forja-src/dist/. la-forja/
+
+      - name: Commit generated site
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add la-forja
+          if git diff --cached --quiet; then
+            echo "No generated changes to publish."
+            exit 0
+          fi
+          git commit -m "Publish La Forja from Astro [skip ci]"
+          git push
