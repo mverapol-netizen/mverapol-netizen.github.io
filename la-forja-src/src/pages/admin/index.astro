@@ -1,7 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
 const supabaseUrl='https://jtgoumydocaleucuomaw.supabase.co';
 const supabaseKey='sb_publishable_jHVTZ5v1aeP82CxMg33r6g_S3C_yG9H';
+const issues=(await getCollection('numeros',({data})=>!data.draft&&data.status==='actual')).sort((a,b)=>b.data.date.valueOf()-a.data.date.valueOf());
+const currentIssue=String(issues[0]?.data.number??1).padStart(3,'0');
 ---
 <BaseLayout title="Panel editorial" noindex>
   <section class="admin-shell">
@@ -11,7 +14,14 @@ const supabaseKey='sb_publishable_jHVTZ5v1aeP82CxMg33r6g_S3C_yG9H';
         <h1>Panel editorial</h1>
         <p>Recepción y revisión de colaboraciones de La Forja.</p>
       </div>
-      <button id="admin-logout" class="admin-logout" type="button" hidden>Cerrar sesión</button>
+      <div class="admin-head-actions">
+        <div id="admin-new-notice" class="admin-new-notice" hidden>
+          <strong id="admin-new-count">0</strong>
+          <span>nuevas</span>
+          <button id="admin-mark-seen" type="button">Marcar vistas</button>
+        </div>
+        <button id="admin-logout" class="admin-logout" type="button" hidden>Cerrar sesión</button>
+      </div>
     </header>
 
     <section id="admin-login" class="admin-login">
@@ -35,6 +45,7 @@ const supabaseKey='sb_publishable_jHVTZ5v1aeP82CxMg33r6g_S3C_yG9H';
         <button data-filter="reviewing"><span id="count-reviewing">0</span><strong>En revisión</strong></button>
         <button data-filter="accepted"><span id="count-accepted">0</span><strong>Aceptadas</strong></button>
         <button data-filter="rejected"><span id="count-rejected">0</span><strong>Rechazadas</strong></button>
+        <button data-filter="published"><span id="count-published">0</span><strong>Publicadas</strong></button>
       </div>
 
       <div class="admin-toolbar">
@@ -55,13 +66,17 @@ const supabaseKey='sb_publishable_jHVTZ5v1aeP82CxMg33r6g_S3C_yG9H';
     </section>
   </section>
 
-  <script define:vars={{supabaseUrl,supabaseKey}}>
+  <script define:vars={{supabaseUrl,supabaseKey,currentIssue}}>
     const STORAGE_KEY='laforja_editorial_session_v1';
+    const SEEN_KEY='laforja_editorial_last_seen_v1';
     const loginSection=document.getElementById('admin-login');
     const appSection=document.getElementById('admin-app');
     const loginForm=document.getElementById('admin-login-form');
     const loginStatus=document.getElementById('admin-login-status');
     const logoutBtn=document.getElementById('admin-logout');
+    const newNotice=document.getElementById('admin-new-notice');
+    const newCountEl=document.getElementById('admin-new-count');
+    const markSeenBtn=document.getElementById('admin-mark-seen');
     const listEl=document.getElementById('admin-list');
     const emptyEl=document.getElementById('admin-empty');
     const detailEl=document.getElementById('admin-detail');
@@ -75,8 +90,94 @@ const supabaseKey='sb_publishable_jHVTZ5v1aeP82CxMg33r6g_S3C_yG9H';
 
     const escapeHtml=(s='')=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
     const fmtDate=(v)=>new Intl.DateTimeFormat('es-CL',{dateStyle:'medium',timeStyle:'short'}).format(new Date(v));
-    const statusName=(s)=>({received:'Recibida',reviewing:'En revisión',accepted:'Aceptada',rejected:'Rechazada',withdrawn:'Retirada'})[s]||s;
+    const statusName=(s)=>({received:'Recibida',reviewing:'En revisión',accepted:'Aceptada',rejected:'Rechazada',withdrawn:'Retirada',published:'Publicada'})[s]||s;
     const typeName=(s)=>({columna:'Columna',ensayo:'Ensayo',debate:'Debate','educacion-popular':'Educación popular',otro:'Otro'})[s]||s;
+    const slugify=(s='')=>String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'texto';
+    const yaml=(s='')=>JSON.stringify(String(s));
+    const lastSeen=()=>localStorage.getItem(SEEN_KEY)||'1970-01-01T00:00:00.000Z';
+    const isNew=(x)=>new Date(x.created_at)>new Date(lastSeen());
+
+    function markdownFor(x){
+      const date=new Date().toISOString().slice(0,10);
+      const words=(x.manuscript||'').trim().split(/\s+/).filter(Boolean).length;
+      const readingTime=Math.max(1,Math.ceil(words/220));
+      const authorSlug=slugify(x.name);
+
+      if(x.contribution_type==='debate'){
+        return `---
+draft: true
+title: ${yaml(x.title)}
+subtitle: ${yaml(x.summary)}
+date: ${date}
+issue: "${currentIssue}"
+participants: [${yaml(x.name)}]
+artStyle: "rays"
+artLabel: ""
+---
+
+${(x.manuscript||'').trim()}
+`;
+      }
+
+      if(x.contribution_type==='educacion-popular'){
+        return `---
+draft: true
+number: 0
+title: ${yaml(x.title)}
+subtitle: ${yaml(x.summary)}
+author: ${yaml(x.name)}
+series: "Por definir"
+date: ${date}
+issue: "${currentIssue}"
+artStyle: "archive"
+artLabel: ""
+---
+
+${(x.manuscript||'').trim()}
+`;
+      }
+
+      const type=x.contribution_type==='columna'?'columna':'ensayo';
+      return `---
+draft: true
+title: ${yaml(x.title)}
+subtitle: ${yaml(x.summary)}
+author: ${yaml(authorSlug)}
+type: "${type}"
+date: ${date}
+issue: "${currentIssue}"
+topics: []
+featured: false
+readingTime: ${readingTime}
+artStyle: "constructivist"
+artLabel: ""
+---
+
+${(x.manuscript||'').trim()}
+`;
+    }
+
+    function markdownFilename(x){return `${slugify(x.title)}.md`}
+    function suggestedPath(x){
+      if(x.contribution_type==='debate')return `src/content/debates/${markdownFilename(x)}`;
+      if(x.contribution_type==='educacion-popular')return `src/content/cuadernos/${markdownFilename(x)}`;
+      return `src/content/articulos/${markdownFilename(x)}`;
+    }
+    async function copyMarkdown(x){
+      await navigator.clipboard.writeText(markdownFor(x));
+      const el=document.getElementById('export-status');if(el)el.textContent='Markdown copiado.';
+    }
+    function downloadMarkdown(x){
+      const blob=new Blob([markdownFor(x)],{type:'text/markdown;charset=utf-8'});
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');a.href=url;a.download=markdownFilename(x);document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+      const el=document.getElementById('export-status');if(el)el.textContent='Archivo descargado.';
+    }
+    function renderNewNotice(){
+      const count=submissions.filter(isNew).length;
+      newCountEl.textContent=count;
+      newNotice.hidden=count===0;
+    }
 
     function readSession(){
       try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'null')}catch{return null}
@@ -119,7 +220,7 @@ const supabaseKey='sb_publishable_jHVTZ5v1aeP82CxMg33r6g_S3C_yG9H';
         if(r.status===401||r.status===403)throw new Error('forbidden');
         if(!r.ok)throw new Error('load');
         submissions=await r.json();
-        renderStats();renderList();
+        renderStats();renderNewNotice();renderList();
         if(selectedId && submissions.some(x=>x.id===selectedId))renderDetail(selectedId);
       }catch(error){
         if(error.message==='auth'||error.message==='forbidden'){logout(false);loginStatus.textContent='La sesión no tiene autorización para acceder a la redacción.'}
@@ -128,7 +229,7 @@ const supabaseKey='sb_publishable_jHVTZ5v1aeP82CxMg33r6g_S3C_yG9H';
     }
     function renderStats(){
       const count=(status)=>status==='all'?submissions.length:submissions.filter(x=>x.status===status).length;
-      ['all','received','reviewing','accepted','rejected'].forEach(s=>{
+      ['all','received','reviewing','accepted','rejected','published'].forEach(s=>{
         const el=document.getElementById(`count-${s}`);if(el)el.textContent=count(s);
       });
     }
@@ -140,8 +241,8 @@ const supabaseKey='sb_publishable_jHVTZ5v1aeP82CxMg33r6g_S3C_yG9H';
       const items=visibleItems();
       emptyEl.hidden=items.length>0;
       listEl.innerHTML=items.map(x=>`
-        <button class="admin-list-item ${x.id===selectedId?'selected':''}" data-id="${x.id}">
-          <span class="admin-status status-${escapeHtml(x.status)}">${escapeHtml(statusName(x.status))}</span>
+        <button class="admin-list-item ${x.id===selectedId?'selected':''} ${isNew(x)?'is-new':''}" data-id="${x.id}">
+          <div class="admin-list-top"><span class="admin-status status-${escapeHtml(x.status)}">${escapeHtml(statusName(x.status))}</span>${isNew(x)?'<span class="admin-new-dot">Nueva</span>':''}</div>
           <strong>${escapeHtml(x.title)}</strong>
           <small>${escapeHtml(x.name)} · ${escapeHtml(typeName(x.contribution_type))}</small>
           <time>${escapeHtml(fmtDate(x.created_at))}</time>
@@ -161,16 +262,33 @@ const supabaseKey='sb_publishable_jHVTZ5v1aeP82CxMg33r6g_S3C_yG9H';
           ${x.notes?`<div><strong>Nota de quien envía</strong><p>${escapeHtml(x.notes)}</p></div>`:''}
         </section>
         <section class="admin-manuscript"><strong>Manuscrito</strong><div>${escapeHtml(x.manuscript).replace(/\n/g,'<br>')}</div></section>
+        ${['accepted','published'].includes(x.status)?`
+        <section class="admin-export">
+          <div>
+            <span>Borrador para GitHub</span>
+            <strong>${escapeHtml(suggestedPath(x))}</strong>
+            <p>Se genera siempre con <code>draft: true</code>. Revísalo en GitHub antes de publicar.</p>
+          </div>
+          <div class="admin-export-actions">
+            <button id="copy-markdown" type="button">Copiar Markdown</button>
+            <button id="download-markdown" type="button">Descargar .md</button>
+            <span id="export-status" role="status"></span>
+          </div>
+        </section>`:''}
         <section class="admin-review">
           <label><span>Estado editorial</span>
             <select id="detail-status">
-              ${['received','reviewing','accepted','rejected','withdrawn'].map(s=>`<option value="${s}" ${x.status===s?'selected':''}>${statusName(s)}</option>`).join('')}
+              ${['received','reviewing','accepted','rejected','withdrawn','published'].map(s=>`<option value="${s}" ${x.status===s?'selected':''}>${statusName(s)}</option>`).join('')}
             </select>
           </label>
           <label><span>Nota interna</span><textarea id="detail-note" rows="6" maxlength="10000" placeholder="Observaciones para la redacción…">${escapeHtml(x.editorial_note||'')}</textarea></label>
           <div class="admin-review-actions"><button id="save-review" type="button">Guardar revisión →</button><span id="save-status" role="status"></span></div>
         </section>`;
       document.getElementById('save-review').addEventListener('click',()=>saveReview(x.id));
+      const copyBtn=document.getElementById('copy-markdown');
+      const downloadBtn=document.getElementById('download-markdown');
+      if(copyBtn)copyBtn.addEventListener('click',()=>copyMarkdown(x));
+      if(downloadBtn)downloadBtn.addEventListener('click',()=>downloadMarkdown(x));
     }
     async function saveReview(id){
       const btn=document.getElementById('save-review');const msg=document.getElementById('save-status');
@@ -185,7 +303,7 @@ const supabaseKey='sb_publishable_jHVTZ5v1aeP82CxMg33r6g_S3C_yG9H';
         });
         if(!r.ok)throw new Error('save');
         const x=submissions.find(s=>s.id===id);if(x){x.status=status;x.editorial_note=editorial_note;x.reviewed_at=now;x.updated_at=now}
-        renderStats();renderList();renderDetail(id);document.getElementById('save-status').textContent='Guardado.';
+        renderStats();renderNewNotice();renderList();renderDetail(id);document.getElementById('save-status').textContent='Guardado.';
       }catch{msg.textContent='No se pudo guardar.'}finally{btn.disabled=false}
     }
     function showApp(){
@@ -208,6 +326,10 @@ const supabaseKey='sb_publishable_jHVTZ5v1aeP82CxMg33r6g_S3C_yG9H';
       }catch{loginStatus.textContent='No fue posible ingresar. Revisa las credenciales.'}
     });
     logoutBtn.addEventListener('click',()=>logout());
+    markSeenBtn.addEventListener('click',()=>{
+      localStorage.setItem(SEEN_KEY,new Date().toISOString());
+      renderNewNotice();renderList();
+    });
     refreshBtn.addEventListener('click',loadSubmissions);
     searchEl.addEventListener('input',renderList);
     filterButtons.forEach(btn=>btn.addEventListener('click',()=>{currentFilter=btn.dataset.filter;filterButtons.forEach(b=>b.classList.toggle('active',b===btn));renderList()}));

@@ -46,6 +46,7 @@ jobs:
             "dist/temas/index.html"
             "dist/buscar/index.html"
             "dist/colabora/index.html"
+            "dist/admin/index.html"
             "dist/autores/index.html"
             "dist/sobre/index.html"
             "dist/rss.xml"
