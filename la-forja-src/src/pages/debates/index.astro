@@ -1,0 +1,4 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';import{getCollection}from'astro:content';const debates=await getCollection('debates');
+---
+<BaseLayout title="Debates" active="Debates"><header class="page-head"><span class="label">Debate</span><h1>Debates</h1><p>Intervenciones, respuestas y réplicas sobre problemas estratégicos, teóricos y políticos.</p></header><section class="list">{debates.map(d=><article class="row"><strong>N.º {d.data.issue}</strong><div><h2>{d.data.title}</h2><p>{d.data.subtitle}</p><small>{d.data.participants.join(' · ')}</small></div></article>)}</section></BaseLayout>

@@ -1,0 +1,4 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';import{getCollection}from'astro:content';const cuadernos=(await getCollection('cuadernos')).sort((a,b)=>a.data.number-b.data.number);
+---
+<BaseLayout title="Educación popular" active="Educación popular"><header class="page-head"><span class="label blue">Educación popular</span><h1>Cuadernos de La Forja</h1><p>Conceptos, historia, lecturas y herramientas para una formación política crítica y colectiva.</p></header><div class="books">{cuadernos.map(c=><article class="book"><span class="num">N.º {String(c.data.number).padStart(2,'0')}</span><h3>{c.data.title}</h3><small>{c.data.series} · {c.data.author}</small></article>)}</div></BaseLayout>

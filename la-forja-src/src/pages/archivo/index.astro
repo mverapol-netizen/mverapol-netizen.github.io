@@ -1,0 +1,4 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';import{getCollection}from'astro:content';const articulos=await getCollection('articulos');const cuadernos=await getCollection('cuadernos');
+---
+<BaseLayout title="Archivo" active="Archivo"><header class="page-head"><span class="label">Hemeroteca</span><h1>Archivo</h1><p>La memoria acumulada de La Forja: números, autores, temas y cuadernos.</p></header><section class="list"><article class="row"><strong>Año I</strong><div><h2>N.º 1 · Octubre de 2026</h2><p>{articulos.length} artículos · {cuadernos.length} cuadernos · debates y editorial.</p></div></article></section></BaseLayout>
