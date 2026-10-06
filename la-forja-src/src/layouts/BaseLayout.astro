@@ -3,12 +3,12 @@ import '../styles/global.css';
 import { getCollection } from 'astro:content';
 interface Props{
   title?:string;description?:string;active?:string;image?:string;
-  type?:'website'|'article';publishedTime?:Date;author?:string;
+  type?:'website'|'article';publishedTime?:Date;author?:string;noindex?:boolean;
 }
 const{
   title='La Forja',
   description='Revista de opinión, pensamiento crítico, debate y educación popular.',
-  active='',image,type='website',publishedTime,author
+  active='',image,type='website',publishedTime,author,noindex=false
 }=Astro.props;
 const base=import.meta.env.BASE_URL;
 const pageTitle=title==='La Forja'?title:`${title} — La Forja`;
@@ -30,6 +30,7 @@ const nav=[['Portada',''],['Columnas','columnas/'],['Ensayos','ensayos/'],['Deba
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <meta name="description" content={description}/>
   <meta name="theme-color" content="#e8ddc4"/>
+  {noindex && <meta name="robots" content="noindex,nofollow,noarchive"/>}
   <link rel="canonical" href={canonical}/>
   <link rel="alternate" type="application/rss+xml" title="La Forja" href={rssUrl}/>
   <meta property="og:site_name" content="La Forja"/>
