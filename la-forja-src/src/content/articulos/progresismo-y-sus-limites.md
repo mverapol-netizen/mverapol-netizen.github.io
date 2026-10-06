@@ -8,6 +8,8 @@ issue: "001"
 topics: ["izquierda","progresismo","estado"]
 featured: false
 readingTime: 5
+artStyle: "constructivist"
+artLabel: "Gobierno · transformación"
 ---
 Una parte relevante del debate contemporáneo de las izquierdas surge de una tensión conocida: acceder al gobierno amplía capacidades institucionales, pero no elimina las restricciones estructurales que organizan la economía y la distribución del poder.
 

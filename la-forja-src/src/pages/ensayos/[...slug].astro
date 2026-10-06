@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import EditorialArt from '../../components/EditorialArt.astro';
 import { getCollection, render } from 'astro:content';
 export async function getStaticPaths(){const entries=await getCollection('articulos',({data})=>data.type==='ensayo');return entries.map(post=>({params:{slug:post.id},props:{post}}))}
 const{post}=Astro.props;
@@ -15,7 +16,8 @@ const{Content}=await render(post);
       <div class="dek">{post.data.subtitle}</div>
       <div class="byline">Por {author?.data.name??post.data.author} · {post.data.date.toLocaleDateString('es-CL')} {post.data.readingTime&&`· ${post.data.readingTime} min`}</div>
     </header>
-    <div class="art"></div>
+    <EditorialArt style={post.data.artStyle} label={post.data.artLabel} alt={post.data.title}/>
+    {post.data.imageCredit && <div class="image-credit">{post.data.imageCredit}</div>}
     <section class="article-body">
       <div class="prose"><Content/></div>
       <aside class="pull">La democracia política no puede separarse indefinidamente de la distribución del poder económico.</aside>

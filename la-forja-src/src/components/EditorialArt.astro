@@ -1,0 +1,15 @@
+---
+interface Props{
+  style?:'crowd'|'constructivist'|'type'|'archive'|'rays';
+  label?:string;
+  alt?:string;
+  href?:string;
+  compact?:boolean;
+}
+const {style='constructivist',label='',alt='',href,compact=false}=Astro.props;
+const Tag=href?'a':'div';
+---
+<Tag class:list={['editorial-art',`art-${style}`,{'art-compact':compact}]} href={href} aria-label={href ? (alt || label || 'Abrir publicación') : undefined} role={!href && alt ? 'img' : undefined} aria-description={!href && alt ? alt : undefined}>
+  <span class="art-field" aria-hidden="true"></span>
+  {label && <span class="art-caption">{label}</span>}
+</Tag>

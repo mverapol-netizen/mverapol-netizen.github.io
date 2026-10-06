@@ -6,5 +6,7 @@ author: "Equipo La Forja"
 series: "Conceptos básicos"
 date: 2026-10-01
 issue: "001"
+artStyle: "crowd"
+artLabel: "Clase"
 ---
 Hablar de clase social supone algo más que ordenar a la población por ingresos. Este cuaderno introduce distintas maneras de comprender las clases, desde la posición en las relaciones de producción hasta los recursos, las oportunidades y las formas de acción colectiva.

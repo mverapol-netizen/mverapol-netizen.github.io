@@ -8,6 +8,9 @@ issue: "001"
 topics: ["izquierda","democracia","clase"]
 featured: true
 readingTime: 14
+artStyle: "crowd"
+artLabel: "Clase · democracia · poder"
+imageCredit: "Composición gráfica de La Forja."
 ---
 La izquierda enfrenta hoy un escenario distinto al que organizó buena parte de sus lenguajes políticos durante el siglo XX. El debilitamiento de las organizaciones populares, la transformación del trabajo y la concentración de poder económico obligan a reconsiderar tanto sus sujetos como sus instrumentos.
 

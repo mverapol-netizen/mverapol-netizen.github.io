@@ -8,6 +8,8 @@ issue: "001"
 topics: ["vivienda","ciudad","desigualdad"]
 featured: false
 readingTime: 5
+artStyle: "archive"
+artLabel: "Ciudad · suelo · propiedad"
 ---
 La crisis de vivienda suele describirse como un problema de oferta, precios o planificación. Pero también es una disputa por la distribución del suelo, la localización de oportunidades y la capacidad de decidir qué ciudad se construye.
 

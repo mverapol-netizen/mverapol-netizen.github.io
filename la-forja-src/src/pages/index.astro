@@ -1,13 +1,16 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import EditorialArt from '../components/EditorialArt.astro';
 import { getCollection } from 'astro:content';
 const base=import.meta.env.BASE_URL;
 const articulos=await getCollection('articulos');
 const autores=await getCollection('autores');
+const debates=await getCollection('debates');
 const authorName=(id)=>autores.find(a=>a.id===id)?.data.name??id;
 const featured=articulos.find(x=>x.data.featured)??articulos[0];
 const columnas=articulos.filter(x=>x.data.type==='columna').sort((a,b)=>b.data.date.valueOf()-a.data.date.valueOf()).slice(0,3);
 const cuadernos=(await getCollection('cuadernos')).sort((a,b)=>a.data.number-b.data.number).slice(0,4);
+const debate=debates[0];
 ---
 <BaseLayout active="Portada">
   <section class="hero">
@@ -18,7 +21,7 @@ const cuadernos=(await getCollection('cuadernos')).sort((a,b)=>a.data.number-b.d
       <div class="byline">Por {authorName(featured.data.author)}</div>
       <a class="text-link" href={base+'ensayos/'+featured.id+'/'}>Leer ensayo →</a>
     </div>
-    <a class="art" href={base+'ensayos/'+featured.id+'/'} aria-label="Abrir ensayo destacado"></a>
+    <EditorialArt style={featured.data.artStyle} label={featured.data.artLabel} alt={featured.data.title} href={base+'ensayos/'+featured.id+'/'} />
   </section>
 
   <section class="grid3">
@@ -36,8 +39,9 @@ const cuadernos=(await getCollection('cuadernos')).sort((a,b)=>a.data.number-b.d
     </article>
     <article class="card">
       <span class="label">Debate</span>
-      <h2>¿Debe la izquierda volver a hablar de clase?</h2>
-      <p>Cuatro intervenciones sobre representación, conflicto social y organización.</p>
+      {debate && <EditorialArt style={debate.data.artStyle} label={debate.data.artLabel} alt={debate.data.title} href={base+'debates/'} compact />}
+      <h2>{debate?.data.title ?? '¿Debe la izquierda volver a hablar de clase?'}</h2>
+      <p>{debate?.data.subtitle}</p>
       <a class="text-link" href={base+'debates/'}>Entrar al debate →</a>
     </article>
   </section>
@@ -48,7 +52,7 @@ const cuadernos=(await getCollection('cuadernos')).sort((a,b)=>a.data.number-b.d
       <p>Conceptos, historia, lecturas y herramientas para una formación política crítica y colectiva.</p>
     </div>
     <div class="books">
-      {cuadernos.map(c=><a class="book" href={base+'educacion-popular/'}><span class="num">N.º {String(c.data.number).padStart(2,'0')}</span><h3>{c.data.title}</h3><small>{c.data.series}</small></a>)}
+      {cuadernos.map(c=><a class:list={['book',`book-${c.data.artStyle}`]} href={base+'educacion-popular/'}><span class="num">N.º {String(c.data.number).padStart(2,'0')}</span><span class="book-art" aria-hidden="true"></span><h3>{c.data.title}</h3><small>{c.data.series}</small></a>)}
     </div>
   </section>
 </BaseLayout>
