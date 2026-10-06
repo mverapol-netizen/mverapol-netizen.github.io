@@ -1,6 +1,25 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';import{getCollection}from'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import IssueCover from '../../components/IssueCover.astro';
+import{getCollection}from'astro:content';
 export async function getStaticPaths(){const numeros=await getCollection('numeros');return numeros.map(numero=>({params:{slug:numero.id},props:{numero}}))}
-const{numero}=Astro.props;const key=String(numero.data.number).padStart(3,'0');const articulos=(await getCollection('articulos')).filter(a=>a.data.issue===key);const cuadernos=(await getCollection('cuadernos')).filter(c=>c.data.issue===key);const debates=(await getCollection('debates')).filter(d=>d.data.issue===key);
+const{numero}=Astro.props;
+const base=import.meta.env.BASE_URL;
+const key=String(numero.data.number).padStart(3,'0');
+const articulos=(await getCollection('articulos')).filter(a=>a.data.issue===key).sort((a,b)=>b.data.date.valueOf()-a.data.date.valueOf());
+const cuadernos=(await getCollection('cuadernos')).filter(c=>c.data.issue===key).sort((a,b)=>a.data.number-b.data.number);
+const debates=(await getCollection('debates')).filter(d=>d.data.issue===key);
+const hrefFor=(a)=>base+(a.data.type==='ensayo'?'ensayos/':'columnas/')+a.id+'/';
 ---
-<BaseLayout title={`N.º ${numero.data.number} · ${numero.data.month}`} active="Archivo"><header class="page-head"><span class="label">Año {numero.data.year} · N.º {numero.data.number}</span><h1>{numero.data.month}</h1><p>{numero.data.coverTitle}</p></header><section class="list">{articulos.map(a=><article class="row"><strong>{a.data.type}</strong><div><h2>{a.data.title}</h2><p>{a.data.subtitle}</p></div></article>)}{debates.map(d=><article class="row"><strong>debate</strong><div><h2>{d.data.title}</h2><p>{d.data.subtitle}</p></div></article>)}{cuadernos.map(c=><article class="row"><strong>cuaderno {c.data.number}</strong><div><h2>{c.data.title}</h2><p>{c.data.subtitle}</p></div></article>)}</section></BaseLayout>
+<BaseLayout title={`N.º ${numero.data.number} · ${numero.data.month}`} active="Archivo">
+  <section class="issue-page">
+    <IssueCover number={numero.data.number} year={numero.data.year} month={numero.data.month} title={numero.data.coverTitle} style={numero.data.coverStyle}/>
+    <div class="issue-toc">
+      <span class="label blue">Sumario</span>
+      <h1>N.º {numero.data.number} · {numero.data.month}</h1>
+      {articulos.map(a=><article class="toc-row"><span>{a.data.type}</span><div><a href={hrefFor(a)}>{a.data.title}</a><small>{a.data.subtitle}</small></div></article>)}
+      {debates.map(d=><article class="toc-row"><span>debate</span><div><a href={base+'debates/'}>{d.data.title}</a><small>{d.data.subtitle}</small></div></article>)}
+      {cuadernos.map(c=><article class="toc-row"><span>cuaderno {String(c.data.number).padStart(2,'0')}</span><div><a href={base+'educacion-popular/'}>{c.data.title}</a><small>{c.data.subtitle}</small></div></article>)}
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,12 @@
+---
+interface Props{number:number;year:number;month:string;title?:string;style?:'crowd'|'constructivist'|'type'|'archive'|'rays';href?:string}
+const{number,year,month,title='',style='constructivist',href}=Astro.props;
+const Tag=href?'a':'div';
+---
+<Tag class:list={['issue-cover-page',`issue-${style}`]} href={href}>
+  <div class="issue-cover-meta">Año {year} · N.º {String(number).padStart(2,'0')}</div>
+  <div class="issue-cover-logo">La Forja</div>
+  <div class="issue-cover-art" aria-hidden="true"></div>
+  <div class="issue-cover-title">{title}</div>
+  <div class="issue-cover-month">{month}</div>
+</Tag>
