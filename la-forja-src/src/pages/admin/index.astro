@@ -132,8 +132,15 @@ const currentIssue=String(issues[0]?.data.number??1).padStart(3,'0');
       return '\nimage: '+yaml(x.publication_image)+'\nimageAlt: '+yaml(x.publication_image_alt||'')+'\nimageCredit: '+yaml(x.publication_image_credit||'')+'\nimageTreatment: "bw"';
     };
 
+    function manuscriptFor(x,versionNumber){
+      if(Number(versionNumber)===1)return x.manuscript||'';
+      const versions=versionsCache[x.id]||[];
+      return versions.find(v=>Number(v.version_number)===Number(versionNumber))?.manuscript||x.manuscript||'';
+    }
+
     function markdownFor(x){
       const date=new Date().toISOString().slice(0,10);
+      const manuscript=manuscriptFor(x,x.publication_manuscript_version||1);
       const words=(manuscript||'').trim().split(/\s+/).filter(Boolean).length;
       const readingTime=Math.max(1,Math.ceil(words/220));
       const authorSlug=x.publication_author_slug||slugify(x.name);
@@ -639,7 +646,7 @@ La Forja`;
     async function loadSubmissions(){
       refreshBtn.disabled=true;
       try{
-        const fields='id,created_at,status,name,email,contribution_type,title,summary,bio,manuscript,notes,editorial_note,reviewed_at,updated_at,publication_author_slug,publication_issue,publication_topics,publication_art_style,publication_art_label,publication_image,publication_image_alt,publication_image_credit,publication_featured,publication_ready,publication_series,publication_number,publication_manuscript_version,editorial_priority,author_response_kind,author_response_note,response_sent_at';
+        const fields='id,created_at,status,name,email,contribution_type,title,summary,bio,manuscript,notes,editorial_note,reviewed_at,updated_at,publication_author_slug,publication_issue,publication_topics,publication_art_style,publication_art_label,publication_image,publication_image_alt,publication_image_credit,publication_featured,publication_ready,publication_series,publication_number,publication_manuscript_version,manuscript_file_path,manuscript_file_name,manuscript_file_size,editorial_priority,author_response_kind,author_response_note,response_sent_at';
         const r=await api(`editorial_submissions?select=${fields}&order=created_at.desc`);
         if(r.status===401||r.status===403)throw new Error('forbidden');
         if(!r.ok)throw new Error('load');
@@ -685,6 +692,33 @@ La Forja`;
         </button>`).join('');
       listEl.querySelectorAll('[data-id]').forEach(btn=>btn.addEventListener('click',()=>{selectedId=btn.dataset.id;renderList();renderDetail(selectedId)}));
     }
+    async function downloadOriginalWord(x){
+      if(!x.manuscript_file_path)return;
+      const btn=document.getElementById('download-word');
+      const msg=document.getElementById('word-download-status');
+      if(btn)btn.disabled=true;
+      if(msg)msg.textContent='Descargando…';
+      try{
+        if(!(await ensureSession()))throw new Error('auth');
+        const encoded=x.manuscript_file_path.split('/').map(encodeURIComponent).join('/');
+        const r=await fetch(`${supabaseUrl}/storage/v1/object/authenticated/editorial-manuscripts/${encoded}`,{
+          headers:{apikey:supabaseKey,Authorization:`Bearer ${session.access_token}`}
+        });
+        if(!r.ok)throw new Error('download');
+        const blob=await r.blob();
+        const url=URL.createObjectURL(blob);
+        const a=document.createElement('a');
+        a.href=url;
+        a.download=x.manuscript_file_name||'manuscrito.docx';
+        document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+        if(msg)msg.textContent='Word descargado.';
+      }catch{
+        if(msg)msg.textContent='No se pudo descargar el Word.';
+      }finally{
+        if(btn)btn.disabled=false;
+      }
+    }
+
     function renderDetail(id){
       const x=submissions.find(s=>s.id===id);if(!x)return;
       detailEl.innerHTML=`
@@ -697,7 +731,17 @@ La Forja`;
           <div><strong>Biografía</strong><p>${escapeHtml(x.bio)}</p></div>
           ${x.notes?`<div><strong>Nota de quien envía</strong><p>${escapeHtml(x.notes)}</p></div>`:''}
         </section>
-        <section class="admin-manuscript"><strong>Manuscrito original · V1</strong><div>${escapeHtml(x.manuscript).replace(/\n/g,'<br>')}</div></section>
+        ${x.manuscript_file_path?`
+        <section class="admin-word-file">
+          <div>
+            <span>Word original</span>
+            <strong>${escapeHtml(x.manuscript_file_name||'manuscrito.docx')}</strong>
+            <small>${x.manuscript_file_size?escapeHtml((x.manuscript_file_size/1024/1024).toFixed(2)+' MB'):''}</small>
+          </div>
+          <button id="download-word" type="button">Descargar Word original →</button>
+          <span id="word-download-status" role="status"></span>
+        </section>`:''}
+        <section class="admin-manuscript"><strong>Vista de lectura extraída del Word · V1</strong><div>${escapeHtml(x.manuscript).replace(/\n/g,'<br>')}</div></section>
         ${versionPanel(x)}
         ${publicationPanel(x)}
         <section class="admin-review">
@@ -720,6 +764,8 @@ La Forja`;
           <div id="admin-history-list"></div>
         </section>`;
       document.getElementById('save-review').addEventListener('click',()=>saveReview(x.id));
+      const downloadWordBtn=document.getElementById('download-word');
+      if(downloadWordBtn)downloadWordBtn.addEventListener('click',()=>downloadOriginalWord(x));
       const copyBtn=document.getElementById('copy-markdown');
       const downloadBtn=document.getElementById('download-markdown');
       const copyAuthorBtn=document.getElementById('copy-author');

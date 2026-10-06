@@ -21,8 +21,8 @@ const supabaseKey='sb_publishable_jHVTZ5v1aeP82CxMg33r6g_S3C_yG9H';
     <div class="submission-form-intro">
       <span class="label blue">Enviar propuesta</span>
       <h2>Queremos leerte</h2>
-      <p>Completa este formulario. La información queda almacenada de forma privada para revisión editorial y no se publica automáticamente en el sitio.</p>
-      <p class="form-note">Por ahora el manuscrito se pega directamente en el formulario. No solicitamos archivos adjuntos en esta primera versión.</p>
+      <p>Completa este formulario y adjunta tu manuscrito en Word. El archivo queda almacenado de forma privada para revisión editorial y nunca se publica automáticamente.</p>
+      <p class="form-note">Formato: <strong>.docx</strong> · máximo 10 MB. Extraemos una copia de texto para poder leer y revisar el manuscrito dentro de la mesa editorial, pero conservamos intacto el Word original.</p>
     </div>
 
     <form id="submission-form" class="submission-form" novalidate>
@@ -62,9 +62,11 @@ const supabaseKey='sb_publishable_jHVTZ5v1aeP82CxMg33r6g_S3C_yG9H';
         <textarea name="bio" minlength="10" maxlength="1200" rows="4" required placeholder="Cuéntanos brevemente quién eres y desde dónde escribes."></textarea>
       </label>
 
-      <label>
-        <span>Texto completo *</span>
-        <textarea name="manuscript" minlength="100" maxlength="120000" rows="18" required placeholder="Pega aquí el manuscrito completo."></textarea>
+      <label class="word-upload">
+        <span>Manuscrito en Word *</span>
+        <input id="manuscript-file" name="manuscript_file" type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required />
+        <span class="word-upload-help">Selecciona un archivo .docx de hasta 10 MB.</span>
+        <span id="word-file-status" class="word-file-status" aria-live="polite"></span>
       </label>
 
       <label>
@@ -79,7 +81,7 @@ const supabaseKey='sb_publishable_jHVTZ5v1aeP82CxMg33r6g_S3C_yG9H';
       <div class="form-checks">
         <label><input name="originality_confirmed" type="checkbox" required /> <span>Declaro que el texto es original y que puedo autorizar su publicación.</span></label>
         <label><input name="editorial_changes_accepted" type="checkbox" required /> <span>Acepto que La Forja pueda proponer cambios editoriales antes de publicar.</span></label>
-        <label><input name="privacy_accepted" type="checkbox" required /> <span>Acepto que estos datos se almacenen únicamente para gestionar esta propuesta editorial.</span></label>
+        <label><input name="privacy_accepted" type="checkbox" required /> <span>Acepto que estos datos y el archivo se almacenen únicamente para gestionar esta propuesta editorial.</span></label>
       </div>
 
       <div class="form-submit-row">
@@ -102,64 +104,128 @@ const supabaseKey='sb_publishable_jHVTZ5v1aeP82CxMg33r6g_S3C_yG9H';
     </aside>
   </section>
 
+  <script is:inline src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2"></script>
+  <script is:inline src="https://cdn.jsdelivr.net/npm/mammoth@1.13.0/mammoth.browser.min.js"></script>
   <script define:vars={{supabaseUrl,supabaseKey}}>
     const form=document.getElementById('submission-form');
     const status=document.getElementById('submission-status');
+    const fileStatus=document.getElementById('word-file-status');
+    const fileInput=document.getElementById('manuscript-file');
     const button=form.querySelector('button[type="submit"]');
+    const client=window.supabase.createClient(supabaseUrl,supabaseKey,{
+      auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}
+    });
+    const DOCX_MIME='application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+    const MAX_FILE_SIZE=10*1024*1024;
+
+    async function extractWordText(file){
+      const buffer=await file.arrayBuffer();
+      const result=await window.mammoth.extractRawText({arrayBuffer:buffer});
+      return String(result.value||'').trim();
+    }
+
+    fileInput.addEventListener('change',async()=>{
+      fileStatus.className='word-file-status';
+      fileStatus.textContent='';
+      const file=fileInput.files?.[0];
+      if(!file)return;
+      if(!file.name.toLowerCase().endsWith('.docx')){
+        fileInput.value='';
+        fileStatus.classList.add('error');
+        fileStatus.textContent='El archivo debe estar en formato .docx.';
+        return;
+      }
+      if(file.size>MAX_FILE_SIZE){
+        fileInput.value='';
+        fileStatus.classList.add('error');
+        fileStatus.textContent='El archivo supera el máximo de 10 MB.';
+        return;
+      }
+      fileStatus.textContent=`${file.name} · ${(file.size/1024/1024).toFixed(2)} MB`;
+    });
 
     form.addEventListener('submit',async(event)=>{
       event.preventDefault();
       status.className='submission-status';
       status.textContent='';
 
-      if(!form.reportValidity()) return;
+      if(!form.reportValidity())return;
       const data=new FormData(form);
 
       if(String(data.get('website')||'').trim()!==''){
         form.reset();
+        fileStatus.textContent='';
         status.classList.add('success');
         status.textContent='Propuesta recibida.';
         return;
       }
 
-      const payload={
-        name:String(data.get('name')||'').trim(),
-        email:String(data.get('email')||'').trim(),
-        contribution_type:String(data.get('contribution_type')||''),
-        title:String(data.get('title')||'').trim(),
-        summary:String(data.get('summary')||'').trim(),
-        bio:String(data.get('bio')||'').trim(),
-        manuscript:String(data.get('manuscript')||'').trim(),
-        notes:String(data.get('notes')||'').trim()||null,
-        originality_confirmed:data.get('originality_confirmed')==='on',
-        editorial_changes_accepted:data.get('editorial_changes_accepted')==='on',
-        privacy_accepted:data.get('privacy_accepted')==='on',
-        source:'la-forja-web'
-      };
+      const file=fileInput.files?.[0];
+      if(!file||!file.name.toLowerCase().endsWith('.docx')||file.size>MAX_FILE_SIZE){
+        status.classList.add('error');
+        status.textContent='Selecciona un archivo Word .docx válido de hasta 10 MB.';
+        return;
+      }
 
       button.disabled=true;
-      button.textContent='Enviando…';
-      status.textContent='Guardando tu propuesta de forma privada…';
+      button.textContent='Procesando Word…';
+      status.textContent='Preparando una copia de lectura del manuscrito…';
 
       try{
-        const response=await fetch(`${supabaseUrl}/rest/v1/editorial_submissions`,{
-          method:'POST',
-          headers:{
-            'apikey':supabaseKey,
-            'Content-Type':'application/json',
-            'Prefer':'return=minimal'
-          },
-          body:JSON.stringify(payload)
-        });
+        const manuscript=await extractWordText(file);
+        if(manuscript.length<100)throw new Error('word_too_short');
+        if(manuscript.length>120000)throw new Error('word_too_long');
 
-        if(!response.ok) throw new Error('submit_failed');
+        const id=crypto.randomUUID();
+        const filePath=`${id}/manuscrito.docx`;
+
+        button.textContent='Subiendo Word…';
+        status.textContent='Guardando el archivo original de forma privada…';
+
+        const {error:uploadError}=await client.storage
+          .from('editorial-manuscripts')
+          .upload(filePath,file,{contentType:DOCX_MIME,upsert:false,cacheControl:'3600'});
+
+        if(uploadError)throw uploadError;
+
+        const payload={
+          id,
+          name:String(data.get('name')||'').trim(),
+          email:String(data.get('email')||'').trim(),
+          contribution_type:String(data.get('contribution_type')||''),
+          title:String(data.get('title')||'').trim(),
+          summary:String(data.get('summary')||'').trim(),
+          bio:String(data.get('bio')||'').trim(),
+          manuscript,
+          manuscript_file_path:filePath,
+          manuscript_file_name:file.name,
+          manuscript_file_size:file.size,
+          notes:String(data.get('notes')||'').trim()||null,
+          originality_confirmed:data.get('originality_confirmed')==='on',
+          editorial_changes_accepted:data.get('editorial_changes_accepted')==='on',
+          privacy_accepted:data.get('privacy_accepted')==='on',
+          source:'la-forja-web-docx'
+        };
+
+        button.textContent='Enviando…';
+        status.textContent='Registrando tu propuesta editorial…';
+
+        const {error:insertError}=await client
+          .from('editorial_submissions')
+          .insert(payload);
+
+        if(insertError)throw insertError;
 
         form.reset();
+        fileStatus.textContent='';
         status.classList.add('success');
-        status.textContent='Propuesta recibida. Gracias por escribir a La Forja.';
+        status.textContent='Propuesta recibida. El Word quedó guardado para revisión editorial.';
       }catch(error){
+        console.error(error);
         status.classList.add('error');
-        status.textContent='No pudimos guardar la propuesta. Intenta nuevamente en unos minutos.';
+        if(error?.message==='word_too_short')status.textContent='No pudimos extraer suficiente texto del Word. Revisa que el archivo contenga el manuscrito y vuelve a intentarlo.';
+        else if(error?.message==='word_too_long')status.textContent='El manuscrito supera el máximo de texto admitido para la vista editorial.';
+        else status.textContent='No pudimos recibir el Word. Intenta nuevamente en unos minutos.';
       }finally{
         button.disabled=false;
         button.textContent='Enviar propuesta →';
