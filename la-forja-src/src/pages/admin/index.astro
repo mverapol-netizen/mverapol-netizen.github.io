@@ -50,6 +50,18 @@ const currentIssue=String(issues[0]?.data.number??1).padStart(3,'0');
 
       <div class="admin-toolbar">
         <input id="admin-search" type="search" placeholder="Buscar por título, nombre o correo…" />
+        <select id="admin-priority-filter" aria-label="Filtrar por prioridad">
+          <option value="all">Todas las prioridades</option>
+          <option value="urgent">Urgentes</option>
+          <option value="high">Altas</option>
+          <option value="normal">Normales</option>
+          <option value="low">Bajas</option>
+        </select>
+        <select id="admin-sort" aria-label="Ordenar propuestas">
+          <option value="priority">Prioridad + antigüedad</option>
+          <option value="oldest">Más antiguas</option>
+          <option value="newest">Más recientes</option>
+        </select>
         <button id="admin-refresh" type="button">Actualizar</button>
       </div>
 
@@ -82,6 +94,8 @@ const currentIssue=String(issues[0]?.data.number??1).padStart(3,'0');
     const detailEl=document.getElementById('admin-detail');
     const searchEl=document.getElementById('admin-search');
     const refreshBtn=document.getElementById('admin-refresh');
+    const priorityFilterEl=document.getElementById('admin-priority-filter');
+    const sortEl=document.getElementById('admin-sort');
     const filterButtons=[...document.querySelectorAll('.admin-stats button')];
     let submissions=[];
     let currentFilter='all';
@@ -92,6 +106,17 @@ const currentIssue=String(issues[0]?.data.number??1).padStart(3,'0');
     const fmtDate=(v)=>new Intl.DateTimeFormat('es-CL',{dateStyle:'medium',timeStyle:'short'}).format(new Date(v));
     const statusName=(s)=>({received:'Recibida',reviewing:'En revisión',accepted:'Aceptada',rejected:'Rechazada',withdrawn:'Retirada',published:'Publicada'})[s]||s;
     const typeName=(s)=>({columna:'Columna',ensayo:'Ensayo',debate:'Debate','educacion-popular':'Educación popular',otro:'Otro'})[s]||s;
+    const priorityName=(s)=>({low:'Baja',normal:'Normal',high:'Alta',urgent:'Urgente'})[s]||'Normal';
+    const priorityWeight=(s)=>({low:1,normal:2,high:3,urgent:4})[s]||2;
+    const eventName=(s)=>({
+      status_change:'Cambio de estado',
+      priority_change:'Cambio de prioridad',
+      note_update:'Nota editorial',
+      publication_prep:'Preparación de publicación',
+      response_draft:'Respuesta al autor',
+      response_sent:'Respuesta marcada como enviada',
+      manual:'Nota de historial'
+    })[s]||s;
     const slugify=(s='')=>String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'texto';
     const yaml=(s='')=>JSON.stringify(String(s));
     const lastSeen=()=>localStorage.getItem(SEEN_KEY)||'1970-01-01T00:00:00.000Z';
@@ -264,6 +289,160 @@ const currentIssue=String(issues[0]?.data.number??1).padStart(3,'0');
       const badge=document.getElementById('prep-readiness');if(badge){badge.textContent=ok+'/'+items.length+' listos';badge.className=ok===items.length?'ready':'pending';}
     }
 
+    async function logEvent(submissionId,eventType,{fromValue=null,toValue=null,note=null}={}){
+      try{
+        await api('editorial_submission_events',{
+          method:'POST',
+          headers:{'Content-Type':'application/json','Prefer':'return=minimal'},
+          body:JSON.stringify({
+            submission_id:submissionId,
+            event_type:eventType,
+            from_value:fromValue,
+            to_value:toValue,
+            note,
+            actor_email:session?.user?.email||null
+          })
+        });
+      }catch{}
+    }
+
+    function responseText(x,kind,note=''){
+      const extra=String(note||'').trim();
+      if(kind==='accept'){
+        return `Hola ${x.name},
+
+Gracias por enviar “${x.title}” a La Forja. Hemos revisado el texto y queremos avanzar con su publicación.
+
+${extra?extra+'\n\n':''}Antes de publicarlo podremos proponer ajustes de edición, título, bajada o presentación para adecuarlo al formato de la revista. La aceptación editorial no implica una publicación inmediata: coordinaremos la versión final antes de incorporarla a un número de La Forja.
+
+Gracias por confiar en nosotros.
+
+Equipo editorial
+La Forja`;
+      }
+      if(kind==='reject'){
+        return `Hola ${x.name},
+
+Gracias por enviar “${x.title}” a La Forja y por confiar en la revista.
+
+Después de revisarlo, hemos decidido no avanzar con su publicación en esta oportunidad.
+
+${extra?extra+'\n\n':''}Esta decisión se refiere a este texto y a las necesidades editoriales actuales de la revista; no impide que puedas enviarnos nuevas propuestas en el futuro.
+
+Gracias nuevamente por escribirnos.
+
+Equipo editorial
+La Forja`;
+      }
+      return `Hola ${x.name},
+
+Gracias por enviar “${x.title}” a La Forja. Hemos revisado el texto y nos interesa seguir trabajando en él, pero antes de tomar una decisión final quisiéramos pedir algunos cambios.
+
+${extra||'En la nota editorial indicaremos los ajustes que consideramos necesarios.'}
+
+Cuando tengas una nueva versión, podremos revisarla nuevamente.
+
+Gracias por la disposición al diálogo editorial.
+
+Equipo editorial
+La Forja`;
+    }
+
+    function responsePanel(x){
+      const kind=x.author_response_kind||(
+        ['accepted','published'].includes(x.status)?'accept':
+        x.status==='rejected'?'reject':'revise'
+      );
+      const note=x.author_response_note||'';
+      return `
+        <section class="admin-response">
+          <header><div><span>Comunicación editorial</span><h3>Respuesta al autor</h3></div>${x.response_sent_at?`<strong>Enviada · ${escapeHtml(fmtDate(x.response_sent_at))}</strong>`:''}</header>
+          <div class="admin-response-grid">
+            <label><span>Tipo de respuesta</span>
+              <select id="response-kind">
+                <option value="accept" ${kind==='accept'?'selected':''}>Aceptación</option>
+                <option value="revise" ${kind==='revise'?'selected':''}>Solicitar cambios</option>
+                <option value="reject" ${kind==='reject'?'selected':''}>Rechazo</option>
+              </select>
+            </label>
+            <label><span>Mensaje específico</span><textarea id="response-note" rows="5" maxlength="10000" placeholder="Argumentos, observaciones o cambios solicitados…">${escapeHtml(note)}</textarea></label>
+          </div>
+          <div id="response-preview" class="admin-response-preview"></div>
+          <div class="admin-response-actions">
+            <button id="save-response" type="button">Guardar respuesta</button>
+            <button id="copy-response" type="button">Copiar respuesta</button>
+            <button id="mark-response-sent" type="button">Marcar enviada</button>
+            <span id="response-status" role="status"></span>
+          </div>
+        </section>`;
+    }
+
+    function updateResponsePreview(x){
+      const host=document.getElementById('response-preview');if(!host)return;
+      const kind=document.getElementById('response-kind')?.value||'revise';
+      const note=document.getElementById('response-note')?.value||'';
+      host.textContent=responseText(x,kind,note);
+    }
+
+    async function saveResponse(id){
+      const x=submissions.find(s=>s.id===id);if(!x)return;
+      const kind=document.getElementById('response-kind').value;
+      const note=document.getElementById('response-note').value.trim()||null;
+      const msg=document.getElementById('response-status');
+      msg.textContent='Guardando…';
+      try{
+        const r=await api('editorial_submissions?id=eq.'+encodeURIComponent(id),{
+          method:'PATCH',
+          headers:{'Content-Type':'application/json','Prefer':'return=minimal'},
+          body:JSON.stringify({author_response_kind:kind,author_response_note:note,updated_at:new Date().toISOString()})
+        });
+        if(!r.ok)throw new Error('save-response');
+        const oldKind=x.author_response_kind;
+        x.author_response_kind=kind;x.author_response_note=note;
+        await logEvent(id,'response_draft',{fromValue:oldKind,toValue:kind,note});
+        msg.textContent='Respuesta guardada.';
+        loadHistory(id);
+      }catch{msg.textContent='No se pudo guardar.'}
+    }
+
+    async function markResponseSent(id){
+      const x=submissions.find(s=>s.id===id);if(!x)return;
+      const when=new Date().toISOString();
+      const kind=document.getElementById('response-kind')?.value||x.author_response_kind||'revise';
+      const note=document.getElementById('response-note')?.value?.trim()||x.author_response_note||null;
+      const msg=document.getElementById('response-status');
+      msg.textContent='Guardando…';
+      try{
+        const r=await api('editorial_submissions?id=eq.'+encodeURIComponent(id),{
+          method:'PATCH',
+          headers:{'Content-Type':'application/json','Prefer':'return=minimal'},
+          body:JSON.stringify({author_response_kind:kind,author_response_note:note,response_sent_at:when,updated_at:when})
+        });
+        if(!r.ok)throw new Error('sent');
+        Object.assign(x,{author_response_kind:kind,author_response_note:note,response_sent_at:when});
+        await logEvent(id,'response_sent',{toValue:kind,note:'Respuesta marcada como enviada.'});
+        renderDetail(id);
+      }catch{msg.textContent='No se pudo marcar como enviada.'}
+    }
+
+    async function loadHistory(id){
+      const host=document.getElementById('admin-history-list');if(!host)return;
+      host.innerHTML='<p>Cargando historial…</p>';
+      try{
+        const r=await api('editorial_submission_events?submission_id=eq.'+encodeURIComponent(id)+'&select=id,created_at,event_type,from_value,to_value,note,actor_email&order=created_at.desc');
+        if(!r.ok)throw new Error('history');
+        const events=await r.json();
+        host.innerHTML=events.length?events.map(e=>`
+          <article>
+            <time>${escapeHtml(fmtDate(e.created_at))}</time>
+            <div><strong>${escapeHtml(eventName(e.event_type))}</strong>
+              ${e.from_value||e.to_value?`<small>${escapeHtml(e.from_value||'—')} → ${escapeHtml(e.to_value||'—')}</small>`:''}
+              ${e.note?`<p>${escapeHtml(e.note)}</p>`:''}
+            </div>
+          </article>`).join(''):'<p>Aún no hay eventos registrados para esta propuesta.</p>';
+      }catch{host.innerHTML='<p>No se pudo cargar el historial.</p>'}
+    }
+
     function renderNewNotice(){
       const count=submissions.filter(isNew).length;
       newCountEl.textContent=count;
@@ -306,7 +485,7 @@ const currentIssue=String(issues[0]?.data.number??1).padStart(3,'0');
     async function loadSubmissions(){
       refreshBtn.disabled=true;
       try{
-        const fields='id,created_at,status,name,email,contribution_type,title,summary,bio,manuscript,notes,editorial_note,reviewed_at,updated_at,publication_author_slug,publication_issue,publication_topics,publication_art_style,publication_art_label,publication_image,publication_image_alt,publication_image_credit,publication_featured,publication_ready,publication_series,publication_number';
+        const fields='id,created_at,status,name,email,contribution_type,title,summary,bio,manuscript,notes,editorial_note,reviewed_at,updated_at,publication_author_slug,publication_issue,publication_topics,publication_art_style,publication_art_label,publication_image,publication_image_alt,publication_image_credit,publication_featured,publication_ready,publication_series,publication_number,editorial_priority,author_response_kind,author_response_note,response_sent_at';
         const r=await api(`editorial_submissions?select=${fields}&order=created_at.desc`);
         if(r.status===401||r.status===403)throw new Error('forbidden');
         if(!r.ok)throw new Error('load');
@@ -326,14 +505,26 @@ const currentIssue=String(issues[0]?.data.number??1).padStart(3,'0');
     }
     function visibleItems(){
       const q=searchEl.value.trim().toLowerCase();
-      return submissions.filter(x=>(currentFilter==='all'||x.status===currentFilter)&&(!q||[x.title,x.name,x.email,x.summary].join(' ').toLowerCase().includes(q)));
+      const priorityFilter=priorityFilterEl.value;
+      const items=submissions.filter(x=>
+        (currentFilter==='all'||x.status===currentFilter) &&
+        (priorityFilter==='all'||(x.editorial_priority||'normal')===priorityFilter) &&
+        (!q||[x.title,x.name,x.email,x.summary].join(' ').toLowerCase().includes(q))
+      );
+      const mode=sortEl.value;
+      return [...items].sort((a,b)=>{
+        if(mode==='oldest')return new Date(a.created_at)-new Date(b.created_at);
+        if(mode==='newest')return new Date(b.created_at)-new Date(a.created_at);
+        const pd=priorityWeight(b.editorial_priority)-priorityWeight(a.editorial_priority);
+        return pd||new Date(a.created_at)-new Date(b.created_at);
+      });
     }
     function renderList(){
       const items=visibleItems();
       emptyEl.hidden=items.length>0;
       listEl.innerHTML=items.map(x=>`
         <button class="admin-list-item ${x.id===selectedId?'selected':''} ${isNew(x)?'is-new':''}" data-id="${x.id}">
-          <div class="admin-list-top"><span class="admin-status status-${escapeHtml(x.status)}">${escapeHtml(statusName(x.status))}</span>${isNew(x)?'<span class="admin-new-dot">Nueva</span>':''}</div>
+          <div class="admin-list-top"><span class="admin-status status-${escapeHtml(x.status)}">${escapeHtml(statusName(x.status))}</span><span class="admin-priority priority-${escapeHtml(x.editorial_priority||'normal')}">${escapeHtml(priorityName(x.editorial_priority||'normal'))}</span>${isNew(x)?'<span class="admin-new-dot">Nueva</span>':''}</div>
           <strong>${escapeHtml(x.title)}</strong>
           <small>${escapeHtml(x.name)} · ${escapeHtml(typeName(x.contribution_type))}</small>
           <time>${escapeHtml(fmtDate(x.created_at))}</time>
@@ -355,6 +546,11 @@ const currentIssue=String(issues[0]?.data.number??1).padStart(3,'0');
         <section class="admin-manuscript"><strong>Manuscrito</strong><div>${escapeHtml(x.manuscript).replace(/\n/g,'<br>')}</div></section>
         ${publicationPanel(x)}
         <section class="admin-review">
+          <label><span>Prioridad editorial</span>
+            <select id="detail-priority">
+              ${['urgent','high','normal','low'].map(p=>`<option value="${p}" ${(x.editorial_priority||'normal')===p?'selected':''}>${priorityName(p)}</option>`).join('')}
+            </select>
+          </label>
           <label><span>Estado editorial</span>
             <select id="detail-status">
               ${['received','reviewing','accepted','rejected','withdrawn','published'].map(s=>`<option value="${s}" ${x.status===s?'selected':''}>${statusName(s)}</option>`).join('')}
@@ -362,6 +558,11 @@ const currentIssue=String(issues[0]?.data.number??1).padStart(3,'0');
           </label>
           <label><span>Nota interna</span><textarea id="detail-note" rows="6" maxlength="10000" placeholder="Observaciones para la redacción…">${escapeHtml(x.editorial_note||'')}</textarea></label>
           <div class="admin-review-actions"><button id="save-review" type="button">Guardar revisión →</button><span id="save-status" role="status"></span></div>
+        </section>
+        ${responsePanel(x)}
+        <section class="admin-history">
+          <header><span>Expediente</span><h3>Historial editorial</h3></header>
+          <div id="admin-history-list"></div>
         </section>`;
       document.getElementById('save-review').addEventListener('click',()=>saveReview(x.id));
       const copyBtn=document.getElementById('copy-markdown');
@@ -378,6 +579,21 @@ const currentIssue=String(issues[0]?.data.number??1).padStart(3,'0');
         detailEl.querySelectorAll('.admin-publication input,.admin-publication select').forEach(el=>el.addEventListener('input',()=>updatePrepChecklist(x)));
         updatePrepChecklist(x);
       }
+      const responseKind=document.getElementById('response-kind');
+      const responseNote=document.getElementById('response-note');
+      const saveResponseBtn=document.getElementById('save-response');
+      const copyResponseBtn=document.getElementById('copy-response');
+      const markResponseBtn=document.getElementById('mark-response-sent');
+      if(responseKind)responseKind.addEventListener('change',()=>updateResponsePreview(x));
+      if(responseNote)responseNote.addEventListener('input',()=>updateResponsePreview(x));
+      if(saveResponseBtn)saveResponseBtn.addEventListener('click',()=>saveResponse(x.id));
+      if(copyResponseBtn)copyResponseBtn.addEventListener('click',async()=>{
+        await navigator.clipboard.writeText(responseText(x,responseKind.value,responseNote.value));
+        document.getElementById('response-status').textContent='Respuesta copiada.';
+      });
+      if(markResponseBtn)markResponseBtn.addEventListener('click',()=>markResponseSent(x.id));
+      updateResponsePreview(x);
+      loadHistory(x.id);
     }
     async function savePublicationPrep(id){
       const x=submissions.find(s=>s.id===id);if(!x)return;
@@ -392,6 +608,7 @@ const currentIssue=String(issues[0]?.data.number??1).padStart(3,'0');
         });
         if(!r.ok)throw new Error('save-prep');
         Object.assign(x,payload,{updated_at:now});
+        await logEvent(id,'publication_prep',{note:'Ficha de preparación editorial actualizada.'});
         renderDetail(id);
         const fresh=document.getElementById('publication-status');if(fresh)fresh.textContent='Ficha guardada.';
       }catch{msg.textContent='No se pudo guardar la ficha.'}finally{btn.disabled=false}
@@ -400,16 +617,26 @@ const currentIssue=String(issues[0]?.data.number??1).padStart(3,'0');
     async function saveReview(id){
       const btn=document.getElementById('save-review');const msg=document.getElementById('save-status');
       const status=document.getElementById('detail-status').value;
+      const priority=document.getElementById('detail-priority').value;
       const editorial_note=document.getElementById('detail-note').value.trim()||null;
+      const x=submissions.find(s=>s.id===id);
+      const oldStatus=x?.status;
+      const oldPriority=x?.editorial_priority||'normal';
+      const oldNote=x?.editorial_note||null;
       btn.disabled=true;msg.textContent='Guardando…';
       try{
         const now=new Date().toISOString();
         const r=await api(`editorial_submissions?id=eq.${encodeURIComponent(id)}`,{
           method:'PATCH',headers:{'Content-Type':'application/json','Prefer':'return=minimal'},
-          body:JSON.stringify({status,editorial_note,reviewed_at:now,updated_at:now})
+          body:JSON.stringify({status,editorial_priority:priority,editorial_note,reviewed_at:now,updated_at:now})
         });
         if(!r.ok)throw new Error('save');
-        const x=submissions.find(s=>s.id===id);if(x){x.status=status;x.editorial_note=editorial_note;x.reviewed_at=now;x.updated_at=now}
+        if(x){x.status=status;x.editorial_priority=priority;x.editorial_note=editorial_note;x.reviewed_at=now;x.updated_at=now}
+        const events=[];
+        if(oldStatus!==status)events.push(logEvent(id,'status_change',{fromValue:oldStatus,toValue:status}));
+        if(oldPriority!==priority)events.push(logEvent(id,'priority_change',{fromValue:oldPriority,toValue:priority}));
+        if(oldNote!==editorial_note)events.push(logEvent(id,'note_update',{note:editorial_note||'Nota editorial eliminada.'}));
+        await Promise.allSettled(events);
         renderStats();renderNewNotice();renderList();renderDetail(id);document.getElementById('save-status').textContent='Guardado.';
       }catch{msg.textContent='No se pudo guardar.'}finally{btn.disabled=false}
     }
@@ -439,6 +666,8 @@ const currentIssue=String(issues[0]?.data.number??1).padStart(3,'0');
     });
     refreshBtn.addEventListener('click',loadSubmissions);
     searchEl.addEventListener('input',renderList);
+    priorityFilterEl.addEventListener('change',renderList);
+    sortEl.addEventListener('change',renderList);
     filterButtons.forEach(btn=>btn.addEventListener('click',()=>{currentFilter=btn.dataset.filter;filterButtons.forEach(b=>b.classList.toggle('active',b===btn));renderList()}));
 
     if(await ensureSession())showApp();
