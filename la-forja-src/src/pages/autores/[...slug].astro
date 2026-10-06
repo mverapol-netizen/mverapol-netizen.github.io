@@ -1,0 +1,6 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';import{getCollection}from'astro:content';
+export async function getStaticPaths(){const autores=await getCollection('autores');return autores.map(autor=>({params:{slug:autor.id},props:{autor}}))}
+const{autor}=Astro.props;const articulos=(await getCollection('articulos')).filter(a=>a.data.author===autor.id).sort((a,b)=>b.data.date.valueOf()-a.data.date.valueOf());
+---
+<BaseLayout title={autor.data.name}><header class="page-head"><span class="label blue">Autor</span><h1>{autor.data.name}</h1><p>{autor.data.bio}</p></header><section class="list">{articulos.length?articulos.map(a=><article class="row"><strong>{a.data.type}</strong><div><h2>{a.data.title}</h2><p>{a.data.subtitle}</p><small>{a.data.date.toLocaleDateString('es-CL')}</small></div></article>):<p>Aún no hay publicaciones asociadas.</p>}</section></BaseLayout>

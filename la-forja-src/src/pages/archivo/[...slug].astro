@@ -1,0 +1,6 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';import{getCollection}from'astro:content';
+export async function getStaticPaths(){const numeros=await getCollection('numeros');return numeros.map(numero=>({params:{slug:numero.id},props:{numero}}))}
+const{numero}=Astro.props;const key=String(numero.data.number).padStart(3,'0');const articulos=(await getCollection('articulos')).filter(a=>a.data.issue===key);const cuadernos=(await getCollection('cuadernos')).filter(c=>c.data.issue===key);const debates=(await getCollection('debates')).filter(d=>d.data.issue===key);
+---
+<BaseLayout title={`N.º ${numero.data.number} · ${numero.data.month}`} active="Archivo"><header class="page-head"><span class="label">Año {numero.data.year} · N.º {numero.data.number}</span><h1>{numero.data.month}</h1><p>{numero.data.coverTitle}</p></header><section class="list">{articulos.map(a=><article class="row"><strong>{a.data.type}</strong><div><h2>{a.data.title}</h2><p>{a.data.subtitle}</p></div></article>)}{debates.map(d=><article class="row"><strong>debate</strong><div><h2>{d.data.title}</h2><p>{d.data.subtitle}</p></div></article>)}{cuadernos.map(c=><article class="row"><strong>cuaderno {c.data.number}</strong><div><h2>{c.data.title}</h2><p>{c.data.subtitle}</p></div></article>)}</section></BaseLayout>

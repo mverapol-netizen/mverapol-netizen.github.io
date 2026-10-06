@@ -1,0 +1,4 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';import{getCollection}from'astro:content';const base=import.meta.env.BASE_URL;const autores=(await getCollection('autores')).sort((a,b)=>a.data.name.localeCompare(b.data.name,'es'));
+---
+<BaseLayout title="Autores"><header class="page-head"><span class="label blue">Autores</span><h1>Autores</h1><p>Quienes escriben, discuten y colaboran en La Forja.</p></header><section class="list">{autores.map(a=><article class="row"><strong>{a.data.name.slice(0,1)}</strong><div><h2><a href={base+'autores/'+a.id+'/'}>{a.data.name}</a></h2><p>{a.data.bio}</p>{a.data.location&&<small>{a.data.location}</small>}</div></article>)}</section></BaseLayout>

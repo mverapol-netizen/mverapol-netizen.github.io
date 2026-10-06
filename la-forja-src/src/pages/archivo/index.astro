@@ -1,4 +1,4 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';import{getCollection}from'astro:content';const articulos=await getCollection('articulos');const cuadernos=await getCollection('cuadernos');
+import BaseLayout from '../../layouts/BaseLayout.astro';import{getCollection}from'astro:content';const base=import.meta.env.BASE_URL;const numeros=(await getCollection('numeros')).sort((a,b)=>b.data.date.valueOf()-a.data.date.valueOf());
 ---
-<BaseLayout title="Archivo" active="Archivo"><header class="page-head"><span class="label">Hemeroteca</span><h1>Archivo</h1><p>La memoria acumulada de La Forja: números, autores, temas y cuadernos.</p></header><section class="list"><article class="row"><strong>Año I</strong><div><h2>N.º 1 · Octubre de 2026</h2><p>{articulos.length} artículos · {cuadernos.length} cuadernos · debates y editorial.</p></div></article></section></BaseLayout>
+<BaseLayout title="Archivo" active="Archivo"><header class="page-head"><span class="label">Hemeroteca</span><h1>Archivo</h1><p>La memoria acumulada de La Forja: números, autores, temas y cuadernos.</p></header><section class="list">{numeros.map(n=><article class="row"><strong>Año {n.data.year}</strong><div><h2><a href={base+'archivo/'+n.id+'/'}>N.º {n.data.number} · {n.data.month}</a></h2><p>{n.data.coverTitle}</p><small>{n.data.status}</small></div></article>)}</section></BaseLayout>
