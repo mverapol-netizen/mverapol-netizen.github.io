@@ -1,6 +1,27 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import {getCollection} from 'astro:content';
-const cuadernos=(await getCollection('cuadernos',({data})=>!data.draft)).sort((a,b)=>a.data.number-b.data.number);
 ---
-<BaseLayout title="Educación popular" active="Educación popular"><header class="page-head"><span class="label blue">Educación popular</span><h1>Cuadernos de La Forja</h1><p>Conceptos, historia, lecturas y herramientas para una formación política crítica y colectiva.</p></header><div class="education-index">{cuadernos.map(c=><article class:list={['edu-card',`edu-${c.data.artStyle}`]}><div class="edu-cover"><span class="num">N.º {String(c.data.number).padStart(2,'0')}</span><span class="edu-art" aria-hidden="true"></span><h2>{c.data.title}</h2><small>Cuadernos de La Forja · {c.data.series}</small></div><div class="edu-copy"><h3>{c.data.title}</h3><p>{c.data.subtitle}</p><span>{c.data.author}</span></div></article>)}</div></BaseLayout>
+<BaseLayout title="Cuadernos populares" active="Educación popular">
+  <header class="page-head">
+    <span class="label blue">Cuadernos populares</span>
+    <h1>Próximamente</h1>
+    <p>Cuadernos breves de autoformación para acercarse a conceptos, problemas y debates políticos fundamentales.</p>
+  </header>
+
+  <div class="education-index">
+    <article class="edu-card edu-constructivist">
+      <div class="edu-cover">
+        <span class="num">Próximamente</span>
+        <span class="edu-art" aria-hidden="true"></span>
+        <h2>La política y los sistemas políticos</h2>
+        <small>Cuadernos populares · La Forja</small>
+      </div>
+
+      <div class="edu-copy">
+        <h3>Cuaderno popular sobre la política y los sistemas políticos</h3>
+        <p>Estamos preparando una serie de cuadernos de autoformación sobre distintos conceptos, problemas y debates fundamentales para comprender las diferentes formas de pensar la política y aprender a analizar los sistemas políticos.</p>
+        <span>¡Pronto habrá más novedades!</span>
+      </div>
+    </article>
+  </div>
+</BaseLayout>
