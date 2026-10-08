@@ -1,27 +1,19 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import EditorialArt from '../../components/EditorialArt.astro';
-import { getCollection } from 'astro:content';
+import {getCollection} from 'astro:content';
 const base=import.meta.env.BASE_URL;
 const autores=await getCollection('autores',({data})=>!data.draft);
 const authorName=(id)=>autores.find(a=>a.id===id)?.data.name??id;
 const ensayos=(await getCollection('articulos',({data})=>data.type==='ensayo'&&!data.draft)).sort((a,b)=>b.data.date.valueOf()-a.data.date.valueOf());
 ---
-<BaseLayout title="Ensayos" active="Ensayos">
-  <header class="page-head">
-    <span class="label blue">Ensayos</span>
-    <h1>Ensayos</h1>
-    <p>Textos de largo aliento para pensar problemas políticos, sociales, históricos y culturales más allá de la coyuntura inmediata.</p>
-  </header>
+<BaseLayout title="Ensayos" active="Ensayos" noindex={ensayos.length===0}>
+  <header class="page-head"><span class="label blue">Ensayos</span><h1>Ensayos</h1><p>Textos de largo aliento para pensar problemas políticos, sociales, históricos y culturales más allá de la coyuntura inmediata.</p></header>
   <section class="essay-index">
+    {ensayos.length===0 && <article class="card"><h2>Ensayos en preparación</h2><p>La primera edición todavía está en construcción. No hay ensayos publicados.</p><a class="text-link" href={base+'colabora/'}>Envía tu propuesta →</a></article>}
     {ensayos.map((e,i)=><article class:list={['essay-entry',{'essay-entry-featured':i===0}]}>
       <EditorialArt style={e.data.artStyle} label={e.data.artLabel} alt={e.data.title} href={base+'ensayos/'+e.id+'/'} compact={i!==0} image={e.data.image} imageAlt={e.data.imageAlt} imageTreatment={e.data.imageTreatment}/>
-      <div class="essay-entry-copy">
-        <span class="kicker">{e.data.date.toLocaleDateString('es-CL')} · {e.data.readingTime&&`${e.data.readingTime} min`}</span>
-        <h2><a href={base+'ensayos/'+e.id+'/'}>{e.data.title}</a></h2>
-        <p>{e.data.subtitle}</p>
-        <small>Por {authorName(e.data.author)}</small>
-      </div>
+      <div class="essay-entry-copy"><span class="kicker">{e.data.date.toLocaleDateString('es-CL')} · {e.data.readingTime&&String(e.data.readingTime)+' min'}</span><h2><a href={base+'ensayos/'+e.id+'/'}>{e.data.title}</a></h2><p>{e.data.subtitle}</p><small>Por {authorName(e.data.author)}</small></div>
     </article>)}
   </section>
 </BaseLayout>

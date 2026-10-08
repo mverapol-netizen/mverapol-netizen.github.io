@@ -5,23 +5,33 @@ interface Props{
   title?:string;description?:string;active?:string;image?:string;
   type?:'website'|'article';publishedTime?:Date;author?:string;noindex?:boolean;
 }
-const{
+const {
   title='La Forja',
-  description='Revista de opinión, pensamiento crítico, debate y educación popular.',
+  description='Revista digital independiente de opinión, pensamiento crítico, ensayo y educación popular.',
   active='',image,type='website',publishedTime,author,noindex=false
 }=Astro.props;
 const base=import.meta.env.BASE_URL;
-const pageTitle=title==='La Forja'?title:`${title} — La Forja`;
+const pageTitle=title==='La Forja'?title:title+' — La Forja';
 const canonical=new URL(Astro.url.pathname,Astro.site);
 const socialImage=new URL(image ? (image.startsWith('/')?base+image.replace(/^\//,''):image) : base+'social/default.svg',Astro.site);
 const rssUrl=new URL(base+'rss.xml',Astro.site);
+const articulos=await getCollection('articulos',({data})=>!data.draft);
+const hayColumnas=articulos.some(a=>a.data.type==='columna');
+const hayEnsayos=articulos.some(a=>a.data.type==='ensayo');
+const hayArticulos=articulos.length>0;
 const issues=(await getCollection('numeros',({data})=>!data.draft&&data.status==='actual')).sort((a,b)=>b.data.date.valueOf()-a.data.date.valueOf());
 const current=issues[0];
 const roman=['','I','II','III','IV','V','VI','VII','VIII','IX','X'];
-const yearLabel=current ? (roman[current.data.year]??String(current.data.year)) : 'I';
-const issueNumber=current?.data.number??1;
-const issueMonth=current?.data.month??'';
-const nav=[['Portada',''],['Columnas','columnas/'],['Ensayos','ensayos/'],['Educación popular','educacion-popular/'],['Archivo','archivo/'],['Temas','temas/'],['Buscar','buscar/']];
+const yearLabel=current ? (roman[current.data.year]??String(current.data.year)) : '';
+const nav=[
+  ['Portada',''],
+  ...(hayColumnas?[['Columnas','columnas/']]:[]),
+  ...(hayEnsayos?[['Ensayos','ensayos/']]:[]),
+  ['Cuadernos populares','educacion-popular/'],
+  ...(current?[['Archivo','archivo/']]:[]),
+  ...(hayArticulos?[['Temas','temas/'],['Buscar','buscar/']]:[]),
+  ['Sobre La Forja','sobre/']
+];
 ---
 <!doctype html>
 <html lang="es">
@@ -32,7 +42,7 @@ const nav=[['Portada',''],['Columnas','columnas/'],['Ensayos','ensayos/'],['Educ
   <meta name="theme-color" content="#e8ddc4"/>
   {noindex && <meta name="robots" content="noindex,nofollow,noarchive"/>}
   <link rel="canonical" href={canonical}/>
-  <link rel="alternate" type="application/rss+xml" title="La Forja" href={rssUrl}/>
+  {hayArticulos && <link rel="alternate" type="application/rss+xml" title="La Forja" href={rssUrl}/>}
   <meta property="og:site_name" content="La Forja"/>
   <meta property="og:locale" content="es_CL"/>
   <meta property="og:type" content={type}/>
@@ -50,11 +60,15 @@ const nav=[['Portada',''],['Columnas','columnas/'],['Ensayos','ensayos/'],['Educ
 </head>
 <body class="page-enter">
   <main class="shell">
-    <div class="topline"><span>Año {yearLabel} · N.º {issueNumber} · Santiago de Chile</span><span>{issueMonth}</span></div>
+    <div class="topline">
+      {current
+        ? <><span>Año {yearLabel} · N.º {current.data.number} · Santiago de Chile</span><span>{current.data.month}</span></>
+        : <><span>Primera convocatoria editorial · Santiago de Chile</span><span>Edición inaugural en preparación</span></>}
+    </div>
     <header class="mast">
       <a class="logo ink-title" href={base}>La Forja</a>
       <div class="mast-side">
-        <div class="mast-note">Opinión<br/>Pensamiento crítico<br/>Debate<br/>Educación popular</div>
+        <div class="mast-note">Opinión<br/>Pensamiento crítico<br/>Ensayo<br/>Educación popular</div>
         <a class="mast-submit" href={base+'colabora/'}>
           <span>Convocatoria editorial</span>
           <strong>Publica con nosotros →</strong>
@@ -68,7 +82,7 @@ const nav=[['Portada',''],['Columnas','columnas/'],['Ensayos','ensayos/'],['Educ
     <slot/>
     <footer>
       <span>La Forja · Santiago de Chile · 2026</span>
-      <span><a href={base+'autores/'}>Autores</a> · <a href={base+'temas/'}>Temas</a> · <a href={base+'buscar/'}>Buscar</a> · <a href={rssUrl}>RSS</a> · <a href={base+'sobre/'}>Sobre La Forja</a> · <a class="footer-submit" href={base+'colabora/'}>Publica con nosotros</a></span>
+      <span><a href={base+'sobre/'}>Sobre La Forja</a> · <a href={base+'educacion-popular/'}>Cuadernos populares</a>{hayArticulos && <> · <a href={base+'autores/'}>Autores</a> · <a href={base+'temas/'}>Temas</a> · <a href={base+'buscar/'}>Buscar</a> · <a href={rssUrl}>RSS</a></>} · <a class="footer-submit" href={base+'colabora/'}>Publica con nosotros</a></span>
     </footer>
   </main>
   <script is:inline>
