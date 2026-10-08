@@ -1,4 +1,15 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+const base=import.meta.env.BASE_URL;
 ---
-<BaseLayout title="Sobre La Forja"><header class="page-head"><span class="label blue">La revista</span><h1>Sobre La Forja</h1><p>La Forja es una revista digital independiente de opinión, ensayo, discusión y educación popular situada en las tradiciones de la izquierda chilena.</p></header><section class="article"><div class="article-body"><div class="prose"><p>La revista busca recuperar la experiencia de las publicaciones políticas, obreras e intelectuales del siglo XX y traducirla a una experiencia digital contemporánea.</p><p>Publicamos columnas, ensayos y materiales de formación. El manifiesto editorial y las normas completas de publicación se incorporarán en una etapa posterior del proyecto.</p></div><aside class="pull">Pensar · discutir · formar · transformar.</aside></div></section></BaseLayout>
+<BaseLayout title="Sobre La Forja">
+  <header class="page-head"><span class="label blue">La revista</span><h1>Por qué nace La Forja</h1><p>Una revista digital independiente de opinión, pensamiento crítico, discusión y educación popular.</p></header>
+  <section class="article"><div class="article-body"><div class="prose">
+    <p>La Forja nace de una convicción sencilla: necesitamos más espacios para examinar críticamente nuestro presente, discutir sus conflictos y construir argumentos que contribuyan al debate público. Queremos recuperar el espíritu de las publicaciones políticas e intelectuales que hicieron de la escritura una forma de intervención, encuentro y formación colectiva.</p>
+    <p>La revista se sitúa en las tradiciones de las izquierdas, sin entender esa pertenencia como una exigencia de uniformidad. Aspiramos a reunir distintas perspectivas, interpretaciones y desacuerdos, siempre que exista disposición a fundamentar las posiciones, dialogar con otras ideas y tratar con rigor los problemas que nos convocan.</p>
+    <p>La Forja contará con columnas de opinión, ensayos y materiales de educación popular. Estos últimos buscarán acercar conceptos, problemas y debates políticos, económicos y sociales a quienes quieran formarse por cuenta propia o colectivamente.</p>
+    <p>Estamos preparando nuestra primera edición. Mientras tanto, abrimos una convocatoria para recibir colaboraciones, revisarlas editorialmente y construir nuestras primeras publicaciones.</p>
+    <p>Para consultas sobre la revista y su proceso editorial, puedes escribir a <a href="mailto:revistalaforja@gmail.com">revistalaforja@gmail.com</a>. Los manuscritos se reciben exclusivamente a través del formulario de convocatoria.</p>
+    <p><a class="text-link" href={base+'colabora/'}>Conoce la convocatoria →</a></p>
+  </div><aside class="pull">Pensar · discutir · formar · transformar.</aside></div></section>
+</BaseLayout>
