@@ -30,7 +30,7 @@ const currentIssue=String(issues[0]?.data.number??1).padStart(3,'0');
         <h2>Ingresar a la redacción</h2>
         <p>Usa la cuenta de administración autorizada en Supabase. Las demás cuentas, aunque puedan autenticarse, no tienen acceso a las postulaciones.</p>
       </div>
-      <form id="admin-login-form">
+      <form id="admin-login-form" onsubmit="return false">
         <label><span>Correo</span><input name="email" type="email" required autocomplete="username"/></label>
         <label><span>Contraseña</span><input name="password" type="password" required minlength="8" autocomplete="current-password"/></label>
         <button type="submit">Ingresar →</button>
@@ -881,6 +881,6 @@ La Forja`;
     sortEl.addEventListener('change',renderList);
     filterButtons.forEach(btn=>btn.addEventListener('click',()=>{currentFilter=btn.dataset.filter;filterButtons.forEach(b=>b.classList.toggle('active',b===btn));renderList()}));
 
-    if(await ensureSession())showApp();
+    ensureSession().then(ok=>{if(ok)showApp();}).catch(()=>{loginStatus.textContent="No fue posible comprobar la sesión.";});
   </script>
 </BaseLayout>
