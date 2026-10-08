@@ -31,6 +31,8 @@ jobs:
 
       - name: Build La Forja
         working-directory: la-forja-src
+        env:
+          PUBLIC_LA_FORJA_REV: ${{ github.sha }}
         run: npm run build
 
       - name: Verify required navigation routes
@@ -58,6 +60,10 @@ jobs:
             fi
           done
           echo "All required La Forja routes exist."
+
+      - name: Audit all generated pages and prelaunch content
+        working-directory: la-forja-src
+        run: node scripts/audit-public.mjs
 
       - name: Replace public La Forja with Astro build
         run: |
