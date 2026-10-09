@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import EditorialArt from '../components/EditorialArt.astro';
+import DeclaracionEditorial from '../components/DeclaracionEditorial.astro';
 import { getCollection } from 'astro:content';
 const base=import.meta.env.BASE_URL;
 const articulos=await getCollection('articulos',({data})=>!data.draft);
@@ -35,13 +36,29 @@ const hrefFor=(a)=>base+(a.data.type==='ensayo'?'ensayos/':'columnas/')+a.id+'/'
       <EditorialArt style="constructivist" label="Pensar · discutir · formar" alt="Composición gráfica editorial de La Forja"/>
     </section>
   )}
+  <section class="editorial-home" aria-labelledby="editorial-home-title">
+    <div class="editorial-home-head">
+      <div>
+        <span class="label blue">Declaración editorial</span>
+        <h2 id="editorial-home-title">Pensar nuestro tiempo es una tarea compartida</h2>
+      </div>
+      <p>Queremos que quienes no suelen encontrar canales para publicar sus reflexiones tengan aquí la oportunidad de compartirlas y encontrar personas que quieran discutir, conversar, compartir.</p>
+    </div>
+    <details class="editorial-home-details">
+      <summary>Leer la declaración editorial completa</summary>
+      <div class="editorial-home-copy">
+        <DeclaracionEditorial />
+      </div>
+    </details>
+    <a class="text-link" href={base+'sobre/'}>Visitar Sobre La Forja →</a>
+  </section>
   <section class="grid3">
     {columnas.length ? (
       <article class="card"><span class="label">Columnas</span><div class="card-list">{columnas.map(c=><a href={hrefFor(c)}><strong>{c.data.title}</strong><br/><small>Por {authorName(c.data.author)}</small></a>)}</div></article>
     ) : (
       <article class="card"><span class="label">En preparación</span><h2>La primera edición</h2><p>Reuniremos columnas y ensayos sobre problemas políticos, económicos, sociales y culturales de nuestro tiempo.</p></article>
     )}
-    <article class="card"><span class="label blue">Nuestra propuesta</span><h2>Por qué nace La Forja</h2><p>Una publicación independiente para desarrollar argumentos, discutir ideas y fortalecer el pensamiento crítico.</p><a class="text-link" href={base+'sobre/'}>Conoce la revista →</a></article>
+    <article class="card"><span class="label blue">Nuestra propuesta</span><h2>Por qué nace La Forja</h2><p>Las ideas políticas nos pertenecen a todos. Un espacio abierto para distintas voces, experiencias y sensibilidades de las izquierdas.</p><a class="text-link" href={base+'sobre/'}>Leer nuestra declaración →</a></article>
     <article class="card"><span class="label">Educación popular</span><h2>Cuadernos populares</h2><p>Preparamos materiales de autoformación. El primero abordará la política y los sistemas políticos.</p><a class="text-link" href={base+'educacion-popular/'}>Conocer el proyecto →</a></article>
   </section>
   <section class="submission-callout">
