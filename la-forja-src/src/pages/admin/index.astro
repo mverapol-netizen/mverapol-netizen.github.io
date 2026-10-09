@@ -741,7 +741,7 @@ La Forja`;
           <button id="download-word" type="button">Descargar Word original →</button>
           <span id="word-download-status" role="status"></span>
         </section>`:''}
-        <section class="admin-manuscript"><strong>Vista de lectura extraída del Word · V1</strong><div>${escapeHtml(x.manuscript).replace(/\n/g,'<br>')}</div></section>
+        <section class="admin-manuscript"><strong>${x.manuscript_file_path?'Vista de lectura extraída del Word · V1':'Descripción de la propuesta · V1'}</strong><div>${escapeHtml(x.manuscript).replace(/\n/g,'<br>')}</div></section>
         ${versionPanel(x)}
         ${publicationPanel(x)}
         <section class="admin-review">

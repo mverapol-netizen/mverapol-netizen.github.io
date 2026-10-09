@@ -67,10 +67,14 @@ const education=htmlFiles.includes('educacion-popular/index.html')?load('educaci
 const form=htmlFiles.includes('colabora/index.html')?load('colabora/index.html'):'';
 const admin=htmlFiles.includes('admin/index.html')?load('admin/index.html'):'';
 assert(home.includes('Una revista para pensar el presente'),'Portada provisional incorrecta');
+assert(home.includes('700 a 1.200') && home.includes('Más de 2.000') && home.includes('Poesía') && home.includes('extensiones son orientativas'),
+  'La portada no contiene la convocatoria con formatos y extensiones de referencia');
 assert(education.includes('Próximamente')&&education.includes('La política y los sistemas políticos'),
   'Cuadernos populares debe anunciar su contenido en preparación');
 assert(form.includes('id="submission-form"')&&form.includes('onsubmit="return false"'),
   'El formulario público debe impedir GET si falla JavaScript');
+assert(form.includes('700 a 1.200') && form.includes('5.000') && form.includes('Documento en Word (opcional)') && form.includes('la-forja-web-propuesta'),
+  'El formulario debe recibir propuestas culturales sin exigir un Word');
 assert(admin.includes('id="admin-login-form" onsubmit="return false"') && admin.includes('ensureSession().then(ok=>'),
   'El panel editorial no conserva la corrección de inicio de sesión');
 assert(fs.existsSync(path.join(dist,'sitemap.xml')),'Falta sitemap');

@@ -36,6 +36,39 @@ const hrefFor=(a)=>base+(a.data.type==='ensayo'?'ensayos/':'columnas/')+a.id+'/'
       <EditorialArt style="constructivist" label="Pensar · discutir · formar" alt="Composición gráfica editorial de La Forja"/>
     </section>
   )}
+  <section class="submission-callout" aria-labelledby="convocatoria-portada-titulo">
+    <div class="submission-callout-head">
+      <div>
+        <span class="submission-eyebrow">Convocatoria abierta · Primera edición</span>
+        <h2 id="convocatoria-portada-titulo">La Forja recibe propuestas</h2>
+      </div>
+      <p>Invitamos a compartir reflexiones, ideas y creaciones desde las distintas izquierdas y sensibilidades progresistas. Nos interesan tanto la discusión política como sus expresiones culturales.</p>
+    </div>
+    <div class="submission-callout-formats">
+      <article>
+        <span class="submission-format-label">01 / Opinión</span>
+        <h3>Columnas</h3>
+        <strong>700 a 1.200 <small>palabras</small></strong>
+        <p>Intervenciones breves sobre política, sociedad, cultura y actualidad.</p>
+      </article>
+      <article>
+        <span class="submission-format-label">02 / Reflexión</span>
+        <h3>Ensayos</h3>
+        <strong>Más de 2.000 <small>y hasta 5.000 palabras</small></strong>
+        <p>Argumentos y reflexiones de mayor desarrollo, sin depender de la coyuntura.</p>
+      </article>
+      <article>
+        <span class="submission-format-label">03 / Creación</span>
+        <h3>Otros aportes</h3>
+        <strong>Formato abierto</strong>
+        <p>Poesía, artes, crónicas, propuestas culturales y otras formas de expresión.</p>
+      </article>
+    </div>
+    <div class="submission-callout-bottom">
+      <p>Las extensiones son orientativas, no excluyentes. También recibimos propuestas de educación popular.</p>
+      <a href={base+'colabora/'}>Presenta tu propuesta <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
   <section class="editorial-home" aria-labelledby="editorial-home-title">
     <div class="editorial-home-head">
       <div>
@@ -60,11 +93,6 @@ const hrefFor=(a)=>base+(a.data.type==='ensayo'?'ensayos/':'columnas/')+a.id+'/'
     )}
     <article class="card"><span class="label blue">Nuestra propuesta</span><h2>Por qué nace La Forja</h2><p>Las ideas políticas nos pertenecen a todos. Un espacio abierto para distintas voces, experiencias y sensibilidades de las izquierdas.</p><a class="text-link" href={base+'sobre/'}>Leer nuestra declaración →</a></article>
     <article class="card"><span class="label">Educación popular</span><h2>Cuadernos populares</h2><p>Preparamos materiales de autoformación. El primero abordará la política y los sistemas políticos.</p><a class="text-link" href={base+'educacion-popular/'}>Conocer el proyecto →</a></article>
-  </section>
-  <section class="submission-callout">
-    <div><span class="submission-eyebrow">Primera convocatoria editorial</span><h2>Publica con nosotros</h2></div>
-    <p>¿Tienes una columna, un ensayo o una propuesta de educación popular? Queremos abrir un espacio a distintas voces que contribuyan al debate crítico de las izquierdas.</p>
-    <a href={base+'colabora/'}>Envía tu propuesta →</a>
   </section>
   {cuadernos.length>0 && <section>
     <div class="section-intro"><div><span class="label blue">Educación popular</span><h2>Cuadernos</h2></div><p>Herramientas para la autoformación política y social.</p></div>
