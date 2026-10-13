@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex"><meta name="referrer" content="no-referrer"><meta name="color-scheme" content="light"><meta name="description" content="Prototipo de la encuesta sobre violencia política digital de género. Prueba interna sin almacenamiento de respuestas."><title>Encuesta VPDG · Versión 02 · Pilotaje</title><style>*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:#192536;background:#f4f6f6;font-family:Inter,"Segoe UI",system-ui,-apple-system,Arial,sans-serif;line-height:1.54}button,input,textarea{font:inherit}button{cursor:pointer}a{color:inherit}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #68d4cb;outline-offset:3px}.skip{position:absolute;top:-70px;left:18px;background:white;padding:8px 14px;z-index:30}.skip:focus{top:8px}.mast{background:#0e2b41;color:white;border-bottom:5px solid #1c9b91}.mast-inner{max-width:1260px;margin:auto;padding:45px 30px 37px}.eyebrow{text-transform:uppercase;letter-spacing:.16em;font-weight:800;font-size:11px;color:#a5dad8;margin-bottom:14px}.mast h1{font-size:clamp(29px,3.7vw,44px);line-height:1.16;letter-spacing:-.032em;max-width:800px;margin:0 0 15px;font-weight:780}.mast p{margin:0;color:#d1e1e9;max-width:760px;font-size:15px}.hero-chip{display:inline-block;font-size:12px;font-weight:750;color:#0c3532;background:#bdece3;padding:6px 11px;border-radius:50px;margin:20px 0 0}.shell{max-width:1260px;margin:0 auto;display:grid;grid-template-columns:260px minmax(0,1fr);gap:34px;padding:35px 30px 100px}.side{align-self:start;position:sticky;top:20px;background:white;border:1px solid #dbe3e5;border-radius:18px;overflow:hidden;box-shadow:0 8px 24px rgba(21,41,61,.04)}.side-head{padding:24px;border-bottom:1px solid #e2e8ea}.side-title{font-size:12px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#425b6b}.side-progress{font-size:31px;font-weight:850;letter-spacing:-.045em;margin-top:6px;color:#123b50}.side-progress small{font-size:14px;color:#657785;font-weight:500}.meter{margin-top:12px;background:#e6eeee;border-radius:50px;height:8px;overflow:hidden}.meter-fill{height:100%;width:0;background:#258e84;transition:width .2s}.nav-title{display:block;color:#71808b;font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;padding:19px 24px 6px}.section-links a{display:flex;align-items:flex-start;gap:12px;padding:9px 24px;color:#3a5664;text-decoration:none;font-size:13px}.section-links a:hover{color:#04695f;background:#f0f8f6}.letter{flex:none;display:inline-grid;place-items:center;width:21px;height:21px;background:#e9f2f2;color:#0a6e67;border-radius:6px;font-weight:800;font-size:11px}.side-bottom{margin-top:17px;border-top:1px solid #e7ecee;padding:19px 24px;color:#617782;font-size:12px}.main{min-width:0}.pilot-note{border:1px solid #c9e3df;border-left:5px solid #0f8c7f;padding:17px 21px;border-radius:12px;background:#effaf7;color:#244a4b;margin-bottom:22px;font-size:14px}.pilot-note strong{color:#0b6b61}.survey-section,.intro-card,.final-card{background:#fff;border:1px solid #dbe3e5;border-radius:18px;box-shadow:0 8px 25px rgba(28,53,65,.035);padding:30px 34px;margin-bottom:22px;scroll-margin-top:24px}.intro-card{padding-top:34px}.section-top{padding:0 0 18px;border-bottom:1px solid #e5eaec;margin-bottom:20px}.section-top h2{font-size:25px;letter-spacing:-.03em;line-height:1.2;font-weight:780;margin:5px 0 0;color:#102e43}.section-num{text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:#168176;font-weight:850}.instruction{color:#536873;font-size:14px;margin:14px 0 20px;max-width:750px}.intro-card>h2{font-size:22px;margin:0 0 18px;letter-spacing:-.025em}.question{min-width:0;border:0;border-bottom:1px solid #edf1f2;margin:0;padding:25px 0;position:relative}.question:last-child{border-bottom:0;padding-bottom:8px}.question legend{width:100%;float:left;display:flex;align-items:flex-start;gap:13px;font-size:15px;color:#152d3e;font-weight:680;line-height:1.5;padding:0}.question legend::after{content:"";display:block;clear:both}.q-no{flex:none;display:inline-grid;place-items:center;background:#e8f1f2;color:#176967;border-radius:8px;min-width:31px;height:31px;font-size:12px;font-weight:800;margin-top:-3px}.q-label{flex:1}.question>.q-meta{clear:both;margin:8px 0 10px 44px;text-transform:uppercase;font-size:10px;font-weight:750;letter-spacing:.1em;color:#77909a}.options{clear:both;display:flex;flex-wrap:wrap;gap:9px;margin-left:44px}.options.multiple{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.option{display:inline-flex;position:relative;align-items:center;min-height:43px;gap:9px;cursor:pointer;font-size:13px;color:#3b5260;background:#f8faf9;border:1px solid #dfe7e6;border-radius:11px;padding:9px 13px;line-height:1.33;transition:background .14s,border-color .14s}.option:hover{border-color:#9bc9c3;background:#f1faf7}.option input{accent-color:#15867b;margin:0;flex:none;width:16px;height:16px}.option:has(input:checked){background:#e5f5f1;border-color:#45aa9b;color:#0c4e49;font-weight:650}.option:focus-within{outline:2px solid #48b3a7;outline-offset:2px}.matrix-title{margin:22px 0 0;font-size:16px;color:#0a6f66;font-weight:780;letter-spacing:-.015em}.matrix-title+.question{padding-top:18px}.placeholder{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#f5ede0;border-radius:5px;color:#7e5c20;padding:1px 3px;font-size:.92em}.pending{width:100%;background:#fff9e9;border:1px dashed #e8d29f;color:#876123;font-size:12px;padding:10px 12px;border-radius:9px}.free-text-label{display:flex;gap:9px;align-items:center;flex-wrap:wrap;color:#667b7b;font-size:12px;width:100%}.free-text-label input{width:100%;max-width:410px;border:1px solid #d7dfdf;border-radius:8px;min-height:40px;padding:8px 12px;background:#fff}.end-card{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between}.end-card h2{margin:0;font-size:20px}.end-card p{font-size:13px;color:#5e7582;margin:8px 0 15px;max-width:550px}.actions{display:flex;gap:10px;flex-wrap:wrap}.btn{appearance:none;background:#0e6c66;border:1px solid #0e6c66;color:white;padding:12px 18px;border-radius:11px;font-size:13px;font-weight:700;min-height:44px}.btn:hover{background:#094b47}.btn.secondary{background:white;color:#1d5861;border-color:#a6bfc1}.btn.secondary:hover{background:#eff6f4}.btn.danger{border-color:#cfd9dd;background:#f7f9f9;color:#576d77}.btn.danger:hover{background:#eef1f1}.foot{padding:15px 0;font-size:12px;color:#667a80}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}.mobile-progress{display:none}@media(max-width:980px){.shell{display:block;padding:20px 16px 65px}.side{position:relative;top:auto;margin-bottom:18px}.section-links{display:grid;grid-template-columns:repeat(3,1fr);padding-bottom:13px}.section-links a{padding:9px 14px}.nav-title{padding:12px 14px}.side-bottom{display:none}.side-head{padding:16px 18px}.mast-inner{padding:35px 17px}.survey-section,.intro-card,.final-card{padding:24px 19px;border-radius:14px}.options.multiple{grid-template-columns:1fr}}@media(max-width:580px){.section-links{grid-template-columns:repeat(2,1fr)}.section-links a{font-size:12px}.mast h1{font-size:30px}.section-top h2{font-size:22px}.question legend{font-size:14px;gap:9px}.q-no{width:27px;min-width:27px;height:27px}.question>.q-meta,.options{margin-left:0}.options.single{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.option{font-size:12px;padding:10px}.options.multiple{grid-template-columns:1fr}.end-card{display:block}}@media print{body{background:#fff}.mast{background:#fff;color:#000;border-bottom:2px solid #000}.mast p{color:#222}.pilot-note,.side,.actions,.foot,.hero-chip{display:none}.shell{display:block;padding:0}.survey-section,.intro-card,.final-card{padding:8px 0;border:0;box-shadow:none;border-radius:0}.question{break-inside:avoid;page-break-inside:avoid}.option{padding:4px 6px;min-height:auto;border:0}.options.multiple{grid-template-columns:repeat(2,1fr)}.section-top{break-after:avoid}.section-num,.mast .eyebrow{color:#000}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.meter-fill,.option{transition:none}}</style></head>
+<body><a class="skip" href="#start">Ir al cuestionario</a><header class="mast"><div class="mast-inner"><div class="eyebrow">Instrumento de investigación · pilotaje</div><h1>Encuesta sobre violencia política digital de género</h1><p>Versión 02 abreviada · Prototipo para evaluar claridad, extensión y experiencia de respuesta</p><div class="hero-chip">61 ítems · Todas las preguntas visibles</div></div></header>
+<div class="shell"><aside class="side" aria-label="Navegación y avance"><div class="side-head"><span class="side-title">Avance del cuestionario</span><div class="side-progress"><span id="progress">0</span><small> / 61 ítems respondidos</small></div><div class="meter"><div class="meter-fill" id="bar" role="progressbar" aria-valuemin="0" aria-valuemax="61" aria-valuenow="0" aria-label="Ítems respondidos"></div></div></div><span class="nav-title">Ir a una sección</span><nav class="section-links"><a href="#seccion-A"><span class="letter">A</span><span>Información de referencia</span></a><a href="#seccion-B"><span class="letter">B</span><span>Experiencias durante la candidatura</span></a><a href="#seccion-C"><span class="letter">C</span><span>Dimensión de género</span></a><a href="#seccion-D"><span class="letter">D</span><span>Consecuencias en la participación</span></a><a href="#seccion-E"><span class="letter">E</span><span>Protección y respuestas</span></a><a href="#seccion-F"><span class="letter">F</span><span>Reconocimiento y características</span></a></nav><div class="side-bottom">En esta versión de prueba no existen saltos ni preguntas obligatorias. Puede recorrerla de principio a fin.</div></aside><main class="main" id="start"><div class="pilot-note"><strong>Modo de prueba.</strong> Se muestran todas las preguntas, incluso las que en la versión definitiva dependerían de respuestas anteriores. No hay saltos, ni envío, ni almacenamiento en servidores. No introduzca datos personales reales: este enlace no tiene control de acceso privado. Las respuestas solo permanecen en la página mientras está abierta; puede descargar un archivo local si lo desea.</div><section class="intro-card" aria-labelledby="intro-title"><h2 id="intro-title">Presentación y consentimiento</h2><p class="instruction">Gracias por participar en este estudio sobre las experiencias de mujeres candidatas durante procesos electorales. Nos interesan las experiencias relacionadas con su candidatura que hayan ocurrido mediante redes sociales, mensajería, correo electrónico, sitios web, llamadas o mensajes digitales, cuentas, dispositivos u otras tecnologías.</p><p class="instruction">Algunas preguntas mencionan amenazas, hostigamiento, contenido sexual no deseado, difusión de información privada y otras situaciones sensibles. Puede omitir cualquier pregunta o terminar su participación cuando lo desee. No se le solicitará identificar por nombre a otras personas. Las respuestas serán tratadas confidencialmente, mediante procedimientos de resguardo y minimización del riesgo de identificación.</p><fieldset class="question" id="q-CONS01" data-code="CONS01"><legend><span class="q-no">01</span><span class="q-label">¿Acepta participar voluntariamente en esta encuesta?</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como CONS01</span></div>
+<div class="options single">
+<label class="option" for="CONS01-0"><input id="CONS01-0" name="CONS01" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="CONS01-1"><input id="CONS01-1" name="CONS01" type="radio" value="No"><span>No</span></label>
+</div></fieldset></section><section class="survey-section" id="seccion-A" aria-labelledby="titulo-A">
+<div class="section-top"><span class="section-num">SECCIÓN A</span><h2 id="titulo-A">Información de referencia</h2></div>
+<p class="instruction">Nuestros registros indican que usted fue candidata a <span class="placeholder">[CARGO]</span>, por <span class="placeholder">[PARTIDO/LISTA]</span>, en <span class="placeholder">[ELECCIÓN]</span>.</p>
+<fieldset class="question" id="q-ADM01" data-code="ADM01"><legend><span class="q-no">02</span><span class="q-label">¿Es correcta esta información?</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como ADM01</span></div>
+<div class="options single">
+<label class="option" for="ADM01-0"><input id="ADM01-0" name="ADM01" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="ADM01-1"><input id="ADM01-1" name="ADM01" type="radio" value="No, contiene algún error"><span>No, contiene algún error</span></label>
+</div></fieldset>
+<p class="instruction">Para responder, considere solo lo ocurrido entre <span class="placeholder">[FECHA INICIO]</span> y <span class="placeholder">[FECHA FIN]</span>, en relación con esa candidatura. Puede haber sufrido estas experiencias aunque no utilizara personalmente redes sociales para hacer campaña.</p>
+<fieldset class="question" id="q-EXP06" data-code="EXP06"><legend><span class="q-no">03</span><span class="q-label">En general, ¿cómo describiría la exposición digital de su candidatura?</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como EXP06</span></div>
+<div class="options single">
+<label class="option" for="EXP06-0"><input id="EXP06-0" name="EXP06" type="radio" value="Baja"><span>Baja</span></label>
+<label class="option" for="EXP06-1"><input id="EXP06-1" name="EXP06" type="radio" value="Media"><span>Media</span></label>
+<label class="option" for="EXP06-2"><input id="EXP06-2" name="EXP06" type="radio" value="Alta"><span>Alta</span></label>
+<label class="option" for="EXP06-3"><input id="EXP06-3" name="EXP06" type="radio" value="Muy alta"><span>Muy alta</span></label>
+<label class="option" for="EXP06-4"><input id="EXP06-4" name="EXP06" type="radio" value="No puedo determinarlo"><span>No puedo determinarlo</span></label>
+</div></fieldset>
+</section><section class="survey-section" id="seccion-B" aria-labelledby="titulo-B">
+<div class="section-top"><span class="section-num">SECCIÓN B</span><h2 id="titulo-B">Experiencias durante la candidatura</h2></div>
+<p class="instruction">En los siguientes paneles, indique si le ocurrió cada situación a usted durante el periodo señalado, en relación con su actividad política. No necesita considerarla «violencia» o «acoso» para marcar «Sí». Responda cada fila de manera independiente.</p>
+<h3 class="matrix-title">Amenazas y hostigamiento</h3>
+<fieldset class="question" id="q-SCR01" data-code="SCR01"><legend><span class="q-no">04</span><span class="q-label">Recibió amenazas digitales de hacerle daño a usted.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como SCR01</span></div>
+<div class="options single">
+<label class="option" for="SCR01-0"><input id="SCR01-0" name="SCR01" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="SCR01-1"><input id="SCR01-1" name="SCR01" type="radio" value="No"><span>No</span></label>
+<label class="option" for="SCR01-2"><input id="SCR01-2" name="SCR01" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="SCR01-3"><input id="SCR01-3" name="SCR01" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-SCR02" data-code="SCR02"><legend><span class="q-no">05</span><span class="q-label">Recibió amenazas digitales de hacer daño a su familia, pareja, equipo u otras personas cercanas.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como SCR02</span></div>
+<div class="options single">
+<label class="option" for="SCR02-0"><input id="SCR02-0" name="SCR02" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="SCR02-1"><input id="SCR02-1" name="SCR02" type="radio" value="No"><span>No</span></label>
+<label class="option" for="SCR02-2"><input id="SCR02-2" name="SCR02" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="SCR02-3"><input id="SCR02-3" name="SCR02" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-SCR03" data-code="SCR03"><legend><span class="q-no">06</span><span class="q-label">Recibió repetidamente mensajes o comentarios no deseados de una persona o conjunto de cuentas.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como SCR03</span></div>
+<div class="options single">
+<label class="option" for="SCR03-0"><input id="SCR03-0" name="SCR03" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="SCR03-1"><input id="SCR03-1" name="SCR03" type="radio" value="No"><span>No</span></label>
+<label class="option" for="SCR03-2"><input id="SCR03-2" name="SCR03" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="SCR03-3"><input id="SCR03-3" name="SCR03" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-SCR04" data-code="SCR04"><legend><span class="q-no">07</span><span class="q-label">Recibió insultos, burlas o expresiones degradantes de carácter personal relacionadas con su candidatura.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como SCR04</span></div>
+<div class="options single">
+<label class="option" for="SCR04-0"><input id="SCR04-0" name="SCR04" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="SCR04-1"><input id="SCR04-1" name="SCR04" type="radio" value="No"><span>No</span></label>
+<label class="option" for="SCR04-2"><input id="SCR04-2" name="SCR04" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="SCR04-3"><input id="SCR04-3" name="SCR04" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-SCR21" data-code="SCR21"><legend><span class="q-no">08</span><span class="q-label">Alguien llamó públicamente a otras personas a hostigarla o atacarla masivamente mediante sus cuentas.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como SCR21</span></div>
+<div class="options single">
+<label class="option" for="SCR21-0"><input id="SCR21-0" name="SCR21" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="SCR21-1"><input id="SCR21-1" name="SCR21" type="radio" value="No"><span>No</span></label>
+<label class="option" for="SCR21-2"><input id="SCR21-2" name="SCR21" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="SCR21-3"><input id="SCR21-3" name="SCR21" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<h3 class="matrix-title">Conductas sexualizadas y contenido íntimo</h3>
+<fieldset class="question" id="q-SCR05" data-code="SCR05"><legend><span class="q-no">09</span><span class="q-label">Recibió comentarios, insinuaciones o materiales sexuales que no deseaba recibir.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como SCR05</span></div>
+<div class="options single">
+<label class="option" for="SCR05-0"><input id="SCR05-0" name="SCR05" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="SCR05-1"><input id="SCR05-1" name="SCR05" type="radio" value="No"><span>No</span></label>
+<label class="option" for="SCR05-2"><input id="SCR05-2" name="SCR05" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="SCR05-3"><input id="SCR05-3" name="SCR05" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-SCR06" data-code="SCR06"><legend><span class="q-no">10</span><span class="q-label">Le solicitaron o exigieron actos o favores sexuales a cambio de apoyo, recursos o ventajas políticas.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como SCR06</span></div>
+<div class="options single">
+<label class="option" for="SCR06-0"><input id="SCR06-0" name="SCR06" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="SCR06-1"><input id="SCR06-1" name="SCR06" type="radio" value="No"><span>No</span></label>
+<label class="option" for="SCR06-2"><input id="SCR06-2" name="SCR06" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="SCR06-3"><input id="SCR06-3" name="SCR06" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-SCR07" data-code="SCR07"><legend><span class="q-no">11</span><span class="q-label">Compartieron sin su consentimiento contenido íntimo o sexual auténtico suyo.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como SCR07</span></div>
+<div class="options single">
+<label class="option" for="SCR07-0"><input id="SCR07-0" name="SCR07" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="SCR07-1"><input id="SCR07-1" name="SCR07" type="radio" value="No"><span>No</span></label>
+<label class="option" for="SCR07-2"><input id="SCR07-2" name="SCR07" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="SCR07-3"><input id="SCR07-3" name="SCR07" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-SCR08" data-code="SCR08"><legend><span class="q-no">12</span><span class="q-label">La amenazaron con difundir contenido íntimo o sexual suyo sin su consentimiento.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como SCR08</span></div>
+<div class="options single">
+<label class="option" for="SCR08-0"><input id="SCR08-0" name="SCR08" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="SCR08-1"><input id="SCR08-1" name="SCR08" type="radio" value="No"><span>No</span></label>
+<label class="option" for="SCR08-2"><input id="SCR08-2" name="SCR08" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="SCR08-3"><input id="SCR08-3" name="SCR08" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-SCR09" data-code="SCR09"><legend><span class="q-no">13</span><span class="q-label">Crearon o difundieron imágenes, audios o videos manipulados que la representaban en una situación íntima o sexual ficticia.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como SCR09</span></div>
+<div class="options single">
+<label class="option" for="SCR09-0"><input id="SCR09-0" name="SCR09" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="SCR09-1"><input id="SCR09-1" name="SCR09" type="radio" value="No"><span>No</span></label>
+<label class="option" for="SCR09-2"><input id="SCR09-2" name="SCR09" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="SCR09-3"><input id="SCR09-3" name="SCR09" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<h3 class="matrix-title">Información falsa y exposición de datos personales</h3>
+<fieldset class="question" id="q-SCR10" data-code="SCR10"><legend><span class="q-no">14</span><span class="q-label">Difundieron afirmaciones presentadas como hechos sobre usted que sabía que eran falsas.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como SCR10</span></div>
+<div class="options single">
+<label class="option" for="SCR10-0"><input id="SCR10-0" name="SCR10" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="SCR10-1"><input id="SCR10-1" name="SCR10" type="radio" value="No"><span>No</span></label>
+<label class="option" for="SCR10-2"><input id="SCR10-2" name="SCR10" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="SCR10-3"><input id="SCR10-3" name="SCR10" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-SCR11" data-code="SCR11"><legend><span class="q-no">15</span><span class="q-label">Crearon o difundieron imágenes, audios o videos manipulados para atribuirle hechos o declaraciones que no ocurrieron.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como SCR11</span></div>
+<div class="options single">
+<label class="option" for="SCR11-0"><input id="SCR11-0" name="SCR11" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="SCR11-1"><input id="SCR11-1" name="SCR11" type="radio" value="No"><span>No</span></label>
+<label class="option" for="SCR11-2"><input id="SCR11-2" name="SCR11" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="SCR11-3"><input id="SCR11-3" name="SCR11" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-SCR12" data-code="SCR12"><legend><span class="q-no">16</span><span class="q-label">Publicaron o compartieron sin su autorización información privada suya que no era públicamente conocida.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como SCR12</span></div>
+<div class="options single">
+<label class="option" for="SCR12-0"><input id="SCR12-0" name="SCR12" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="SCR12-1"><input id="SCR12-1" name="SCR12" type="radio" value="No"><span>No</span></label>
+<label class="option" for="SCR12-2"><input id="SCR12-2" name="SCR12" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="SCR12-3"><input id="SCR12-3" name="SCR12" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-SCR13" data-code="SCR13"><legend><span class="q-no">17</span><span class="q-label">Publicaron o compartieron sin su autorización datos que permitían contactarla o localizarla, como teléfono, dirección o ubicación.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como SCR13</span></div>
+<div class="options single">
+<label class="option" for="SCR13-0"><input id="SCR13-0" name="SCR13" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="SCR13-1"><input id="SCR13-1" name="SCR13" type="radio" value="No"><span>No</span></label>
+<label class="option" for="SCR13-2"><input id="SCR13-2" name="SCR13" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="SCR13-3"><input id="SCR13-3" name="SCR13" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<h3 class="matrix-title">Seguridad, suplantación y sabotaje digital</h3>
+<fieldset class="question" id="q-SCR14" data-code="SCR14"><legend><span class="q-no">18</span><span class="q-label">Accedieron sin autorización a alguna de sus cuentas, correos, dispositivos o servicios digitales.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como SCR14</span></div>
+<div class="options single">
+<label class="option" for="SCR14-0"><input id="SCR14-0" name="SCR14" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="SCR14-1"><input id="SCR14-1" name="SCR14" type="radio" value="No"><span>No</span></label>
+<label class="option" for="SCR14-2"><input id="SCR14-2" name="SCR14" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="SCR14-3"><input id="SCR14-3" name="SCR14" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-SCR15" data-code="SCR15"><legend><span class="q-no">19</span><span class="q-label">Detectó intentos repetidos o inusuales de acceder a sus cuentas o conseguir sus contraseñas.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como SCR15</span></div>
+<div class="options single">
+<label class="option" for="SCR15-0"><input id="SCR15-0" name="SCR15" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="SCR15-1"><input id="SCR15-1" name="SCR15" type="radio" value="No"><span>No</span></label>
+<label class="option" for="SCR15-2"><input id="SCR15-2" name="SCR15" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="SCR15-3"><input id="SCR15-3" name="SCR15" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-SCR16" data-code="SCR16"><legend><span class="q-no">20</span><span class="q-label">Crearon o usaron una identidad digital haciéndose pasar por usted sin su autorización.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como SCR16</span></div>
+<div class="options single">
+<label class="option" for="SCR16-0"><input id="SCR16-0" name="SCR16" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="SCR16-1"><input id="SCR16-1" name="SCR16" type="radio" value="No"><span>No</span></label>
+<label class="option" for="SCR16-2"><input id="SCR16-2" name="SCR16" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="SCR16-3"><input id="SCR16-3" name="SCR16" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-SCR17" data-code="SCR17"><legend><span class="q-no">21</span><span class="q-label">Usaron herramientas o información digital para vigilarla, localizarla o hacerle saber reiteradamente dónde estaba.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como SCR17</span></div>
+<div class="options single">
+<label class="option" for="SCR17-0"><input id="SCR17-0" name="SCR17" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="SCR17-1"><input id="SCR17-1" name="SCR17" type="radio" value="No"><span>No</span></label>
+<label class="option" for="SCR17-2"><input id="SCR17-2" name="SCR17" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="SCR17-3"><input id="SCR17-3" name="SCR17" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-SCR20" data-code="SCR20"><legend><span class="q-no">22</span><span class="q-label">Interfirieron deliberadamente en una actividad digital de su campaña, como una transmisión, publicación o cuenta.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como SCR20</span></div>
+<div class="options single">
+<label class="option" for="SCR20-0"><input id="SCR20-0" name="SCR20" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="SCR20-1"><input id="SCR20-1" name="SCR20" type="radio" value="No"><span>No</span></label>
+<label class="option" for="SCR20-2"><input id="SCR20-2" name="SCR20" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="SCR20-3"><input id="SCR20-3" name="SCR20" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+</section><section class="survey-section" id="seccion-C" aria-labelledby="titulo-C">
+<div class="section-top"><span class="section-num">SECCIÓN C</span><h2 id="titulo-C">Dimensión de género de las experiencias</h2></div>
+<p class="instruction">Piense ahora en todas las situaciones que marcó «Sí», no solo en una de ellas.</p>
+<fieldset class="question" id="q-GEN01" data-code="GEN01"><legend><span class="q-no">23</span><span class="q-label">¿Alguna de esas situaciones incluyó referencias explícitas a que usted es mujer o a cómo debería comportarse una mujer?</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como GEN01</span></div>
+<div class="options single">
+<label class="option" for="GEN01-0"><input id="GEN01-0" name="GEN01" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="GEN01-1"><input id="GEN01-1" name="GEN01" type="radio" value="No"><span>No</span></label>
+<label class="option" for="GEN01-2"><input id="GEN01-2" name="GEN01" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="GEN01-3"><input id="GEN01-3" name="GEN01" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-GEN02" data-code="GEN02"><legend><span class="q-no">24</span><span class="q-label">¿En qué medida considera que ser mujer influyó en que usted fuera objeto de alguna de esas situaciones?</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como GEN02</span></div>
+<div class="options single">
+<label class="option" for="GEN02-0"><input id="GEN02-0" name="GEN02" type="radio" value="Nada"><span>Nada</span></label>
+<label class="option" for="GEN02-1"><input id="GEN02-1" name="GEN02" type="radio" value="Poco"><span>Poco</span></label>
+<label class="option" for="GEN02-2"><input id="GEN02-2" name="GEN02" type="radio" value="Algo"><span>Algo</span></label>
+<label class="option" for="GEN02-3"><input id="GEN02-3" name="GEN02" type="radio" value="Mucho"><span>Mucho</span></label>
+<label class="option" for="GEN02-4"><input id="GEN02-4" name="GEN02" type="radio" value="No puedo determinarlo"><span>No puedo determinarlo</span></label>
+<label class="option" for="GEN02-5"><input id="GEN02-5" name="GEN02" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-GEN03" data-code="GEN03"><legend><span class="q-no">25</span><span class="q-label">¿En qué medida considera que ser mujer influyó en la forma o el contenido que tomó alguna de esas situaciones?</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como GEN03</span></div>
+<div class="options single">
+<label class="option" for="GEN03-0"><input id="GEN03-0" name="GEN03" type="radio" value="Nada"><span>Nada</span></label>
+<label class="option" for="GEN03-1"><input id="GEN03-1" name="GEN03" type="radio" value="Poco"><span>Poco</span></label>
+<label class="option" for="GEN03-2"><input id="GEN03-2" name="GEN03" type="radio" value="Algo"><span>Algo</span></label>
+<label class="option" for="GEN03-3"><input id="GEN03-3" name="GEN03" type="radio" value="Mucho"><span>Mucho</span></label>
+<label class="option" for="GEN03-4"><input id="GEN03-4" name="GEN03" type="radio" value="No puedo determinarlo"><span>No puedo determinarlo</span></label>
+<label class="option" for="GEN03-5"><input id="GEN03-5" name="GEN03" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-GEN04" data-code="GEN04"><legend><span class="q-no">26</span><span class="q-label">¿Apareció alguno de estos contenidos relacionado con el género? Marque todos los que correspondan.</span></legend>
+<div class="q-meta">Selección múltiple<span class="sr-only">. Pregunta identificada internamente como GEN04</span></div>
+<div class="options multiple">
+<label class="option" for="GEN04-0"><input id="GEN04-0" name="GEN04" type="checkbox" value="Descalificaciones de su capacidad, preparación, liderazgo o autoridad como mujer"><span>Descalificaciones de su capacidad, preparación, liderazgo o autoridad como mujer</span></label>
+<label class="option" for="GEN04-1"><input id="GEN04-1" name="GEN04" type="checkbox" value="Cuestionamientos por cuota, paridad o supuesta dependencia de un hombre"><span>Cuestionamientos por cuota, paridad o supuesta dependencia de un hombre</span></label>
+<label class="option" for="GEN04-2"><input id="GEN04-2" name="GEN04" type="checkbox" value="Comentarios sobre cuerpo, apariencia, vestimenta o edad"><span>Comentarios sobre cuerpo, apariencia, vestimenta o edad</span></label>
+<label class="option" for="GEN04-3"><input id="GEN04-3" name="GEN04" type="checkbox" value="Referencias degradantes a su sexualidad, vida sexual o moralidad"><span>Referencias degradantes a su sexualidad, vida sexual o moralidad</span></label>
+<label class="option" for="GEN04-4"><input id="GEN04-4" name="GEN04" type="checkbox" value="Referencias a maternidad, cuidados, pareja o familia"><span>Referencias a maternidad, cuidados, pareja o familia</span></label>
+<label class="option" for="GEN04-5"><input id="GEN04-5" name="GEN04" type="checkbox" value="Ataques a su apoyo al feminismo o a los derechos de las mujeres"><span>Ataques a su apoyo al feminismo o a los derechos de las mujeres</span></label>
+<label class="option" for="GEN04-6"><input id="GEN04-6" name="GEN04" type="checkbox" value="Expresiones misóginas, objetificación o amenazas sexuales"><span>Expresiones misóginas, objetificación o amenazas sexuales</span></label>
+<label class="option" for="GEN04-7"><input id="GEN04-7" name="GEN04" type="checkbox" value="Otro contenido relacionado con el género"><span>Otro contenido relacionado con el género</span></label>
+<label class="option" for="GEN04-8"><input id="GEN04-8" name="GEN04" type="checkbox" value="Ninguno de los anteriores"><span>Ninguno de los anteriores</span></label>
+<label class="option" for="GEN04-9"><input id="GEN04-9" name="GEN04" type="checkbox" value="No puedo determinarlo"><span>No puedo determinarlo</span></label>
+<label class="option" for="GEN04-10"><input id="GEN04-10" name="GEN04" type="checkbox" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-INT01" data-code="INT01"><legend><span class="q-no">27</span><span class="q-label">Además del género, ¿alguna experiencia hizo referencia a las siguientes características? Marque todas las que correspondan.</span></legend>
+<div class="q-meta">Selección múltiple<span class="sr-only">. Pregunta identificada internamente como INT01</span></div>
+<div class="options multiple">
+<label class="option" for="INT01-0"><input id="INT01-0" name="INT01" type="checkbox" value="Edad"><span>Edad</span></label>
+<label class="option" for="INT01-1"><input id="INT01-1" name="INT01" type="checkbox" value="Raza, etnia, pueblo indígena u origen"><span>Raza, etnia, pueblo indígena u origen</span></label>
+<label class="option" for="INT01-2"><input id="INT01-2" name="INT01" type="checkbox" value="Nacionalidad u origen migrante"><span>Nacionalidad u origen migrante</span></label>
+<label class="option" for="INT01-3"><input id="INT01-3" name="INT01" type="checkbox" value="Situación socioeconómica"><span>Situación socioeconómica</span></label>
+<label class="option" for="INT01-4"><input id="INT01-4" name="INT01" type="checkbox" value="Discapacidad"><span>Discapacidad</span></label>
+<label class="option" for="INT01-5"><input id="INT01-5" name="INT01" type="checkbox" value="Orientación sexual"><span>Orientación sexual</span></label>
+<label class="option" for="INT01-6"><input id="INT01-6" name="INT01" type="checkbox" value="Identidad o expresión de género"><span>Identidad o expresión de género</span></label>
+<label class="option" for="INT01-7"><input id="INT01-7" name="INT01" type="checkbox" value="Religión o creencias"><span>Religión o creencias</span></label>
+<label class="option" for="INT01-8"><input id="INT01-8" name="INT01" type="checkbox" value="Región, territorio o lugar de residencia"><span>Región, territorio o lugar de residencia</span></label>
+<label class="option" for="INT01-9"><input id="INT01-9" name="INT01" type="checkbox" value="Otra característica"><span>Otra característica</span></label>
+<label class="option" for="INT01-10"><input id="INT01-10" name="INT01" type="checkbox" value="Ninguna"><span>Ninguna</span></label>
+<label class="option" for="INT01-11"><input id="INT01-11" name="INT01" type="checkbox" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+</section><section class="survey-section" id="seccion-D" aria-labelledby="titulo-D">
+<div class="section-top"><span class="section-num">SECCIÓN D</span><h2 id="titulo-D">Consecuencias sobre la seguridad y la participación política</h2></div>
+<fieldset class="question" id="q-IMP01" data-code="IMP01"><legend><span class="q-no">28</span><span class="q-label">¿En qué medida estas experiencias le provocaron temor o preocupación por su seguridad física o la de personas cercanas?</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como IMP01</span></div>
+<div class="options single">
+<label class="option" for="IMP01-0"><input id="IMP01-0" name="IMP01" type="radio" value="Nada"><span>Nada</span></label>
+<label class="option" for="IMP01-1"><input id="IMP01-1" name="IMP01" type="radio" value="Poco"><span>Poco</span></label>
+<label class="option" for="IMP01-2"><input id="IMP01-2" name="IMP01" type="radio" value="Algo"><span>Algo</span></label>
+<label class="option" for="IMP01-3"><input id="IMP01-3" name="IMP01" type="radio" value="Mucho"><span>Mucho</span></label>
+<label class="option" for="IMP01-4"><input id="IMP01-4" name="IMP01" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-IMP02" data-code="IMP02"><legend><span class="q-no">29</span><span class="q-label">¿En qué medida estas experiencias afectaron su bienestar o vida cotidiana?</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como IMP02</span></div>
+<div class="options single">
+<label class="option" for="IMP02-0"><input id="IMP02-0" name="IMP02" type="radio" value="Nada"><span>Nada</span></label>
+<label class="option" for="IMP02-1"><input id="IMP02-1" name="IMP02" type="radio" value="Poco"><span>Poco</span></label>
+<label class="option" for="IMP02-2"><input id="IMP02-2" name="IMP02" type="radio" value="Algo"><span>Algo</span></label>
+<label class="option" for="IMP02-3"><input id="IMP02-3" name="IMP02" type="radio" value="Mucho"><span>Mucho</span></label>
+<label class="option" for="IMP02-4"><input id="IMP02-4" name="IMP02" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-PUR04" data-code="PUR04"><legend><span class="q-no">30</span><span class="q-label">Como consecuencia de estas experiencias, ¿cambió, redujo, retrasó o dejó de hacer alguna actividad de su candidatura o participación política, incluidas actividades digitales?</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como PUR04</span></div>
+<div class="options single">
+<label class="option" for="PUR04-0"><input id="PUR04-0" name="PUR04" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="PUR04-1"><input id="PUR04-1" name="PUR04" type="radio" value="No"><span>No</span></label>
+<label class="option" for="PUR04-2"><input id="PUR04-2" name="PUR04" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="PUR04-3"><input id="PUR04-3" name="PUR04" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<h3 class="matrix-title">Cambios en conductas políticas y de campaña</h3>
+<fieldset class="question" id="q-CHL01–03" data-code="CHL01–03"><legend><span class="q-no">31</span><span class="q-label">Modificó, evitó o dejó de expresar o publicar opiniones, temas o contenidos políticos.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como CHL01–03</span></div>
+<div class="options single">
+<label class="option" for="CHL01–03-0"><input id="CHL01–03-0" name="CHL01–03" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="CHL01–03-1"><input id="CHL01–03-1" name="CHL01–03" type="radio" value="No"><span>No</span></label>
+<label class="option" for="CHL01–03-2"><input id="CHL01–03-2" name="CHL01–03" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="CHL01–03-3"><input id="CHL01–03-3" name="CHL01–03" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-CHL04" data-code="CHL04"><legend><span class="q-no">32</span><span class="q-label">Redujo la frecuencia con que publicaba contenido político.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como CHL04</span></div>
+<div class="options single">
+<label class="option" for="CHL04-0"><input id="CHL04-0" name="CHL04" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="CHL04-1"><input id="CHL04-1" name="CHL04" type="radio" value="No"><span>No</span></label>
+<label class="option" for="CHL04-2"><input id="CHL04-2" name="CHL04" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="CHL04-3"><input id="CHL04-3" name="CHL04" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-CHL05" data-code="CHL05"><legend><span class="q-no">33</span><span class="q-label">Redujo su participación en videos, transmisiones, entrevistas u otras actividades digitales visibles.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como CHL05</span></div>
+<div class="options single">
+<label class="option" for="CHL05-0"><input id="CHL05-0" name="CHL05" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="CHL05-1"><input id="CHL05-1" name="CHL05" type="radio" value="No"><span>No</span></label>
+<label class="option" for="CHL05-2"><input id="CHL05-2" name="CHL05" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="CHL05-3"><input id="CHL05-3" name="CHL05" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-CHL06" data-code="CHL06"><legend><span class="q-no">34</span><span class="q-label">Dejó temporalmente de utilizar alguna plataforma digital.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como CHL06</span></div>
+<div class="options single">
+<label class="option" for="CHL06-0"><input id="CHL06-0" name="CHL06" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="CHL06-1"><input id="CHL06-1" name="CHL06" type="radio" value="No"><span>No</span></label>
+<label class="option" for="CHL06-2"><input id="CHL06-2" name="CHL06" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="CHL06-3"><input id="CHL06-3" name="CHL06" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-CHL07" data-code="CHL07"><legend><span class="q-no">35</span><span class="q-label">Abandonó por completo alguna plataforma digital.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como CHL07</span></div>
+<div class="options single">
+<label class="option" for="CHL07-0"><input id="CHL07-0" name="CHL07" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="CHL07-1"><input id="CHL07-1" name="CHL07" type="radio" value="No"><span>No</span></label>
+<label class="option" for="CHL07-2"><input id="CHL07-2" name="CHL07" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="CHL07-3"><input id="CHL07-3" name="CHL07" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-CHL08" data-code="CHL08"><legend><span class="q-no">36</span><span class="q-label">Delegó a otras personas publicaciones o actividades que antes realizaba personalmente.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como CHL08</span></div>
+<div class="options single">
+<label class="option" for="CHL08-0"><input id="CHL08-0" name="CHL08" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="CHL08-1"><input id="CHL08-1" name="CHL08" type="radio" value="No"><span>No</span></label>
+<label class="option" for="CHL08-2"><input id="CHL08-2" name="CHL08" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="CHL08-3"><input id="CHL08-3" name="CHL08" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-CHL09–11" data-code="CHL09–11"><legend><span class="q-no">37</span><span class="q-label">Restringió su interacción directa con otras personas, comentarios o mensajes.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como CHL09–11</span></div>
+<div class="options single">
+<label class="option" for="CHL09–11-0"><input id="CHL09–11-0" name="CHL09–11" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="CHL09–11-1"><input id="CHL09–11-1" name="CHL09–11" type="radio" value="No"><span>No</span></label>
+<label class="option" for="CHL09–11-2"><input id="CHL09–11-2" name="CHL09–11" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="CHL09–11-3"><input id="CHL09–11-3" name="CHL09–11" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-OFF01" data-code="OFF01"><legend><span class="q-no">38</span><span class="q-label">Redujo alguna actividad presencial de campaña.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como OFF01</span></div>
+<div class="options single">
+<label class="option" for="OFF01-0"><input id="OFF01-0" name="OFF01" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="OFF01-1"><input id="OFF01-1" name="OFF01" type="radio" value="No"><span>No</span></label>
+<label class="option" for="OFF01-2"><input id="OFF01-2" name="OFF01" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="OFF01-3"><input id="OFF01-3" name="OFF01" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-OFF02–03" data-code="OFF02–03"><legend><span class="q-no">39</span><span class="q-label">Evitó lugares o canceló actividades de campaña por razones de seguridad.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como OFF02–03</span></div>
+<div class="options single">
+<label class="option" for="OFF02–03-0"><input id="OFF02–03-0" name="OFF02–03" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="OFF02–03-1"><input id="OFF02–03-1" name="OFF02–03" type="radio" value="No"><span>No</span></label>
+<label class="option" for="OFF02–03-2"><input id="OFF02–03-2" name="OFF02–03" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="OFF02–03-3"><input id="OFF02–03-3" name="OFF02–03" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<h3 class="matrix-title">Continuidad de la participación política</h3>
+<fieldset class="question" id="q-POLC01" data-code="POLC01"><legend><span class="q-no">40</span><span class="q-label">Llegó a considerar retirar su candidatura.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como POLC01</span></div>
+<div class="options single">
+<label class="option" for="POLC01-0"><input id="POLC01-0" name="POLC01" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="POLC01-1"><input id="POLC01-1" name="POLC01" type="radio" value="No"><span>No</span></label>
+<label class="option" for="POLC01-2"><input id="POLC01-2" name="POLC01" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="POLC01-3"><input id="POLC01-3" name="POLC01" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-POLC02" data-code="POLC02"><legend><span class="q-no">41</span><span class="q-label">Llegó a considerar abandonar completamente la actividad política.</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como POLC02</span></div>
+<div class="options single">
+<label class="option" for="POLC02-0"><input id="POLC02-0" name="POLC02" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="POLC02-1"><input id="POLC02-1" name="POLC02" type="radio" value="No"><span>No</span></label>
+<label class="option" for="POLC02-2"><input id="POLC02-2" name="POLC02" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="POLC02-3"><input id="POLC02-3" name="POLC02" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-FUT01" data-code="FUT01"><legend><span class="q-no">42</span><span class="q-label">¿En qué medida estas experiencias redujeron su deseo de volver a presentarse como candidata en el futuro?</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como FUT01</span></div>
+<div class="options single">
+<label class="option" for="FUT01-0"><input id="FUT01-0" name="FUT01" type="radio" value="Nada"><span>Nada</span></label>
+<label class="option" for="FUT01-1"><input id="FUT01-1" name="FUT01" type="radio" value="Poco"><span>Poco</span></label>
+<label class="option" for="FUT01-2"><input id="FUT01-2" name="FUT01" type="radio" value="Algo"><span>Algo</span></label>
+<label class="option" for="FUT01-3"><input id="FUT01-3" name="FUT01" type="radio" value="Mucho"><span>Mucho</span></label>
+<label class="option" for="FUT01-4"><input id="FUT01-4" name="FUT01" type="radio" value="No puedo determinarlo"><span>No puedo determinarlo</span></label>
+<label class="option" for="FUT01-5"><input id="FUT01-5" name="FUT01" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-HYB01" data-code="HYB01"><legend><span class="q-no">43</span><span class="q-label">¿Alguna de estas experiencias digitales fue seguida por amenazas, seguimiento, confrontaciones o agresiones presenciales que usted considerara relacionadas?</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como HYB01</span></div>
+<div class="options single">
+<label class="option" for="HYB01-0"><input id="HYB01-0" name="HYB01" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="HYB01-1"><input id="HYB01-1" name="HYB01" type="radio" value="No"><span>No</span></label>
+<label class="option" for="HYB01-2"><input id="HYB01-2" name="HYB01" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="HYB01-3"><input id="HYB01-3" name="HYB01" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-WDR01" data-code="WDR01"><legend><span class="q-no">44</span><span class="q-label">¿En qué medida estas experiencias digitales influyeron en la decisión de retirar su candidatura?</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como WDR01</span></div>
+<div class="options single">
+<label class="option" for="WDR01-0"><input id="WDR01-0" name="WDR01" type="radio" value="Nada"><span>Nada</span></label>
+<label class="option" for="WDR01-1"><input id="WDR01-1" name="WDR01" type="radio" value="Poco"><span>Poco</span></label>
+<label class="option" for="WDR01-2"><input id="WDR01-2" name="WDR01" type="radio" value="Algo"><span>Algo</span></label>
+<label class="option" for="WDR01-3"><input id="WDR01-3" name="WDR01" type="radio" value="Mucho"><span>Mucho</span></label>
+<label class="option" for="WDR01-4"><input id="WDR01-4" name="WDR01" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+</section><section class="survey-section" id="seccion-E" aria-labelledby="titulo-E">
+<div class="section-top"><span class="section-num">SECCIÓN E</span><h2 id="titulo-E">Medidas de protección, costos y respuestas</h2></div>
+<fieldset class="question" id="q-PRO-A" data-code="PRO-A"><legend><span class="q-no">45</span><span class="q-label">¿Qué medidas adoptó usted o su equipo para protegerse o gestionar estas experiencias? Marque todas las que correspondan.</span></legend>
+<div class="q-meta">Selección múltiple<span class="sr-only">. Pregunta identificada internamente como PRO-A</span></div>
+<div class="options multiple">
+<label class="option" for="PRO-A-0"><input id="PRO-A-0" name="PRO-A" type="checkbox" value="Cambiar contraseñas o reforzar la seguridad de sus cuentas"><span>Cambiar contraseñas o reforzar la seguridad de sus cuentas</span></label>
+<label class="option" for="PRO-A-1"><input id="PRO-A-1" name="PRO-A" type="checkbox" value="Bloquear o restringir cuentas y usuarios"><span>Bloquear o restringir cuentas y usuarios</span></label>
+<label class="option" for="PRO-A-2"><input id="PRO-A-2" name="PRO-A" type="checkbox" value="Modificar privacidad o retirar información personal pública"><span>Modificar privacidad o retirar información personal pública</span></label>
+<label class="option" for="PRO-A-3"><input id="PRO-A-3" name="PRO-A" type="checkbox" value="Pedir a otras personas que moderaran o administraran cuentas o mensajes"><span>Pedir a otras personas que moderaran o administraran cuentas o mensajes</span></label>
+<label class="option" for="PRO-A-4"><input id="PRO-A-4" name="PRO-A" type="checkbox" value="Conservar capturas, enlaces u otras evidencias"><span>Conservar capturas, enlaces u otras evidencias</span></label>
+<label class="option" for="PRO-A-5"><input id="PRO-A-5" name="PRO-A" type="checkbox" value="Solicitar apoyo técnico o de ciberseguridad"><span>Solicitar apoyo técnico o de ciberseguridad</span></label>
+<label class="option" for="PRO-A-6"><input id="PRO-A-6" name="PRO-A" type="checkbox" value="Adoptar medidas adicionales de seguridad física"><span>Adoptar medidas adicionales de seguridad física</span></label>
+<label class="option" for="PRO-A-7"><input id="PRO-A-7" name="PRO-A" type="checkbox" value="Ninguna de estas medidas"><span>Ninguna de estas medidas</span></label>
+<label class="option" for="PRO-A-8"><input id="PRO-A-8" name="PRO-A" type="checkbox" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-BUR-A" data-code="BUR-A"><legend><span class="q-no">46</span><span class="q-label">¿Qué costos implicó enfrentar estas experiencias? Marque todas las opciones que correspondan.</span></legend>
+<div class="q-meta">Selección múltiple<span class="sr-only">. Pregunta identificada internamente como BUR-A</span></div>
+<div class="options multiple">
+<label class="option" for="BUR-A-0"><input id="BUR-A-0" name="BUR-A" type="checkbox" value="Tiempo adicional suyo o de su equipo para gestionar las situaciones"><span>Tiempo adicional suyo o de su equipo para gestionar las situaciones</span></label>
+<label class="option" for="BUR-A-1"><input id="BUR-A-1" name="BUR-A" type="checkbox" value="Gastos económicos adicionales de campaña"><span>Gastos económicos adicionales de campaña</span></label>
+<label class="option" for="BUR-A-2"><input id="BUR-A-2" name="BUR-A" type="checkbox" value="Reasignación de personas desde otras tareas de campaña"><span>Reasignación de personas desde otras tareas de campaña</span></label>
+<label class="option" for="BUR-A-3"><input id="BUR-A-3" name="BUR-A" type="checkbox" value="Ninguno de estos costos"><span>Ninguno de estos costos</span></label>
+<label class="option" for="BUR-A-4"><input id="BUR-A-4" name="BUR-A" type="checkbox" value="No puedo determinarlo"><span>No puedo determinarlo</span></label>
+<label class="option" for="BUR-A-5"><input id="BUR-A-5" name="BUR-A" type="checkbox" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-PLT01" data-code="PLT01"><legend><span class="q-no">47</span><span class="q-label">¿Reportó alguna de estas experiencias, contenidos o cuentas ante la plataforma o servicio digital correspondiente?</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como PLT01</span></div>
+<div class="options single">
+<label class="option" for="PLT01-0"><input id="PLT01-0" name="PLT01" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="PLT01-1"><input id="PLT01-1" name="PLT01" type="radio" value="No"><span>No</span></label>
+<label class="option" for="PLT01-2"><input id="PLT01-2" name="PLT01" type="radio" value="No correspondía un reporte a plataforma"><span>No correspondía un reporte a plataforma</span></label>
+<label class="option" for="PLT01-3"><input id="PLT01-3" name="PLT01" type="radio" value="No recuerdo"><span>No recuerdo</span></label>
+<label class="option" for="PLT01-4"><input id="PLT01-4" name="PLT01" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-PLT02" data-code="PLT02"><legend><span class="q-no">48</span><span class="q-label">Si no reportó ante una plataforma, ¿cuál fue la razón? Marque todas las que correspondan.</span></legend>
+<div class="q-meta">Selección múltiple<span class="sr-only">. Pregunta identificada internamente como PLT02</span></div>
+<div class="options multiple">
+<label class="option" for="PLT02-0"><input id="PLT02-0" name="PLT02" type="checkbox" value="No sabía cómo hacerlo"><span>No sabía cómo hacerlo</span></label>
+<label class="option" for="PLT02-1"><input id="PLT02-1" name="PLT02" type="checkbox" value="No pensé que la plataforma actuaría"><span>No pensé que la plataforma actuaría</span></label>
+<label class="option" for="PLT02-2"><input id="PLT02-2" name="PLT02" type="checkbox" value="No lo consideré suficientemente grave o pensé que era habitual en política"><span>No lo consideré suficientemente grave o pensé que era habitual en política</span></label>
+<label class="option" for="PLT02-3"><input id="PLT02-3" name="PLT02" type="checkbox" value="Temía mayor visibilidad o nuevas agresiones"><span>Temía mayor visibilidad o nuevas agresiones</span></label>
+<label class="option" for="PLT02-4"><input id="PLT02-4" name="PLT02" type="checkbox" value="No contaba con tiempo o evidencia suficiente"><span>No contaba con tiempo o evidencia suficiente</span></label>
+<label class="option" for="PLT02-5"><input id="PLT02-5" name="PLT02" type="checkbox" value="Se gestionó de otra manera"><span>Se gestionó de otra manera</span></label>
+<label class="option" for="PLT02-6"><input id="PLT02-6" name="PLT02" type="checkbox" value="Otra razón"><span>Otra razón</span></label>
+<label class="option" for="PLT02-7"><input id="PLT02-7" name="PLT02" type="checkbox" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-PLT04–05" data-code="PLT04–05"><legend><span class="q-no">49</span><span class="q-label">Si reportó, ¿qué resultado observó? Si presentó varios reportes, marque todas las opciones aplicables.</span></legend>
+<div class="q-meta">Selección múltiple<span class="sr-only">. Pregunta identificada internamente como PLT04–05</span></div>
+<div class="options multiple">
+<label class="option" for="PLT04–05-0"><input id="PLT04–05-0" name="PLT04–05" type="checkbox" value="Se eliminó o restringió contenido o una cuenta"><span>Se eliminó o restringió contenido o una cuenta</span></label>
+<label class="option" for="PLT04–05-1"><input id="PLT04–05-1" name="PLT04–05" type="checkbox" value="La plataforma indicó que no existía infracción de sus reglas"><span>La plataforma indicó que no existía infracción de sus reglas</span></label>
+<label class="option" for="PLT04–05-2"><input id="PLT04–05-2" name="PLT04–05" type="checkbox" value="La plataforma solicitó antecedentes adicionales"><span>La plataforma solicitó antecedentes adicionales</span></label>
+<label class="option" for="PLT04–05-3"><input id="PLT04–05-3" name="PLT04–05" type="checkbox" value="No observé ninguna acción o respuesta"><span>No observé ninguna acción o respuesta</span></label>
+<label class="option" for="PLT04–05-4"><input id="PLT04–05-4" name="PLT04–05" type="checkbox" value="No puedo determinarlo / no lo sé"><span>No puedo determinarlo / no lo sé</span></label>
+<label class="option" for="PLT04–05-5"><input id="PLT04–05-5" name="PLT04–05" type="checkbox" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-INS01" data-code="INS01"><legend><span class="q-no">50</span><span class="q-label">¿Informó o denunció alguna de estas experiencias ante un partido, una institución pública u otra organización, fuera de las plataformas digitales?</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como INS01</span></div>
+<div class="options single">
+<label class="option" for="INS01-0"><input id="INS01-0" name="INS01" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="INS01-1"><input id="INS01-1" name="INS01" type="radio" value="No"><span>No</span></label>
+<label class="option" for="INS01-2"><input id="INS01-2" name="INS01" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-INS02" data-code="INS02"><legend><span class="q-no">51</span><span class="q-label">¿Ante qué tipo de organización o institución informó o denunció? Marque todas las opciones que correspondan.</span></legend>
+<div class="q-meta">Selección múltiple<span class="sr-only">. Pregunta identificada internamente como INS02</span></div>
+<div class="options multiple">
+<label class="option" for="INS02-0"><input id="INS02-0" name="INS02" type="checkbox" value="Partido o coalición política"><span>Partido o coalición política</span></label>
+<label class="option" for="INS02-1"><input id="INS02-1" name="INS02" type="checkbox" value="Autoridad u organismo electoral"><span>Autoridad u organismo electoral</span></label>
+<label class="option" for="INS02-2"><input id="INS02-2" name="INS02" type="checkbox" value="Policía, Fiscalía/Ministerio Público o tribunal"><span>Policía, Fiscalía/Ministerio Público o tribunal</span></label>
+<label class="option" for="INS02-3"><input id="INS02-3" name="INS02" type="checkbox" value="Organismo público de mujeres, género o derechos humanos"><span>Organismo público de mujeres, género o derechos humanos</span></label>
+<label class="option" for="INS02-4"><input id="INS02-4" name="INS02" type="checkbox" value="Organización de la sociedad civil"><span>Organización de la sociedad civil</span></label>
+<label class="option" for="INS02-5"><input id="INS02-5" name="INS02" type="checkbox" value="Otra institución"><span>Otra institución</span></label>
+<label class="option" for="INS02-6"><input id="INS02-6" name="INS02" type="checkbox" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-SEC01–03" data-code="SEC01–03"><legend><span class="q-no">52</span><span class="q-label">Si buscó ayuda o denunció, ¿experimentó alguna de estas situaciones a raíz de ello? Marque las que correspondan.</span></legend>
+<div class="q-meta">Selección múltiple<span class="sr-only">. Pregunta identificada internamente como SEC01–03</span></div>
+<div class="options multiple">
+<label class="option" for="SEC01–03-0"><input id="SEC01–03-0" name="SEC01–03" type="checkbox" value="Consecuencias negativas que atribuye a haber informado o denunciado"><span>Consecuencias negativas que atribuye a haber informado o denunciado</span></label>
+<label class="option" for="SEC01–03-1"><input id="SEC01–03-1" name="SEC01–03" type="checkbox" value="Trato humillante, culpabilización o desacreditación por parte de una institución"><span>Trato humillante, culpabilización o desacreditación por parte de una institución</span></label>
+<label class="option" for="SEC01–03-2"><input id="SEC01–03-2" name="SEC01–03" type="checkbox" value="Difusión no autorizada de información que esperaba confidencial"><span>Difusión no autorizada de información que esperaba confidencial</span></label>
+<label class="option" for="SEC01–03-3"><input id="SEC01–03-3" name="SEC01–03" type="checkbox" value="Ninguna de las anteriores"><span>Ninguna de las anteriores</span></label>
+<label class="option" for="SEC01–03-4"><input id="SEC01–03-4" name="SEC01–03" type="checkbox" value="No puedo determinarlo"><span>No puedo determinarlo</span></label>
+<label class="option" for="SEC01–03-5"><input id="SEC01–03-5" name="SEC01–03" type="checkbox" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+</section><section class="survey-section" id="seccion-F" aria-labelledby="titulo-F">
+<div class="section-top"><span class="section-num">SECCIÓN F</span><h2 id="titulo-F">Reconocimiento y características personales</h2></div>
+<fieldset class="question" id="q-REC01" data-code="REC01"><legend><span class="q-no">53</span><span class="q-label">Pensando en el conjunto de esta candidatura, ¿considera que experimentó violencia, acoso u otra forma de agresión política facilitada por medios digitales y relacionada con el hecho de ser mujer?</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como REC01</span></div>
+<div class="options single">
+<label class="option" for="REC01-0"><input id="REC01-0" name="REC01" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="REC01-1"><input id="REC01-1" name="REC01" type="radio" value="No"><span>No</span></label>
+<label class="option" for="REC01-2"><input id="REC01-2" name="REC01" type="radio" value="No estoy segura"><span>No estoy segura</span></label>
+<label class="option" for="REC01-3"><input id="REC01-3" name="REC01" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<p class="instruction">Las preguntas restantes permiten describir la trayectoria y diversidad de las candidatas. Algunas pueden completarse desde registros administrativos confiables, sin necesidad de volver a preguntarlas.</p>
+<fieldset class="question" id="q-TRA02" data-code="TRA02"><legend><span class="q-no">54</span><span class="q-label">Antes de esta elección, ¿había sido candidata a otro cargo de elección popular?</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como TRA02</span></div>
+<div class="options single">
+<label class="option" for="TRA02-0"><input id="TRA02-0" name="TRA02" type="radio" value="No"><span>No</span></label>
+<label class="option" for="TRA02-1"><input id="TRA02-1" name="TRA02" type="radio" value="Sí, una vez"><span>Sí, una vez</span></label>
+<label class="option" for="TRA02-2"><input id="TRA02-2" name="TRA02" type="radio" value="Sí, dos veces"><span>Sí, dos veces</span></label>
+<label class="option" for="TRA02-3"><input id="TRA02-3" name="TRA02" type="radio" value="Sí, tres veces o más"><span>Sí, tres veces o más</span></label>
+<label class="option" for="TRA02-4"><input id="TRA02-4" name="TRA02" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-TRA03" data-code="TRA03"><legend><span class="q-no">55</span><span class="q-label">Antes de esta elección, ¿había ocupado algún cargo de elección popular?</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como TRA03</span></div>
+<div class="options single">
+<label class="option" for="TRA03-0"><input id="TRA03-0" name="TRA03" type="radio" value="Sí"><span>Sí</span></label>
+<label class="option" for="TRA03-1"><input id="TRA03-1" name="TRA03" type="radio" value="No"><span>No</span></label>
+<label class="option" for="TRA03-2"><input id="TRA03-2" name="TRA03" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-TRA04" data-code="TRA04"><legend><span class="q-no">56</span><span class="q-label">Durante esta candidatura, ¿ocupaba una posición formal dentro de su partido o movimiento?</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como TRA04</span></div>
+<div class="options single">
+<label class="option" for="TRA04-0"><input id="TRA04-0" name="TRA04" type="radio" value="No"><span>No</span></label>
+<label class="option" for="TRA04-1"><input id="TRA04-1" name="TRA04" type="radio" value="Sí, a nivel local"><span>Sí, a nivel local</span></label>
+<label class="option" for="TRA04-2"><input id="TRA04-2" name="TRA04" type="radio" value="Sí, a nivel regional"><span>Sí, a nivel regional</span></label>
+<label class="option" for="TRA04-3"><input id="TRA04-3" name="TRA04" type="radio" value="Sí, a nivel nacional"><span>Sí, a nivel nacional</span></label>
+<label class="option" for="TRA04-4"><input id="TRA04-4" name="TRA04" type="radio" value="Sí, en su máxima dirección"><span>Sí, en su máxima dirección</span></label>
+<label class="option" for="TRA04-5"><input id="TRA04-5" name="TRA04" type="radio" value="Otra posición"><span>Otra posición</span></label>
+<label class="option" for="TRA04-6"><input id="TRA04-6" name="TRA04" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-DEM01" data-code="DEM01"><legend><span class="q-no">57</span><span class="q-label">¿Cómo se identifica en términos étnicos, raciales o de pertenencia a un pueblo indígena?</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como DEM01</span></div>
+<div class="options single">
+<div class="pending">Categorías de respuesta pendientes de adaptación al país. Para esta prueba puede escribir una respuesta provisional, sin información personal real.</div>
+<label class="free-text-label">Respuesta de prueba (opcional) <input data-provisional type="text" name="DEM01_provisional" aria-label="Respuesta provisional para DEM01" placeholder="Escriba una respuesta de prueba"></label>
+<label class="option" for="DEM01-1"><input id="DEM01-1" name="DEM01" type="radio" value="Otra"><span>Otra</span></label>
+<label class="option" for="DEM01-2"><input id="DEM01-2" name="DEM01" type="radio" value="Ninguna de las anteriores"><span>Ninguna de las anteriores</span></label>
+<label class="option" for="DEM01-3"><input id="DEM01-3" name="DEM01" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-DEM02" data-code="DEM02"><legend><span class="q-no">58</span><span class="q-label">¿Tiene alguna discapacidad o dificultad permanente que afecte de manera importante alguna actividad cotidiana?</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como DEM02</span></div>
+<div class="options single">
+<div class="pending">Categorías de respuesta pendientes de adaptación al país. Para esta prueba puede escribir una respuesta provisional, sin información personal real.</div>
+<label class="free-text-label">Respuesta de prueba (opcional) <input data-provisional type="text" name="DEM02_provisional" aria-label="Respuesta provisional para DEM02" placeholder="Escriba una respuesta de prueba"></label>
+<label class="option" for="DEM02-1"><input id="DEM02-1" name="DEM02" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-DEM03" data-code="DEM03"><legend><span class="q-no">59</span><span class="q-label">¿Cuál es su orientación sexual?</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como DEM03</span></div>
+<div class="options single">
+<div class="pending">Categorías de respuesta pendientes de adaptación al país. Para esta prueba puede escribir una respuesta provisional, sin información personal real.</div>
+<label class="free-text-label">Respuesta de prueba (opcional) <input data-provisional type="text" name="DEM03_provisional" aria-label="Respuesta provisional para DEM03" placeholder="Escriba una respuesta de prueba"></label>
+<label class="option" for="DEM03-1"><input id="DEM03-1" name="DEM03" type="radio" value="Otra"><span>Otra</span></label>
+<label class="option" for="DEM03-2"><input id="DEM03-2" name="DEM03" type="radio" value="Ninguna de las anteriores"><span>Ninguna de las anteriores</span></label>
+<label class="option" for="DEM03-3"><input id="DEM03-3" name="DEM03" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-DEM04" data-code="DEM04"><legend><span class="q-no">60</span><span class="q-label">¿Cómo describe su identidad de género?</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como DEM04</span></div>
+<div class="options single">
+<div class="pending">Categorías de respuesta pendientes de adaptación al país. Para esta prueba puede escribir una respuesta provisional, sin información personal real.</div>
+<label class="free-text-label">Respuesta de prueba (opcional) <input data-provisional type="text" name="DEM04_provisional" aria-label="Respuesta provisional para DEM04" placeholder="Escriba una respuesta de prueba"></label>
+<label class="option" for="DEM04-1"><input id="DEM04-1" name="DEM04" type="radio" value="Otra"><span>Otra</span></label>
+<label class="option" for="DEM04-2"><input id="DEM04-2" name="DEM04" type="radio" value="Ninguna de las anteriores"><span>Ninguna de las anteriores</span></label>
+<label class="option" for="DEM04-3"><input id="DEM04-3" name="DEM04" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+<fieldset class="question" id="q-DEM05" data-code="DEM05"><legend><span class="q-no">61</span><span class="q-label">¿Cuál es su nacionalidad u origen migrante?</span></legend>
+<div class="q-meta">Una respuesta<span class="sr-only">. Pregunta identificada internamente como DEM05</span></div>
+<div class="options single">
+<div class="pending">Categorías de respuesta pendientes de adaptación al país. Para esta prueba puede escribir una respuesta provisional, sin información personal real.</div>
+<label class="free-text-label">Respuesta de prueba (opcional) <input data-provisional type="text" name="DEM05_provisional" aria-label="Respuesta provisional para DEM05" placeholder="Escriba una respuesta de prueba"></label>
+<label class="option" for="DEM05-1"><input id="DEM05-1" name="DEM05" type="radio" value="Otra"><span>Otra</span></label>
+<label class="option" for="DEM05-2"><input id="DEM05-2" name="DEM05" type="radio" value="Ninguna de las anteriores"><span>Ninguna de las anteriores</span></label>
+<label class="option" for="DEM05-3"><input id="DEM05-3" name="DEM05" type="radio" value="Prefiero no responder"><span>Prefiero no responder</span></label>
+</div></fieldset>
+</section><section class="final-card" aria-label="Final del cuestionario"><div class="end-card"><div><h2>Fin del cuestionario</h2><p>Muchas gracias por participar. Este formulario es solo un prototipo: no transmite ni guarda automáticamente sus respuestas. Puede guardar una copia JSON en su dispositivo o imprimir la página.</p></div><div class="actions"><button type="button" class="btn" id="export">Descargar respuestas de prueba</button><button type="button" class="btn secondary" id="print">Imprimir</button><button type="button" class="btn danger" id="clear">Borrar respuestas</button></div></div><div class="foot">Documento base: Encuesta VPDG Digital V2 abreviada. Ítems del instrumento conservados. Categorías demográficas nacionales pendientes de definición.</div></section><div id="announcer" class="sr-only" role="status" aria-live="polite"></div></main></div><script>(()=>{'use strict';const questions=[...document.querySelectorAll('.question[data-code]')];const progress=document.getElementById('progress');const bar=document.getElementById('bar');const live=document.getElementById('announcer');function anyAnswer(q){return !!q.querySelector('input[type="radio"]:checked,input[type="checkbox"]:checked')||[...q.querySelectorAll('input[data-provisional]')].some(x=>x.value.trim()!=='')};function update(){const done=questions.filter(anyAnswer).length;progress.textContent=String(done);bar.style.width=(done/questions.length*100).toFixed(1)+'%';bar.setAttribute('aria-valuenow',String(done));return done}document.addEventListener('change',e=>{if(e.target.matches('input'))update()});document.addEventListener('input',e=>{if(e.target.matches('input[data-provisional]'))update()});document.getElementById('export').addEventListener('click',()=>{const payload={tipo:'piloto-cuestionario-vpdg',version:'V2-abreviada',nota:'Respuestas de prueba exportadas localmente por la persona usuaria. No enviadas al servidor.',respondidas:update(),total:questions.length,respuestas:{}};for(const q of questions){const code=q.dataset.code;const checked=[...q.querySelectorAll('input:checked')].map(x=>x.value);const additional=q.querySelector('input[data-provisional]');payload.respuestas[code]=q.querySelector('input[type=checkbox]')?checked:(checked[0]||null);if(additional&&additional.value.trim())payload.respuestas[code+'_provisional']=additional.value.trim()}const url=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='respuestas_prueba_vpdg_v2.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);live.textContent='Se descargó un archivo JSON en este dispositivo. No se transmitió ninguna respuesta.'});document.getElementById('clear').addEventListener('click',()=>{if(!window.confirm('¿Borrar todas las respuestas de esta sesión? Esta acción no se puede deshacer.'))return;for(const input of document.querySelectorAll('.question input')){if(input.type==='radio'||input.type==='checkbox')input.checked=false;else input.value=''}update();live.textContent='Respuestas borradas de esta sesión.';document.getElementById('start').scrollIntoView({behavior:'smooth'})});document.getElementById('print').addEventListener('click',()=>window.print());update()})();</script></body></html>
